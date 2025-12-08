@@ -1,0 +1,42 @@
+symbol: "BTC/USD"
+timeframes:
+  - "1h"
+  - "2h"
+
+allowed_patterns:
+  - "ErectHnS"
+  - "InvertedHnS"
+  - "DoubleTop"
+  - "ErectRect"
+  - "InvRect"
+
+risk_pct: 0.02
+take_profit_pips: 200
+pips_unit_in_usd: 1.0
+stoploss_padding_points: 10
+
+atr_period: 14
+atr_multiplier: 2.0
+
+news_block_minutes: 30
+poll_interval_seconds: 60
+
+max_concurrent_trades: 3
+trade_mode: "live"   # options: "dry_run", "live"
+order_type: "market" # or "limit"
+
+logging:
+  level: "INFO"
+  to_file: true
+  file_path: "logs/strategy.log"
+
+safety:
+  daily_loss_limit_pct: 0.10
+  max_trades_per_day: 10
+
+# Exchange credentials (set via environment variables for security)
+exchange:
+  name: "binance"  # or your preferred exchange
+  api_key_env: "EXCHANGE_API_KEY"
+  api_secret_env: "EXCHANGE_API_SECRET"
+  sandbox: true

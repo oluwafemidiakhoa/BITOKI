@@ -1,0 +1,372 @@
+{% extends "base.html" %}
+
+{% block title %}Trade - BITOKI{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <h2 class="mb-4"><i class="fas fa-exchange-alt"></i> Trade Cryptocurrency</h2>
+
+    <div class="row">
+        <!-- Trading Panel -->
+        <div class="col-md-8">
+            <!-- Tab Navigation -->
+            <ul class="nav nav-tabs mb-3" role="tablist">
+                <li class="nav-item">
+                    <a class="nav-link active" data-bs-toggle="tab" href="#buy-tab">
+                        <i class="fas fa-shopping-cart"></i> Buy
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" data-bs-toggle="tab" href="#sell-tab">
+                        <i class="fas fa-hand-holding-usd"></i> Sell
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" data-bs-toggle="tab" href="#swap-tab">
+                        <i class="fas fa-exchange-alt"></i> Swap
+                    </a>
+                </li>
+            </ul>
+
+            <!-- Tab Content -->
+            <div class="tab-content">
+                <!-- Buy Tab -->
+                <div class="tab-pane fade show active" id="buy-tab">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">Buy Cryptocurrency</h5>
+                            <form id="buy-form">
+                                <div class="mb-3">
+                                    <label class="form-label">Select Currency</label>
+                                    <select class="form-select" name="currency" required>
+                                        <option value="BTC">Bitcoin (BTC)</option>
+                                        <option value="ETH">Ethereum (ETH)</option>
+                                        <option value="SOL">Solana (SOL)</option>
+                                        <option value="USDT">Tether (USDT)</option>
+                                    </select>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label class="form-label">Amount</label>
+                                    <input type="number" class="form-control" name="amount" step="0.000001" required placeholder="0.00">
+                                </div>
+
+                                <div class="mb-3">
+                                    <label class="form-label">Pay With</label>
+                                    <select class="form-select" name="payment_currency">
+                                        <option value="USDT">USDT</option>
+                                        <option value="USD">USD</option>
+                                        <option value="NGN">NGN</option>
+                                    </select>
+                                </div>
+
+                                <div class="mb-3">
+                                    <div class="alert alert-info">
+                                        <strong>Estimated Cost:</strong> <span id="buy-cost">$0.00</span>
+                                    </div>
+                                </div>
+
+                                <button type="submit" class="btn btn-success btn-lg w-100">
+                                    <i class="fas fa-shopping-cart"></i> Buy Now
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Sell Tab -->
+                <div class="tab-pane fade" id="sell-tab">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">Sell Cryptocurrency</h5>
+                            <form id="sell-form">
+                                <div class="mb-3">
+                                    <label class="form-label">Select Currency</label>
+                                    <select class="form-select" name="currency" required>
+                                        <option value="BTC">Bitcoin (BTC)</option>
+                                        <option value="ETH">Ethereum (ETH)</option>
+                                        <option value="SOL">Solana (SOL)</option>
+                                        <option value="USDT">Tether (USDT)</option>
+                                    </select>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label class="form-label">Amount</label>
+                                    <input type="number" class="form-control" name="amount" step="0.000001" required placeholder="0.00">
+                                </div>
+
+                                <div class="mb-3">
+                                    <label class="form-label">Receive In</label>
+                                    <select class="form-select" name="receive_currency">
+                                        <option value="USDT">USDT</option>
+                                        <option value="USD">USD</option>
+                                        <option value="NGN">NGN</option>
+                                    </select>
+                                </div>
+
+                                <div class="mb-3">
+                                    <div class="alert alert-info">
+                                        <strong>You'll Receive:</strong> <span id="sell-receive">$0.00</span>
+                                    </div>
+                                </div>
+
+                                <button type="submit" class="btn btn-danger btn-lg w-100">
+                                    <i class="fas fa-hand-holding-usd"></i> Sell Now
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Swap Tab -->
+                <div class="tab-pane fade" id="swap-tab">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">Swap Cryptocurrency</h5>
+                            <form id="swap-form">
+                                <div class="mb-3">
+                                    <label class="form-label">From</label>
+                                    <select class="form-select" name="from_currency" required>
+                                        <option value="BTC">Bitcoin (BTC)</option>
+                                        <option value="ETH">Ethereum (ETH)</option>
+                                        <option value="SOL">Solana (SOL)</option>
+                                        <option value="USDT">Tether (USDT)</option>
+                                    </select>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label class="form-label">Amount</label>
+                                    <input type="number" class="form-control" name="amount" step="0.000001" required placeholder="0.00">
+                                </div>
+
+                                <div class="text-center mb-3">
+                                    <i class="fas fa-exchange-alt fa-2x text-primary"></i>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label class="form-label">To</label>
+                                    <select class="form-select" name="to_currency" required>
+                                        <option value="ETH">Ethereum (ETH)</option>
+                                        <option value="BTC">Bitcoin (BTC)</option>
+                                        <option value="SOL">Solana (SOL)</option>
+                                        <option value="USDT">Tether (USDT)</option>
+                                    </select>
+                                </div>
+
+                                <div class="mb-3">
+                                    <div class="alert alert-info">
+                                        <strong>You'll Receive:</strong> <span id="swap-receive">0.00</span>
+                                    </div>
+                                </div>
+
+                                <button type="submit" class="btn btn-primary btn-lg w-100">
+                                    <i class="fas fa-exchange-alt"></i> Swap Now
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Market Info -->
+        <div class="col-md-4">
+            <!-- Current Prices -->
+            <div class="card mb-3">
+                <div class="card-header">
+                    <h5><i class="fas fa-chart-line"></i> Current Prices</h5>
+                </div>
+                <div class="card-body">
+                    <div class="mb-2">
+                        <strong>BTC/USD</strong>
+                        <span class="float-end">$97,000.00</span>
+                    </div>
+                    <div class="mb-2">
+                        <strong>ETH/USD</strong>
+                        <span class="float-end">$3,500.00</span>
+                    </div>
+                    <div class="mb-2">
+                        <strong>SOL/USD</strong>
+                        <span class="float-end">$180.00</span>
+                    </div>
+                    <div class="mb-2">
+                        <strong>USDT/USD</strong>
+                        <span class="float-end">$1.00</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Recent Trades -->
+            <div class="card">
+                <div class="card-header">
+                    <h5><i class="fas fa-history"></i> Recent Trades</h5>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-sm">
+                            <thead>
+                                <tr>
+                                    <th>Pair</th>
+                                    <th>Amount</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody id="recent-trades-table">
+                                <!-- Populated by JS -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Success Modal -->
+<div class="modal fade" id="successModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-success text-white">
+                <h5 class="modal-title">
+                    <i class="fas fa-check-circle"></i> Transaction Successful
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body" id="modal-body">
+                <!-- Content populated by JS -->
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <a href="/dashboard" class="btn btn-primary">View Dashboard</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+$(document).ready(function() {
+    // Load recent trades
+    loadRecentTrades();
+
+    // Buy form
+    $('#buy-form').submit(function(e) {
+        e.preventDefault();
+        const formData = {
+            currency: $(this).find('[name="currency"]').val(),
+            amount: parseFloat($(this).find('[name="amount"]').val()),
+            payment_currency: $(this).find('[name="payment_currency"]').val()
+        };
+
+        $.ajax({
+            url: '/api/trade/buy',
+            method: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify(formData),
+            success: function(response) {
+                if (response.success) {
+                    showSuccess('Buy', response.order);
+                    $('#buy-form')[0].reset();
+                } else {
+                    alert('Error: ' + response.error);
+                }
+            },
+            error: function() {
+                alert('Failed to complete purchase. Please try again.');
+            }
+        });
+    });
+
+    // Sell form
+    $('#sell-form').submit(function(e) {
+        e.preventDefault();
+        const formData = {
+            currency: $(this).find('[name="currency"]').val(),
+            amount: parseFloat($(this).find('[name="amount"]').val()),
+            receive_currency: $(this).find('[name="receive_currency"]').val()
+        };
+
+        $.ajax({
+            url: '/api/trade/sell',
+            method: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify(formData),
+            success: function(response) {
+                if (response.success) {
+                    showSuccess('Sell', response.order);
+                    $('#sell-form')[0].reset();
+                } else {
+                    alert('Error: ' + response.error);
+                }
+            },
+            error: function() {
+                alert('Failed to complete sale. Please try again.');
+            }
+        });
+    });
+
+    // Swap form
+    $('#swap-form').submit(function(e) {
+        e.preventDefault();
+        const formData = {
+            from_currency: $(this).find('[name="from_currency"]').val(),
+            to_currency: $(this).find('[name="to_currency"]').val(),
+            amount: parseFloat($(this).find('[name="amount"]').val())
+        };
+
+        $.ajax({
+            url: '/api/trade/swap',
+            method: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify(formData),
+            success: function(response) {
+                if (response.success) {
+                    showSuccess('Swap', response.order);
+                    $('#swap-form')[0].reset();
+                } else {
+                    alert('Error: ' + response.error);
+                }
+            },
+            error: function() {
+                alert('Failed to complete swap. Please try again.');
+            }
+        });
+    });
+});
+
+function loadRecentTrades() {
+    $.get('/api/trade/history', function(data) {
+        if (data.success) {
+            const tbody = $('#recent-trades-table');
+            tbody.empty();
+
+            data.trades.slice(0, 5).forEach(trade => {
+                const row = `
+                    <tr>
+                        <td>${trade.pair}</td>
+                        <td>${trade.amount}</td>
+                        <td><span class="badge bg-success">✓</span></td>
+                    </tr>
+                `;
+                tbody.append(row);
+            });
+        }
+    });
+}
+
+function showSuccess(type, order) {
+    const modalBody = $('#modal-body');
+    modalBody.html(`
+        <p><strong>Order ID:</strong> ${order.order_id}</p>
+        <p><strong>Type:</strong> ${type}</p>
+        <p><strong>Amount:</strong> ${order.amount} ${order.to_currency}</p>
+        <p><strong>Total:</strong> $${order.total.toFixed(2)}</p>
+        <p><strong>Status:</strong> <span class="badge bg-success">${order.status}</span></p>
+    `);
+
+    const modal = new bootstrap.Modal(document.getElementById('successModal'));
+    modal.show();
+}
+</script>
+{% endblock %}

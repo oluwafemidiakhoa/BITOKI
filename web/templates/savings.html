@@ -1,0 +1,289 @@
+{% extends "base.html" %}
+
+{% block title %}Savings - BITOKI{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <h2 class="mb-4"><i class="fas fa-piggy-bank"></i> Crypto Savings</h2>
+
+    <!-- Savings Overview -->
+    <div class="row mb-4">
+        <div class="col-md-3">
+            <div class="card bg-success text-white">
+                <div class="card-body">
+                    <h6>Total Savings</h6>
+                    <h3>$15,500.00</h3>
+                    <small><i class="fas fa-arrow-up"></i> +8.3%</small>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card bg-primary text-white">
+                <div class="card-body">
+                    <h6>Interest Earned</h6>
+                    <h3>$287.50</h3>
+                    <small>This month</small>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card bg-warning text-white">
+                <div class="card-body">
+                    <h6>Active Plans</h6>
+                    <h3>4</h3>
+                    <small>Locked & Flexible</small>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card bg-info text-white">
+                <div class="card-body">
+                    <h6>Next Payout</h6>
+                    <h3>3 days</h3>
+                    <small>~$25.00</small>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Savings Products -->
+    <div class="row mb-4">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    <h5><i class="fas fa-chart-line"></i> Available Savings Products</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <!-- Bitcoin Savings -->
+                        <div class="col-md-4 mb-3">
+                            <div class="card border-warning">
+                                <div class="card-body">
+                                    <h5><i class="fab fa-bitcoin text-warning"></i> Bitcoin Savings</h5>
+                                    <h3 class="text-primary">5.0% APY</h3>
+                                    <p class="text-muted">Flexible - Withdraw anytime</p>
+                                    <button class="btn btn-warning w-100" onclick="showDepositModal('BTC', 5.0)">
+                                        <i class="fas fa-plus"></i> Start Saving
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Ethereum Savings -->
+                        <div class="col-md-4 mb-3">
+                            <div class="card border-primary">
+                                <div class="card-body">
+                                    <h5><i class="fab fa-ethereum text-primary"></i> Ethereum Savings</h5>
+                                    <h3 class="text-primary">6.5% APY</h3>
+                                    <p class="text-muted">Flexible - Withdraw anytime</p>
+                                    <button class="btn btn-primary w-100" onclick="showDepositModal('ETH', 6.5)">
+                                        <i class="fas fa-plus"></i> Start Saving
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Solana Savings -->
+                        <div class="col-md-4 mb-3">
+                            <div class="card border-info">
+                                <div class="card-body">
+                                    <h5><i class="fas fa-coins text-info"></i> Solana Savings</h5>
+                                    <h3 class="text-primary">8.0% APY</h3>
+                                    <p class="text-muted">Flexible - Withdraw anytime</p>
+                                    <button class="btn btn-info w-100" onclick="showDepositModal('SOL', 8.0)">
+                                        <i class="fas fa-plus"></i> Start Saving
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- USDT Savings -->
+                        <div class="col-md-4 mb-3">
+                            <div class="card border-success">
+                                <div class="card-body">
+                                    <h5><i class="fas fa-dollar-sign text-success"></i> USDT Savings</h5>
+                                    <h3 class="text-primary">10.0% APY</h3>
+                                    <p class="text-muted">Stablecoin - Low risk</p>
+                                    <button class="btn btn-success w-100" onclick="showDepositModal('USDT', 10.0)">
+                                        <i class="fas fa-plus"></i> Start Saving
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Naira Savings -->
+                        <div class="col-md-4 mb-3">
+                            <div class="card border-secondary">
+                                <div class="card-body">
+                                    <h5><i class="fas fa-money-bill text-secondary"></i> Naira Savings</h5>
+                                    <h3 class="text-primary">15.0% APY</h3>
+                                    <p class="text-muted">Local currency savings</p>
+                                    <button class="btn btn-secondary w-100" onclick="showDepositModal('NGN', 15.0)">
+                                        <i class="fas fa-plus"></i> Start Saving
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Locked Savings -->
+                        <div class="col-md-4 mb-3">
+                            <div class="card border-danger">
+                                <div class="card-body">
+                                    <h5><i class="fas fa-lock text-danger"></i> Locked Savings</h5>
+                                    <h3 class="text-primary">Up to 20% APY</h3>
+                                    <p class="text-muted">30/60/90 day lock periods</p>
+                                    <button class="btn btn-danger w-100" onclick="showLockedModal()">
+                                        <i class="fas fa-plus"></i> Start Saving
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Active Savings -->
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    <h5><i class="fas fa-list"></i> Your Active Savings</h5>
+                </div>
+                <div class="card-body">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>Currency</th>
+                                <th>Amount</th>
+                                <th>USD Value</th>
+                                <th>APY</th>
+                                <th>Interest Earned</th>
+                                <th>Started</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>BTC</strong></td>
+                                <td>0.05</td>
+                                <td>$4,850.00</td>
+                                <td>5.0%</td>
+                                <td>$121.25</td>
+                                <td>30 days ago</td>
+                                <td>
+                                    <button class="btn btn-sm btn-warning">Withdraw</button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><strong>ETH</strong></td>
+                                <td>1.5</td>
+                                <td>$5,250.00</td>
+                                <td>6.5%</td>
+                                <td>$85.31</td>
+                                <td>20 days ago</td>
+                                <td>
+                                    <button class="btn btn-sm btn-warning">Withdraw</button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><strong>USDT</strong></td>
+                                <td>3,000</td>
+                                <td>$3,000.00</td>
+                                <td>10.0%</td>
+                                <td>$50.00</td>
+                                <td>15 days ago</td>
+                                <td>
+                                    <button class="btn btn-sm btn-warning">Withdraw</button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><strong>NGN</strong></td>
+                                <td>2,000,000</td>
+                                <td>$2,400.00</td>
+                                <td>15.0%</td>
+                                <td>$30.94</td>
+                                <td>10 days ago</td>
+                                <td>
+                                    <button class="btn btn-sm btn-warning">Withdraw</button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Deposit Modal -->
+<div class="modal fade" id="depositModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-primary text-white">
+                <h5 class="modal-title"><i class="fas fa-piggy-bank"></i> Start Saving</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <h6 id="savings-currency"></h6>
+                <form id="savings-form">
+                    <input type="hidden" name="currency" id="deposit-currency">
+
+                    <div class="mb-3">
+                        <label class="form-label">Amount to Save</label>
+                        <input type="number" class="form-control" name="amount" step="0.000001" required>
+                    </div>
+
+                    <div class="alert alert-info">
+                        <div class="row">
+                            <div class="col-6"><strong>APY:</strong></div>
+                            <div class="col-6 text-end" id="savings-apy">0%</div>
+                        </div>
+                        <div class="row">
+                            <div class="col-6"><strong>Est. Yearly Interest:</strong></div>
+                            <div class="col-6 text-end" id="est-interest">$0.00</div>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary w-100">
+                        <i class="fas fa-check"></i> Confirm Deposit
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+let currentAPY = 0;
+
+function showDepositModal(currency, apy) {
+    currentAPY = apy;
+    $('#deposit-currency').val(currency);
+    $('#savings-currency').text(`${currency} Savings (${apy}% APY)`);
+    $('#savings-apy').text(apy + '%');
+    $('#depositModal').modal('show');
+}
+
+function showLockedModal() {
+    alert('Locked savings coming soon! Lock your crypto for 30, 60, or 90 days to earn higher APY rates.');
+}
+
+// Calculate estimated interest
+$('#savings-form input[name="amount"]').on('input', function() {
+    const amount = parseFloat($(this).val()) || 0;
+    const interest = amount * (currentAPY / 100);
+    $('#est-interest').text('$' + interest.toFixed(2));
+});
+
+$('#savings-form').submit(function(e) {
+    e.preventDefault();
+    alert('Savings deposit successful! Your funds are now earning interest.');
+    $('#depositModal').modal('hide');
+    $(this)[0].reset();
+});
+</script>
+{% endblock %}

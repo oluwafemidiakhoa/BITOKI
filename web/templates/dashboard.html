@@ -1,0 +1,279 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard - BITOKI{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <h2 class="mb-4"><i class="fas fa-dashboard"></i> Dashboard</h2>
+
+    <!-- Portfolio Overview -->
+    <div class="row mb-4">
+        <div class="col-md-3">
+            <div class="card bg-primary text-white">
+                <div class="card-body">
+                    <h6 class="card-title">Total Balance</h6>
+                    <h3 id="total-balance">$0.00</h3>
+                    <small><i class="fas fa-arrow-up text-success"></i> +5.2% (24h)</small>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card bg-success text-white">
+                <div class="card-body">
+                    <h6 class="card-title">Today's Profit</h6>
+                    <h3>$245.80</h3>
+                    <small><i class="fas fa-chart-line"></i> Active Trading</small>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card bg-info text-white">
+                <div class="card-body">
+                    <h6 class="card-title">Open Trades</h6>
+                    <h3>3</h3>
+                    <small><i class="fas fa-exchange-alt"></i> 2 Winning</small>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card bg-warning text-white">
+                <div class="card-body">
+                    <h6 class="card-title">Win Rate</h6>
+                    <h3>72%</h3>
+                    <small><i class="fas fa-trophy"></i> Last 30 days</small>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Portfolio Chart -->
+    <div class="row mb-4">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header">
+                    <h5><i class="fas fa-chart-area"></i> Portfolio Performance</h5>
+                </div>
+                <div class="card-body">
+                    <canvas id="portfolioChart" height="100"></canvas>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-header">
+                    <h5><i class="fas fa-pie-chart"></i> Asset Distribution</h5>
+                </div>
+                <div class="card-body">
+                    <canvas id="assetChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Assets Table -->
+    <div class="row mb-4">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    <h5><i class="fas fa-coins"></i> Your Assets</h5>
+                </div>
+                <div class="card-body">
+                    <table class="table table-hover" id="assets-table">
+                        <thead>
+                            <tr>
+                                <th>Currency</th>
+                                <th>Balance</th>
+                                <th>USD Value</th>
+                                <th>24h Change</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Populated by JS -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Recent Activity -->
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    <h5><i class="fas fa-history"></i> Recent Activity</h5>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-sm" id="activity-table">
+                            <thead>
+                                <tr>
+                                    <th>Time</th>
+                                    <th>Type</th>
+                                    <th>Asset</th>
+                                    <th>Amount</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Populated by JS -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+$(document).ready(function() {
+    // Load dashboard data
+    loadDashboardData();
+
+    // Refresh every 30 seconds
+    setInterval(loadDashboardData, 30000);
+});
+
+function loadDashboardData() {
+    // Load balances
+    $.get('/api/wallet/balances', function(data) {
+        if (data.success) {
+            $('#total-balance').text('$' + data.total_usd.toFixed(2));
+            updateAssetsTable(data.balances);
+            updateAssetChart(data.balances);
+        }
+    });
+
+    // Load transactions
+    $.get('/api/wallet/transactions', function(data) {
+        if (data.success) {
+            updateActivityTable(data.transactions);
+        }
+    });
+
+    // Initialize portfolio chart
+    initPortfolioChart();
+}
+
+function updateAssetsTable(balances) {
+    const tbody = $('#assets-table tbody');
+    tbody.empty();
+
+    balances.forEach(balance => {
+        const change = (Math.random() * 10 - 5).toFixed(2); // Mock change
+        const changeClass = change >= 0 ? 'text-success' : 'text-danger';
+        const changeIcon = change >= 0 ? 'fa-arrow-up' : 'fa-arrow-down';
+
+        const row = `
+            <tr>
+                <td><strong>${balance.currency}</strong></td>
+                <td>${balance.balance.toFixed(6)}</td>
+                <td>$${balance.usd_value.toFixed(2)}</td>
+                <td class="${changeClass}">
+                    <i class="fas ${changeIcon}"></i> ${Math.abs(change)}%
+                </td>
+                <td>
+                    <a href="/trade" class="btn btn-sm btn-primary">Trade</a>
+                </td>
+            </tr>
+        `;
+        tbody.append(row);
+    });
+}
+
+function updateActivityTable(transactions) {
+    const tbody = $('#activity-table tbody');
+    tbody.empty();
+
+    transactions.slice(0, 10).forEach(tx => {
+        const statusBadge = tx.status === 'completed'
+            ? '<span class="badge bg-success">Completed</span>'
+            : '<span class="badge bg-warning">Pending</span>';
+
+        const typeIcon = tx.type === 'deposit'
+            ? '<i class="fas fa-arrow-down text-success"></i>'
+            : '<i class="fas fa-arrow-up text-danger"></i>';
+
+        const row = `
+            <tr>
+                <td>${new Date(tx.timestamp).toLocaleString()}</td>
+                <td>${typeIcon} ${tx.type}</td>
+                <td>${tx.currency}</td>
+                <td>${tx.amount}</td>
+                <td>${statusBadge}</td>
+            </tr>
+        `;
+        tbody.append(row);
+    });
+}
+
+function initPortfolioChart() {
+    const ctx = document.getElementById('portfolioChart');
+    if (!ctx) return;
+
+    // Mock data
+    const labels = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    const data = [10000, 12000, 11500, 14000, 16500, 15000, 18000, 19500, 21000, 20000, 22500, 25000];
+
+    new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: labels,
+            datasets: [{
+                label: 'Portfolio Value ($)',
+                data: data,
+                borderColor: 'rgb(75, 192, 192)',
+                backgroundColor: 'rgba(75, 192, 192, 0.1)',
+                tension: 0.4,
+                fill: true
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: true,
+            plugins: {
+                legend: {
+                    display: false
+                }
+            }
+        }
+    });
+}
+
+function updateAssetChart(balances) {
+    const ctx = document.getElementById('assetChart');
+    if (!ctx) return;
+
+    // Prepare data
+    const labels = balances.map(b => b.currency);
+    const data = balances.map(b => b.usd_value);
+    const colors = [
+        '#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF', '#FF9F40'
+    ];
+
+    new Chart(ctx, {
+        type: 'doughnut',
+        data: {
+            labels: labels,
+            datasets: [{
+                data: data,
+                backgroundColor: colors
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: true,
+            plugins: {
+                legend: {
+                    position: 'bottom'
+                }
+            }
+        }
+    });
+}
+</script>
+{% endblock %}

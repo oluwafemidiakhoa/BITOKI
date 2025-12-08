@@ -1,0 +1,339 @@
+{% extends "base.html" %}
+
+{% block title %}Gift Cards - BITOKI{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <h2 class="mb-4"><i class="fas fa-gift"></i> Trade Gift Cards</h2>
+
+    <!-- Category Filter -->
+    <div class="row mb-4">
+        <div class="col-md-12">
+            <div class="btn-group" role="group">
+                <button class="btn btn-outline-primary active" onclick="filterCategory('all')">All</button>
+                <button class="btn btn-outline-primary" onclick="filterCategory('Shopping')">Shopping</button>
+                <button class="btn btn-outline-primary" onclick="filterCategory('Entertainment')">Entertainment</button>
+                <button class="btn btn-outline-primary" onclick="filterCategory('Gaming')">Gaming</button>
+                <button class="btn btn-outline-primary" onclick="filterCategory('Fashion')">Fashion</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Gift Cards Grid -->
+    <div class="row mb-4" id="giftcards-grid">
+        <!-- Populated by JS -->
+    </div>
+
+    <!-- Trade History -->
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    <h5><i class="fas fa-history"></i> Trade History</h5>
+                </div>
+                <div class="card-body">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Brand</th>
+                                <th>Type</th>
+                                <th>Face Value</th>
+                                <th>Rate</th>
+                                <th>Amount Paid</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody id="history-table">
+                            <!-- Populated by JS -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Sell Gift Card Modal -->
+<div class="modal fade" id="sellModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-success text-white">
+                <h5 class="modal-title"><i class="fas fa-hand-holding-usd"></i> Sell Gift Card</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <h6 id="sell-card-name"></h6>
+                <form id="sell-form">
+                    <input type="hidden" name="card_id" id="sell-card-id">
+
+                    <div class="mb-3">
+                        <label class="form-label">Face Value ($)</label>
+                        <input type="number" class="form-control" name="face_value" required step="0.01">
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Card Code/Number</label>
+                        <input type="text" class="form-control" name="code" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">PIN (if applicable)</label>
+                        <input type="text" class="form-control" name="pin">
+                    </div>
+
+                    <div class="alert alert-info">
+                        <div class="row">
+                            <div class="col-6"><strong>Rate:</strong></div>
+                            <div class="col-6 text-end" id="sell-rate">0%</div>
+                        </div>
+                        <div class="row">
+                            <div class="col-6"><strong>You'll Receive:</strong></div>
+                            <div class="col-6 text-end" id="sell-payout">$0.00</div>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn btn-success w-100">
+                        <i class="fas fa-check"></i> Sell Card
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Buy Gift Card Modal -->
+<div class="modal fade" id="buyModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-primary text-white">
+                <h5 class="modal-title"><i class="fas fa-shopping-cart"></i> Buy Gift Card</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <h6 id="buy-card-name"></h6>
+                <form id="buy-form">
+                    <input type="hidden" name="card_id" id="buy-card-id">
+
+                    <div class="mb-3">
+                        <label class="form-label">Face Value ($)</label>
+                        <select class="form-select" name="face_value" required>
+                            <option value="25">$25</option>
+                            <option value="50">$50</option>
+                            <option value="100">$100</option>
+                            <option value="200">$200</option>
+                            <option value="500">$500</option>
+                        </select>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Payment Method</label>
+                        <select class="form-select" name="payment_method">
+                            <option value="crypto">Cryptocurrency</option>
+                            <option value="usdt">USDT</option>
+                            <option value="balance">Account Balance</option>
+                        </select>
+                    </div>
+
+                    <div class="alert alert-info">
+                        <div class="row">
+                            <div class="col-6"><strong>Rate:</strong></div>
+                            <div class="col-6 text-end" id="buy-rate">0%</div>
+                        </div>
+                        <div class="row">
+                            <div class="col-6"><strong>Total Cost:</strong></div>
+                            <div class="col-6 text-end" id="buy-cost">$0.00</div>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary w-100">
+                        <i class="fas fa-check"></i> Buy Card
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+let currentCards = [];
+
+$(document).ready(function() {
+    loadGiftCards();
+    loadHistory();
+
+    // Sell form calculation
+    $('#sell-form input[name="face_value"]').on('input', function() {
+        calculateSellPayout();
+    });
+
+    // Buy form calculation
+    $('#buy-form select[name="face_value"]').change(function() {
+        calculateBuyCost();
+    });
+
+    // Sell form submit
+    $('#sell-form').submit(function(e) {
+        e.preventDefault();
+        const formData = {
+            card_id: $('#sell-card-id').val(),
+            face_value: parseFloat($(this).find('[name="face_value"]').val()),
+            code: $(this).find('[name="code"]').val(),
+            pin: $(this).find('[name="pin"]').val()
+        };
+
+        $.ajax({
+            url: '/api/giftcards/sell',
+            method: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify(formData),
+            success: function(response) {
+                if (response.success) {
+                    alert('Gift card trade submitted! Processing...');
+                    $('#sellModal').modal('hide');
+                    loadHistory();
+                } else {
+                    alert('Error: ' + response.error);
+                }
+            }
+        });
+    });
+
+    // Buy form submit
+    $('#buy-form').submit(function(e) {
+        e.preventDefault();
+        const formData = {
+            card_id: $('#buy-card-id').val(),
+            face_value: parseFloat($(this).find('[name="face_value"]').val()),
+            payment_method: $(this).find('[name="payment_method"]').val()
+        };
+
+        $.ajax({
+            url: '/api/giftcards/buy',
+            method: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify(formData),
+            success: function(response) {
+                if (response.success) {
+                    alert('Gift card purchased successfully!');
+                    $('#buyModal').modal('hide');
+                    loadHistory();
+                } else {
+                    alert('Error: ' + response.error);
+                }
+            }
+        });
+    });
+});
+
+function loadGiftCards() {
+    $.get('/api/giftcards/available', function(data) {
+        if (data.success) {
+            currentCards = data.cards;
+            displayGiftCards(data.cards);
+        }
+    });
+}
+
+function displayGiftCards(cards) {
+    const grid = $('#giftcards-grid');
+    grid.empty();
+
+    cards.forEach(card => {
+        const cardHtml = `
+            <div class="col-md-3 mb-4">
+                <div class="card h-100 shadow-sm">
+                    <div class="card-body">
+                        <h5 class="card-title">${card.brand}</h5>
+                        <p class="text-muted">${card.category}</p>
+                        <p class="mb-1"><strong>Buy Rate:</strong> ${(card.buy_rate * 100).toFixed(0)}%</p>
+                        <p class="mb-3"><strong>Sell Rate:</strong> ${(card.sell_rate * 100).toFixed(0)}%</p>
+                        <div class="btn-group w-100">
+                            <button class="btn btn-sm btn-success" onclick="showSellModal('${card.card_id}', '${card.brand}', ${card.sell_rate})">
+                                Sell
+                            </button>
+                            <button class="btn btn-sm btn-primary" onclick="showBuyModal('${card.card_id}', '${card.brand}', ${card.buy_rate})">
+                                Buy
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `;
+        grid.append(cardHtml);
+    });
+}
+
+function filterCategory(category) {
+    if (category === 'all') {
+        displayGiftCards(currentCards);
+    } else {
+        const filtered = currentCards.filter(c => c.category === category);
+        displayGiftCards(filtered);
+    }
+
+    // Update active button
+    $('.btn-group button').removeClass('active');
+    event.target.classList.add('active');
+}
+
+function showSellModal(cardId, cardName, rate) {
+    $('#sell-card-id').val(cardId);
+    $('#sell-card-name').text(cardName);
+    $('#sell-rate').text((rate * 100).toFixed(0) + '%');
+    $('#sellModal').modal('show');
+}
+
+function showBuyModal(cardId, cardName, rate) {
+    $('#buy-card-id').val(cardId);
+    $('#buy-card-name').text(cardName);
+    $('#buy-rate').text((rate * 100).toFixed(0) + '%');
+    $('#buyModal').modal('show');
+    calculateBuyCost();
+}
+
+function calculateSellPayout() {
+    const faceValue = parseFloat($('#sell-form input[name="face_value"]').val()) || 0;
+    const rate = parseFloat($('#sell-rate').text()) / 100;
+    const payout = faceValue * rate;
+    $('#sell-payout').text('$' + payout.toFixed(2));
+}
+
+function calculateBuyCost() {
+    const faceValue = parseFloat($('#buy-form select[name="face_value"]').val()) || 0;
+    const rate = parseFloat($('#buy-rate').text()) / 100;
+    const cost = faceValue * rate;
+    $('#buy-cost').text('$' + cost.toFixed(2));
+}
+
+function loadHistory() {
+    $.get('/api/giftcards/history', function(data) {
+        if (data.success) {
+            const tbody = $('#history-table');
+            tbody.empty();
+
+            data.history.forEach(trade => {
+                const statusBadge = trade.status === 'completed'
+                    ? '<span class="badge bg-success">Completed</span>'
+                    : '<span class="badge bg-warning">Pending</span>';
+
+                const row = `
+                    <tr>
+                        <td>${new Date(trade.timestamp).toLocaleString()}</td>
+                        <td><strong>${trade.brand}</strong></td>
+                        <td>${trade.type}</td>
+                        <td>$${trade.face_value.toFixed(2)}</td>
+                        <td>${(trade.rate * 100).toFixed(0)}%</td>
+                        <td>$${trade.amount_paid.toFixed(2)}</td>
+                        <td>${statusBadge}</td>
+                    </tr>
+                `;
+                tbody.append(row);
+            });
+        }
+    });
+}
+</script>
+{% endblock %}
