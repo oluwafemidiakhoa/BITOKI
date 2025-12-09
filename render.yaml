@@ -4,7 +4,7 @@ services:
     env: python
     plan: free
     buildCommand: "./build.sh"
-    startCommand: "gunicorn app_prod:app"
+    startCommand: "gunicorn app_prod:app --bind 0.0.0.0:$PORT"
     envVars:
       - key: PYTHON_VERSION
         value: 3.12.0
