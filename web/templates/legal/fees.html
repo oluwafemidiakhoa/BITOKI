@@ -1,0 +1,479 @@
+{% extends "base.html" %}
+
+{% block title %}Fee Schedule - BITOKI{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+    <div class="row">
+        <div class="col-lg-10 mx-auto">
+            <h1 class="mb-4">Fee Schedule</h1>
+            <p class="lead">Transparent pricing with no hidden charges</p>
+            <p class="text-muted">Last Updated: December 16, 2025</p>
+
+            <div class="alert alert-success">
+                <i class="fas fa-check-circle"></i>
+                <strong>Our Promise:</strong> All fees are clearly disclosed before you confirm any transaction. No surprises, no hidden costs.
+            </div>
+
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h3>Trading Fees</h3>
+                    <p>Fees charged when buying, selling, or swapping cryptocurrencies.</p>
+
+                    <table class="table table-bordered table-hover">
+                        <thead class="table-primary">
+                            <tr>
+                                <th>Transaction Type</th>
+                                <th>Fee</th>
+                                <th>Example</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>Buy Cryptocurrency</strong></td>
+                                <td><span class="badge bg-primary">0.5%</span></td>
+                                <td>Buy $1,000 BTC = $5 fee</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Sell Cryptocurrency</strong></td>
+                                <td><span class="badge bg-primary">0.5%</span></td>
+                                <td>Sell $1,000 ETH = $5 fee</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Cryptocurrency Swap</strong></td>
+                                <td><span class="badge bg-success">0.3%</span></td>
+                                <td>Swap $1,000 BTC to ETH = $3 fee</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Minimum Trading Fee</strong></td>
+                                <td><span class="badge bg-info">$0.10</span></td>
+                                <td>Applies to all trades</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <div class="alert alert-info mt-3">
+                        <i class="fas fa-info-circle"></i>
+                        <strong>Note:</strong> Trading fees are automatically deducted from your transaction amount. The exact fee is shown before you confirm.
+                    </div>
+                </div>
+            </div>
+
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h3>Gift Card Trading Fees</h3>
+                    <p>Fees for buying and selling gift cards.</p>
+
+                    <table class="table table-bordered table-hover">
+                        <thead class="table-warning">
+                            <tr>
+                                <th>Transaction Type</th>
+                                <th>Fee</th>
+                                <th>Example</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>Sell Gift Card</strong></td>
+                                <td><span class="badge bg-warning text-dark">2%</span></td>
+                                <td>Sell $100 card = $2 processing fee</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Buy Gift Card</strong></td>
+                                <td><span class="badge bg-success">Included in rate</span></td>
+                                <td>Fee included in purchase price</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <h5 class="mt-4">Gift Card Rates by Brand</h5>
+                    <div class="table-responsive">
+                        <table class="table table-sm table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Brand</th>
+                                    <th>Sell Rate</th>
+                                    <th>Buy Rate</th>
+                                    <th>Category</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Amazon</td>
+                                    <td>75%</td>
+                                    <td>82%</td>
+                                    <td><span class="badge bg-primary">Shopping</span></td>
+                                </tr>
+                                <tr>
+                                    <td>iTunes</td>
+                                    <td>73%</td>
+                                    <td>80%</td>
+                                    <td><span class="badge bg-info">Entertainment</span></td>
+                                </tr>
+                                <tr>
+                                    <td>Google Play</td>
+                                    <td>73%</td>
+                                    <td>80%</td>
+                                    <td><span class="badge bg-info">Entertainment</span></td>
+                                </tr>
+                                <tr>
+                                    <td>Steam</td>
+                                    <td>74%</td>
+                                    <td>81%</td>
+                                    <td><span class="badge bg-success">Gaming</span></td>
+                                </tr>
+                                <tr>
+                                    <td>Visa Gift Card</td>
+                                    <td>78%</td>
+                                    <td>85%</td>
+                                    <td><span class="badge bg-secondary">General</span></td>
+                                </tr>
+                                <tr>
+                                    <td>eBay</td>
+                                    <td>74%</td>
+                                    <td>81%</td>
+                                    <td><span class="badge bg-primary">Shopping</span></td>
+                                </tr>
+                                <tr>
+                                    <td>Walmart</td>
+                                    <td>75%</td>
+                                    <td>82%</td>
+                                    <td><span class="badge bg-primary">Shopping</span></td>
+                                </tr>
+                                <tr>
+                                    <td>Nike</td>
+                                    <td>76%</td>
+                                    <td>83%</td>
+                                    <td><span class="badge bg-danger">Fashion</span></td>
+                                </tr>
+                                <tr>
+                                    <td>Sephora</td>
+                                    <td>77%</td>
+                                    <td>84%</td>
+                                    <td><span class="badge bg-warning text-dark">Beauty</span></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <p class="mt-3"><small class="text-muted">Rates are subject to change based on market conditions. Current rates are shown at the time of transaction.</small></p>
+                </div>
+            </div>
+
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h3>Deposit Fees</h3>
+                    <p>Fees for depositing funds into your BITOKI account.</p>
+
+                    <table class="table table-bordered table-hover">
+                        <thead class="table-success">
+                            <tr>
+                                <th>Deposit Method</th>
+                                <th>Fee</th>
+                                <th>Processing Time</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>Cryptocurrency Deposit (BTC, ETH, SOL, USDT)</strong></td>
+                                <td><span class="badge bg-success">FREE</span></td>
+                                <td>Network confirmations (5-30 min)</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Nigerian Naira (NGN) via Paystack</strong></td>
+                                <td><span class="badge bg-warning text-dark">1.5%</span> <small>(capped at ₦2,000)</small></td>
+                                <td>Instant</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Bank Transfer (NGN)</strong></td>
+                                <td><span class="badge bg-success">FREE</span></td>
+                                <td>30 minutes - 24 hours</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <div class="alert alert-warning mt-3">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        <strong>Network Fees:</strong> Crypto deposits are free on BITOKI, but blockchain network fees apply when sending from external wallets.
+                    </div>
+                </div>
+            </div>
+
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h3>Withdrawal Fees</h3>
+                    <p>Fees for withdrawing funds from your BITOKI account.</p>
+
+                    <table class="table table-bordered table-hover">
+                        <thead class="table-danger">
+                            <tr>
+                                <th>Currency</th>
+                                <th>Fee</th>
+                                <th>Minimum Withdrawal</th>
+                                <th>Processing Time</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>Bitcoin (BTC)</strong></td>
+                                <td><span class="badge bg-warning text-dark">0.0005 BTC</span></td>
+                                <td>0.001 BTC</td>
+                                <td>Up to 24 hours</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Ethereum (ETH)</strong></td>
+                                <td><span class="badge bg-warning text-dark">0.003 ETH</span></td>
+                                <td>0.01 ETH</td>
+                                <td>Up to 24 hours</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Solana (SOL)</strong></td>
+                                <td><span class="badge bg-warning text-dark">0.01 SOL</span></td>
+                                <td>0.1 SOL</td>
+                                <td>Up to 24 hours</td>
+                            </tr>
+                            <tr>
+                                <td><strong>USDT (ERC-20)</strong></td>
+                                <td><span class="badge bg-warning text-dark">5 USDT</span></td>
+                                <td>10 USDT</td>
+                                <td>Up to 24 hours</td>
+                            </tr>
+                            <tr>
+                                <td><strong>USDT (TRC-20)</strong></td>
+                                <td><span class="badge bg-warning text-dark">1 USDT</span></td>
+                                <td>10 USDT</td>
+                                <td>Up to 24 hours</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Nigerian Naira (NGN)</strong></td>
+                                <td><span class="badge bg-warning text-dark">₦50</span> + Paystack fees</td>
+                                <td>₦1,000</td>
+                                <td>Same day</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <div class="alert alert-info mt-3">
+                        <i class="fas fa-info-circle"></i>
+                        <strong>Fast Track:</strong> Withdrawals are typically processed within 1-4 hours during business hours.
+                    </div>
+                </div>
+            </div>
+
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h3>Transaction Limits</h3>
+                    <p>Limits are based on your KYC verification level.</p>
+
+                    <div class="table-responsive">
+                        <table class="table table-bordered">
+                            <thead class="table-info">
+                                <tr>
+                                    <th>KYC Level</th>
+                                    <th>Daily Trade Limit</th>
+                                    <th>Daily Withdrawal Limit</th>
+                                    <th>Per Transaction Limit</th>
+                                    <th>Requirements</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><span class="badge bg-secondary">Level 0</span></td>
+                                    <td>$500</td>
+                                    <td><span class="text-danger">Disabled</span></td>
+                                    <td>$200</td>
+                                    <td>Email only</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="badge bg-primary">Level 1</span></td>
+                                    <td>$2,000</td>
+                                    <td>$500</td>
+                                    <td>$1,000</td>
+                                    <td>Email + Phone</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="badge bg-success">Level 2</span></td>
+                                    <td>$10,000</td>
+                                    <td>$3,000</td>
+                                    <td>$5,000</td>
+                                    <td>ID Document</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="badge bg-warning text-dark">Level 3</span></td>
+                                    <td>$50,000</td>
+                                    <td>$10,000</td>
+                                    <td>$25,000</td>
+                                    <td>Full KYC</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <a href="/settings" class="btn btn-primary mt-3">
+                        <i class="fas fa-arrow-up"></i> Increase Your Limits
+                    </a>
+                </div>
+            </div>
+
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h3>Savings Plans</h3>
+                    <p>Interest rates for crypto savings plans.</p>
+
+                    <table class="table table-bordered table-hover">
+                        <thead class="table-success">
+                            <tr>
+                                <th>Plan Type</th>
+                                <th>APY (Annual Percentage Yield)</th>
+                                <th>Minimum Deposit</th>
+                                <th>Lock Period</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>Flexible Savings</strong></td>
+                                <td><span class="badge bg-success">5%</span></td>
+                                <td>0.001 BTC / 0.01 ETH / 1 SOL</td>
+                                <td>None (withdraw anytime)</td>
+                            </tr>
+                            <tr>
+                                <td><strong>30-Day Lock</strong></td>
+                                <td><span class="badge bg-primary">8%</span></td>
+                                <td>0.01 BTC / 0.1 ETH / 10 SOL</td>
+                                <td>30 days</td>
+                            </tr>
+                            <tr>
+                                <td><strong>90-Day Lock</strong></td>
+                                <td><span class="badge bg-warning text-dark">12%</span></td>
+                                <td>0.01 BTC / 0.1 ETH / 10 SOL</td>
+                                <td>90 days</td>
+                            </tr>
+                            <tr>
+                                <td><strong>180-Day Lock</strong></td>
+                                <td><span class="badge bg-danger">15%</span></td>
+                                <td>0.1 BTC / 1 ETH / 100 SOL</td>
+                                <td>180 days</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <div class="alert alert-warning mt-3">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        <strong>Early Withdrawal:</strong> Early withdrawal from locked plans forfeits all interest earned.
+                    </div>
+                </div>
+            </div>
+
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h3>Inactivity Fees</h3>
+                    <p>No inactivity fees! Your account remains free even if you don't trade.</p>
+                    <div class="alert alert-success">
+                        <i class="fas fa-check-circle"></i>
+                        <strong>Good News:</strong> BITOKI does NOT charge account maintenance or inactivity fees. Your funds remain yours, always.
+                    </div>
+                </div>
+            </div>
+
+            <div class="card mb-4 bg-light">
+                <div class="card-body">
+                    <h3>Fee Examples</h3>
+                    <p>Real-world examples to help you understand our fees:</p>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <div class="card h-100">
+                                <div class="card-header bg-primary text-white">
+                                    <h5 class="mb-0">Example 1: Buy Bitcoin</h5>
+                                </div>
+                                <div class="card-body">
+                                    <p><strong>Transaction:</strong> Buy $10,000 worth of BTC</p>
+                                    <hr>
+                                    <p>Amount: $10,000.00</p>
+                                    <p>Trading Fee (0.5%): <strong>$50.00</strong></p>
+                                    <hr>
+                                    <p class="mb-0"><strong>Total Cost: $10,050.00</strong></p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <div class="card h-100">
+                                <div class="card-header bg-success text-white">
+                                    <h5 class="mb-0">Example 2: Sell Amazon Gift Card</h5>
+                                </div>
+                                <div class="card-body">
+                                    <p><strong>Transaction:</strong> Sell $100 Amazon gift card</p>
+                                    <hr>
+                                    <p>Card Value: $100.00</p>
+                                    <p>Rate: 75%</p>
+                                    <p>Subtotal: $75.00</p>
+                                    <p>Processing Fee (2%): <strong>$1.50</strong></p>
+                                    <hr>
+                                    <p class="mb-0"><strong>You Receive: $73.50</strong></p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <div class="card h-100">
+                                <div class="card-header bg-info text-white">
+                                    <h5 class="mb-0">Example 3: Withdraw NGN</h5>
+                                </div>
+                                <div class="card-body">
+                                    <p><strong>Transaction:</strong> Withdraw ₦50,000 to bank</p>
+                                    <hr>
+                                    <p>Amount: ₦50,000</p>
+                                    <p>BITOKI Fee: ₦50</p>
+                                    <p>Paystack Fee (~1%): <strong>₦500</strong></p>
+                                    <hr>
+                                    <p class="mb-0"><strong>You Receive: ₦49,450</strong></p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <div class="card h-100">
+                                <div class="card-header bg-warning text-dark">
+                                    <h5 class="mb-0">Example 4: Swap Crypto</h5>
+                                </div>
+                                <div class="card-body">
+                                    <p><strong>Transaction:</strong> Swap 1 ETH to BTC</p>
+                                    <hr>
+                                    <p>ETH Value: $3,500</p>
+                                    <p>Swap Fee (0.3%): <strong>$10.50</strong></p>
+                                    <p>Net: $3,489.50</p>
+                                    <hr>
+                                    <p class="mb-0"><strong>BTC Received: ~0.036 BTC</strong></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="alert alert-primary">
+                <i class="fas fa-calculator"></i>
+                <strong>Fee Calculator:</strong> All fees are automatically calculated and displayed before you confirm any transaction. You always know exactly what you'll pay.
+            </div>
+
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h3>Questions About Fees?</h3>
+                    <p>If you have questions about our fee structure, we're here to help:</p>
+                    <ul>
+                        <li><strong>Email:</strong> support@bitoki.ng</li>
+                        <li><strong>Live Chat:</strong> Available 24/7 on our platform</li>
+                        <li><strong>FAQ:</strong> <a href="/help/faq">Check our Frequently Asked Questions</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="text-center mt-4">
+                <a href="/" class="btn btn-primary">Back to Home</a>
+                <a href="/auth/register" class="btn btn-success">Start Trading</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

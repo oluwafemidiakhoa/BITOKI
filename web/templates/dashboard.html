@@ -160,28 +160,60 @@ function loadDashboardData() {
 }
 
 function updateAssetsTable(balances) {
-    const tbody = $('#assets-table tbody');
-    tbody.empty();
+    // First fetch market data for all currencies
+    $.get('/api/trade/market-overview', function(marketData) {
+        const tbody = $('#assets-table tbody');
+        tbody.empty();
 
-    balances.forEach(balance => {
-        const change = (Math.random() * 10 - 5).toFixed(2); // Mock change
-        const changeClass = change >= 0 ? 'text-success' : 'text-danger';
-        const changeIcon = change >= 0 ? 'fa-arrow-up' : 'fa-arrow-down';
+        // Create a map of currency to market data
+        const marketMap = {};
+        if (marketData.success && marketData.markets) {
+            marketData.markets.forEach(m => {
+                marketMap[m.currency] = m;
+            });
+        }
 
-        const row = `
-            <tr>
-                <td><strong>${balance.currency}</strong></td>
-                <td>${balance.balance.toFixed(6)}</td>
-                <td>$${balance.usd_value.toFixed(2)}</td>
-                <td class="${changeClass}">
-                    <i class="fas ${changeIcon}"></i> ${Math.abs(change)}%
-                </td>
-                <td>
-                    <a href="/trade" class="btn btn-sm btn-primary">Trade</a>
-                </td>
-            </tr>
-        `;
-        tbody.append(row);
+        balances.forEach(balance => {
+            // Use real market data if available, otherwise use mock
+            const market = marketMap[balance.currency];
+            const change = market ? market.change_24h_percent : (Math.random() * 10 - 5);
+            const changeClass = change >= 0 ? 'text-success' : 'text-danger';
+            const changeIcon = change >= 0 ? 'fa-arrow-up' : 'fa-arrow-down';
+            const changeSymbol = change >= 0 ? '+' : '';
+
+            const row = `
+                <tr>
+                    <td><strong>${balance.currency}</strong></td>
+                    <td>${balance.balance.toFixed(6)}</td>
+                    <td>$${balance.usd_value.toFixed(2)}</td>
+                    <td class="${changeClass}">
+                        <i class="fas ${changeIcon}"></i> ${changeSymbol}${Math.abs(change).toFixed(2)}%
+                    </td>
+                    <td>
+                        <a href="/trade" class="btn btn-sm btn-primary">Trade</a>
+                    </td>
+                </tr>
+            `;
+            tbody.append(row);
+        });
+    }).fail(function() {
+        // Fallback to displaying without change data
+        const tbody = $('#assets-table tbody');
+        tbody.empty();
+        balances.forEach(balance => {
+            const row = `
+                <tr>
+                    <td><strong>${balance.currency}</strong></td>
+                    <td>${balance.balance.toFixed(6)}</td>
+                    <td>$${balance.usd_value.toFixed(2)}</td>
+                    <td class="text-muted">-</td>
+                    <td>
+                        <a href="/trade" class="btn btn-sm btn-primary">Trade</a>
+                    </td>
+                </tr>
+            `;
+            tbody.append(row);
+        });
     });
 }
 

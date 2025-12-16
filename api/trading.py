@@ -207,6 +207,57 @@ class TradingAPI:
             }
             return mock_prices.get(currency, 0.0)
 
+    def get_market_data(self, currency: str, quote_currency: str = "USDT") -> Dict:
+        """
+        Get market data including price and 24h change.
+
+        Args:
+            currency: Currency to get data for
+            quote_currency: Quote currency
+
+        Returns:
+            Dictionary with price, change_24h_percent, and change_24h_value
+        """
+        try:
+            symbol = f"{currency}/{quote_currency}"
+            ticker = self.exchange.fetch_ticker(symbol)
+
+            price = ticker.get('last', 0)
+            change_percent = ticker.get('percentage', 0)  # 24h percentage change
+            change_value = ticker.get('change', 0)  # 24h absolute change
+
+            return {
+                'currency': currency,
+                'quote_currency': quote_currency,
+                'price': price,
+                'change_24h_percent': change_percent,
+                'change_24h_value': change_value,
+                'high_24h': ticker.get('high', price),
+                'low_24h': ticker.get('low', price),
+                'volume_24h': ticker.get('baseVolume', 0)
+            }
+        except Exception as e:
+            print(f"Error getting market data for {currency}: {e}")
+            # Return mock data with realistic changes
+            import random
+            mock_data = {
+                "BTC": {"price": 97000.0, "change": random.uniform(-5, 5)},
+                "ETH": {"price": 3500.0, "change": random.uniform(-5, 5)},
+                "SOL": {"price": 180.0, "change": random.uniform(-8, 8)},
+                "USDT": {"price": 1.0, "change": 0.0}
+            }
+            data = mock_data.get(currency, {"price": 100.0, "change": 0.0})
+            return {
+                'currency': currency,
+                'quote_currency': quote_currency,
+                'price': data['price'],
+                'change_24h_percent': data['change'],
+                'change_24h_value': data['price'] * (data['change'] / 100),
+                'high_24h': data['price'] * 1.05,
+                'low_24h': data['price'] * 0.95,
+                'volume_24h': 1000000
+            }
+
     def get_order_book(self, currency: str, quote_currency: str = "USDT") -> Dict:
         """
         Get order book for currency pair.

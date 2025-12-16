@@ -82,14 +82,32 @@
                         <input type="text" class="form-control" name="pin">
                     </div>
 
-                    <div class="alert alert-info">
-                        <div class="row">
-                            <div class="col-6"><strong>Rate:</strong></div>
-                            <div class="col-6 text-end" id="sell-rate">0%</div>
-                        </div>
-                        <div class="row">
-                            <div class="col-6"><strong>You'll Receive:</strong></div>
-                            <div class="col-6 text-end" id="sell-payout">$0.00</div>
+                    <!-- Fee Disclosure -->
+                    <div class="card border-success">
+                        <div class="card-body p-3">
+                            <h6 class="card-title mb-2">
+                                <i class="fas fa-info-circle"></i> Payout Summary
+                            </h6>
+                            <div class="d-flex justify-content-between mb-1">
+                                <span class="text-muted">Exchange Rate:</span>
+                                <span id="sell-rate">0%</span>
+                            </div>
+                            <div class="d-flex justify-content-between mb-1">
+                                <span class="text-muted">Base Value:</span>
+                                <span id="sell-base">$0.00</span>
+                            </div>
+                            <div class="d-flex justify-content-between mb-1">
+                                <span class="text-muted">Processing Fee (2%):</span>
+                                <span id="sell-processing-fee" class="text-danger">-$0.00</span>
+                            </div>
+                            <hr class="my-2">
+                            <div class="d-flex justify-content-between">
+                                <strong>You'll Receive:</strong>
+                                <strong id="sell-payout" class="text-success">$0.00</strong>
+                            </div>
+                            <small class="text-muted mt-2 d-block">
+                                <i class="fas fa-link"></i> See <a href="/fees" target="_blank">complete fee schedule</a>
+                            </small>
                         </div>
                     </div>
 
@@ -135,14 +153,32 @@
                         </select>
                     </div>
 
-                    <div class="alert alert-info">
-                        <div class="row">
-                            <div class="col-6"><strong>Rate:</strong></div>
-                            <div class="col-6 text-end" id="buy-rate">0%</div>
-                        </div>
-                        <div class="row">
-                            <div class="col-6"><strong>Total Cost:</strong></div>
-                            <div class="col-6 text-end" id="buy-cost">$0.00</div>
+                    <!-- Fee Disclosure -->
+                    <div class="card border-primary">
+                        <div class="card-body p-3">
+                            <h6 class="card-title mb-2">
+                                <i class="fas fa-info-circle"></i> Cost Summary
+                            </h6>
+                            <div class="d-flex justify-content-between mb-1">
+                                <span class="text-muted">Exchange Rate:</span>
+                                <span id="buy-rate">0%</span>
+                            </div>
+                            <div class="d-flex justify-content-between mb-1">
+                                <span class="text-muted">Base Cost:</span>
+                                <span id="buy-base">$0.00</span>
+                            </div>
+                            <div class="d-flex justify-content-between mb-1">
+                                <span class="text-muted">Processing Fee (2%):</span>
+                                <span id="buy-processing-fee" class="text-warning">+$0.00</span>
+                            </div>
+                            <hr class="my-2">
+                            <div class="d-flex justify-content-between">
+                                <strong>Total Cost:</strong>
+                                <strong id="buy-cost" class="text-primary">$0.00</strong>
+                            </div>
+                            <small class="text-muted mt-2 d-block">
+                                <i class="fas fa-link"></i> See <a href="/fees" target="_blank">complete fee schedule</a>
+                            </small>
                         </div>
                     </div>
 
@@ -297,15 +333,25 @@ function showBuyModal(cardId, cardName, rate) {
 function calculateSellPayout() {
     const faceValue = parseFloat($('#sell-form input[name="face_value"]').val()) || 0;
     const rate = parseFloat($('#sell-rate').text()) / 100;
-    const payout = faceValue * rate;
-    $('#sell-payout').text('$' + payout.toFixed(2));
+    const baseValue = faceValue * rate;
+    const processingFee = baseValue * 0.02; // 2% processing fee
+    const netPayout = baseValue - processingFee;
+
+    $('#sell-base').text('$' + baseValue.toFixed(2));
+    $('#sell-processing-fee').text('-$' + processingFee.toFixed(2));
+    $('#sell-payout').text('$' + netPayout.toFixed(2));
 }
 
 function calculateBuyCost() {
     const faceValue = parseFloat($('#buy-form select[name="face_value"]').val()) || 0;
     const rate = parseFloat($('#buy-rate').text()) / 100;
-    const cost = faceValue * rate;
-    $('#buy-cost').text('$' + cost.toFixed(2));
+    const baseCost = faceValue * rate;
+    const processingFee = baseCost * 0.02; // 2% processing fee
+    const totalCost = baseCost + processingFee;
+
+    $('#buy-base').text('$' + baseCost.toFixed(2));
+    $('#buy-processing-fee').text('+$' + processingFee.toFixed(2));
+    $('#buy-cost').text('$' + totalCost.toFixed(2));
 }
 
 function loadHistory() {

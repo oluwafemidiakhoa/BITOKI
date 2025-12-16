@@ -99,6 +99,23 @@ class WalletManager:
             WalletBalance("NGN", 500000.0, 602.41, ""),
         ]
 
+    def get_balance_for_currency(self, currency: str) -> float:
+        """
+        Get balance for a specific currency.
+
+        Args:
+            currency: Currency code (e.g., 'BTC', 'ETH')
+
+        Returns:
+            Balance amount for the currency, or 0.0 if not found
+        """
+        balances = self.get_balances()
+        for balance in balances:
+            # Handle both with and without network suffix (e.g., USDT vs USDT_ERC20)
+            if balance.currency == currency or balance.currency.startswith(currency):
+                return balance.balance
+        return 0.0
+
     def get_total_balance_usd(self) -> float:
         """Get total portfolio value in USD."""
         return sum(b.usd_value for b in self.get_balances())

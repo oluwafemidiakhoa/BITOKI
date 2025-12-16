@@ -11,6 +11,7 @@ from api.trading import TradingAPI
 from api.giftcard import GiftCardAPI
 from src.bitoki.config import Config
 from src.bitoki.data.market_data import MarketDataFetcher
+from src.bitoki.security.security_manager import SecurityManager
 
 # Load environment variables
 load_dotenv()
@@ -32,6 +33,9 @@ try:
 except Exception as e:
     print(f"Warning: Could not initialize exchange: {e}")
     exchange = None
+
+# Initialize security manager
+security_manager = SecurityManager()
 
 wallet_manager = WalletManager(exchange)
 trading_api = TradingAPI(exchange) if exchange else None
