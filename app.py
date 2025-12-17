@@ -12,6 +12,7 @@ from api.giftcard import GiftCardAPI
 from src.bitoki.config import Config
 from src.bitoki.data.market_data import MarketDataFetcher
 from src.bitoki.security.security_manager import SecurityManager
+from src.bitoki.utils.email_service import EmailService
 
 # Load environment variables
 load_dotenv()
@@ -36,6 +37,14 @@ except Exception as e:
 
 # Initialize security manager
 security_manager = SecurityManager()
+
+# Initialize email service
+try:
+    email_service = EmailService()
+    email_service.create_email_templates()
+except Exception as e:
+    print(f"Warning: Could not initialize email service: {e}")
+    email_service = None
 
 wallet_manager = WalletManager(exchange)
 trading_api = TradingAPI(exchange) if exchange else None
@@ -317,6 +326,190 @@ def get_giftcard_history():
         return jsonify({
             'success': True,
             'history': [h.__dict__ for h in history]
+        })
+    except Exception as e:
+        return jsonify({'success': False, 'error': str(e)}), 500
+
+
+# Security Endpoints
+@app.route('/api/security/setup-2fa', methods=['POST'])
+def setup_2fa():
+    """Set up two-factor authentication."""
+    try:
+        data = request.json
+        user_id = data.get('user_id')
+        method = data.get('method', 'totp')
+        
+        if not user_id:
+            return jsonify({'success': False, 'error': 'User ID required'}), 400
+        
+        # Setup 2FA
+        two_factor = security_manager.setup_2fa(user_id, method)
+        
+        # Generate QR code URL for TOTP
+        if method == 'totp':
+            issuer = "BITOKI"
+            qr_code_url = f"https://chart.googleapis.com/chart?chs=200x200&chld=M|0&cht=qr&chl=otpauth://totp/{issuer}:{user_id}?secret={two_factor.secret}&issuer={issuer}"
+        else:
+            qr_code_url = ""
+        
+        # Send email with backup codes
+        if email_service:
+            email_service.send_2fa_setup_email(
+                user_email=f"{user_id}@bitoki.com",  # In production, use real email
+                qr_code_url=qr_code_url,
+                backup_codes=two_factor.backup_codes
+            )
+        
+        return jsonify({
+            'success': True,
+            'secret': two_factor.secret,
+            'qr_code_url': qr_code_url,
+            'backup_codes': two_factor.backup_codes,
+            'method': two_factor.method
+        })
+    except Exception as e:
+        return jsonify({'success': False, 'error': str(e)}), 500
+
+
+@app.route('/api/security/verify-2fa', methods=['POST'])
+def verify_2fa():
+    """Verify 2FA code."""
+    try:
+        data = request.json
+        user_id = data.get('user_id')
+        code = data.get('code')
+        
+        if not user_id or not code:
+            return jsonify({'success': False, 'error': 'User ID and code required'}), 400
+        
+        is_valid = security_manager.verify_2fa_code(user_id, code)
+        
+        if is_valid:
+            # Create security alert for successful 2FA verification
+            security_manager.create_alert(
+                user_id=user_id,
+                alert_type='login',
+                message=f'Successful 2FA verification from IP: {request.remote_addr}',
+                severity='low'
+            )
+        
+        return jsonify({
+            'success': True,
+            'is_valid': is_valid
+        })
+    except Exception as e:
+        return jsonify({'success': False, 'error': str(e)}), 500
+
+
+@app.route('/api/security/alerts', methods=['GET'])
+def get_security_alerts():
+    """Get security alerts for a user."""
+    try:
+        user_id = request.args.get('user_id')
+        unread_only = request.args.get('unread_only', 'false').lower() == 'true'
+        
+        if not user_id:
+            return jsonify({'success': False, 'error': 'User ID required'}), 400
+        
+        alerts = security_manager.get_alerts(user_id, unread_only)
+        
+        return jsonify({
+            'success': True,
+            'alerts': [{
+                'alert_id': a.alert_id,
+                'alert_type': a.alert_type,
+                'message': a.message,
+                'timestamp': a.timestamp,
+                'is_read': a.is_read,
+                'severity': a.severity
+            } for a in alerts]
+        })
+    except Exception as e:
+        return jsonify({'success': False, 'error': str(e)}), 500
+
+
+@app.route('/api/security/mark-alert-read', methods=['POST'])
+def mark_alert_read():
+    """Mark a security alert as read."""
+    try:
+        data = request.json
+        user_id = data.get('user_id')
+        alert_id = data.get('alert_id')
+        
+        if not user_id or not alert_id:
+            return jsonify({'success': False, 'error': 'User ID and alert ID required'}), 400
+        
+        success = security_manager.mark_alert_as_read(user_id, alert_id)
+        
+        return jsonify({
+            'success': success
+        })
+    except Exception as e:
+        return jsonify({'success': False, 'error': str(e)}), 500
+
+
+@app.route('/api/security/transaction-history', methods=['GET'])
+def get_transaction_history():
+    """Get immutable transaction history."""
+    try:
+        user_id = request.args.get('user_id')
+        
+        if not user_id:
+            return jsonify({'success': False, 'error': 'User ID required'}), 400
+        
+        transactions = security_manager.get_transaction_history(user_id)
+        chain_valid = security_manager.verify_transaction_chain()
+        
+        return jsonify({
+            'success': True,
+            'transactions': [{
+                'transaction_id': t.transaction_id,
+                'type': t.type,
+                'amount': t.amount,
+                'currency': t.currency,
+                'timestamp': t.timestamp,
+                'status': t.status,
+                'verified': chain_valid
+            } for t in transactions],
+            'chain_valid': chain_valid
+        })
+    except Exception as e:
+        return jsonify({'success': False, 'error': str(e)}), 500
+
+
+@app.route('/api/security/check-fraud', methods=['POST'])
+def check_fraud():
+    """Check transaction for fraud patterns."""
+    try:
+        data = request.json
+        
+        is_fraudulent, reason = security_manager.check_fraud_patterns(data)
+        
+        return jsonify({
+            'success': True,
+            'is_fraudulent': is_fraudulent,
+            'reason': reason
+        })
+    except Exception as e:
+        return jsonify({'success': False, 'error': str(e)}), 500
+
+
+@app.route('/api/security/test-email', methods=['POST'])
+def test_email():
+    """Test email sending."""
+    try:
+        if not email_service:
+            return jsonify({'success': False, 'error': 'Email service not available'}), 500
+        
+        data = request.json
+        email = data.get('email', 'test@example.com')
+        
+        success = email_service.send_test_email(email)
+        
+        return jsonify({
+            'success': success,
+            'message': 'Test email sent' if success else 'Failed to send test email'
         })
     except Exception as e:
         return jsonify({'success': False, 'error': str(e)}), 500

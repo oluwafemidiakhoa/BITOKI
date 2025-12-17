@@ -1,0 +1,53 @@
+# Email configuration for BITOKI platform
+# Uses Zoho SMTP for transactional emails
+
+email:
+  # Zoho SMTP Configuration
+  smtp:
+    host: "smtp.zoho.com"
+    port: 587
+    username: "foundryai@getfoundryai.com"
+    password: "Flindell1977@"
+    use_tls: true
+    use_ssl: false
+    
+  # Default sender information
+  sender:
+    name: "BITOKI Security"
+    email: "security@bitoki.com"
+    
+  # Email templates
+  templates:
+    login_alert:
+      subject: "🔒 New Login to Your BITOKI Account"
+      template_file: "login_alert.html"
+      
+    transfer_alert:
+      subject: "💰 Transfer Alert from BITOKI"
+      template_file: "transfer_alert.html"
+      
+    two_factor_setup:
+      subject: "🔐 Two-Factor Authentication Setup"
+      template_file: "2fa_setup.html"
+      
+    backup_codes:
+      subject: "🔑 Your BITOKI Backup Codes"
+      template_file: "backup_codes.html"
+
+# Security alerts configuration
+alerts:
+  enabled: true
+  email_notifications: true
+  push_notifications: false  # Would require mobile app integration
+  
+  # Alert thresholds
+  login_alerts: true
+  transfer_threshold: 1000.0  # Alert for transfers over $1000
+  large_transaction_threshold: 5000.0  # Alert for transactions over $5000
+
+# Rate limiting
+rate_limits:
+  login_attempts: 5
+  login_window_minutes: 15
+  transfer_attempts: 3
+  transfer_window_minutes: 10

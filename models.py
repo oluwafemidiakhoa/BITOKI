@@ -34,6 +34,8 @@ class User(UserMixin, db.Model):
     # Security
     two_factor_enabled = db.Column(db.Boolean, default=False)
     two_factor_secret = db.Column(db.String(32))
+    password_reset_token = db.Column(db.String(255))
+    password_reset_expires = db.Column(db.DateTime)
 
     # Timestamps
     created_at = db.Column(db.DateTime, default=datetime.utcnow)

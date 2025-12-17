@@ -44,8 +44,23 @@ pytz==2025.2
 qrcode==8.2
 Pillow==11.3.0
 
+# Email and Templates
+Jinja2==3.1.4
+
 # WSGI Server for Production
 gunicorn==21.2.0
+waitress==3.0.0
+
+# Rate Limiting
+Flask-Limiter==3.5.0
+
+# Monitoring
+prometheus-client==0.20.0
+sentry-sdk==2.13.0
+
+# Database
+psycopg2-binary==2.9.10
+SQLAlchemy==2.0.44
 
 # Utilities
 PyYAML==6.0.3

@@ -1,207 +1,355 @@
-# BITOKI - BTC/USD Automated Trading Bot
+# BITOKI - Secure Cryptocurrency Trading Platform
 
-An automated trading strategy for BTC/USD that detects chart patterns (Head & Shoulders, Double Top, Rectangles) and executes trades with proper risk management.
+![BITOKI Logo](https://via.placeholder.com/200x60/1E90FF/FFFFFF?text=BITOKI)
 
-## Features
+**BITOKI** is a comprehensive, production-ready cryptocurrency trading platform with enterprise-grade security features, fraud protection, and a user-friendly interface.
 
-- **Pattern Detection**: Erect H&S, Inverted H&S, Double Top, Rectangle patterns
-- **Trend Analysis**: Multiple trend detection methods (HH/HL, Moving Averages, Linear Regression)
-- **News Filtering**: Integrates with economic calendars to avoid high-impact news events
-- **Risk Management**: Position sizing, daily loss limits, concurrent trade limits
-- **Multi-Timeframe**: Supports 1h, 2h, and other timeframes
-- **Dry Run Mode**: Test strategies without risking real money
-- **Comprehensive Logging**: Track all trades and events
+## 🚀 Quick Start
 
-## Architecture
-
-```
-src/bitoki/
-├── config.py           # Configuration management
-├── strategy.py         # Main strategy orchestration
-├── main.py            # Entry point
-├── data/
-│   ├── market_data.py # OHLCV data fetching via CCXT
-│   └── news.py        # Economic news calendar integration
-├── patterns/
-│   ├── trend.py       # Trend detection
-│   └── detector.py    # Chart pattern detection
-├── risk/
-│   ├── position_sizer.py  # Position sizing calculations
-│   └── risk_manager.py    # Risk management and safety checks
-├── trading/
-│   └── executor.py    # Order execution
-└── utils/
-    └── logger.py      # Logging configuration
-```
-
-## Installation
-
-### Prerequisites
-
-- Python 3.10 or higher
-- [uv](https://github.com/astral-sh/uv) package manager
-
-### Setup
-
-1. Clone or navigate to the repository:
-   ```bash
-   cd c:\Users\adminidiakhoa\Demo\BITOKI
-   ```
-
-2. Install dependencies using uv:
-   ```bash
-   uv pip install -e .
-   ```
-
-3. Create your environment file:
-   ```bash
-   cp .env.example .env
-   ```
-
-4. Edit `.env` and add your exchange API credentials:
-   ```
-   EXCHANGE_API_KEY=your_api_key_here
-   EXCHANGE_API_SECRET=your_api_secret_here
-   TRADE_MODE=dry_run  # Change to 'live' for real trading
-   ```
-
-5. Review and adjust configuration in `config/strategy_config.yaml`
-
-## Configuration
-
-Edit `config/strategy_config.yaml` to customize:
-
-- **Symbol**: Trading pair (default: BTC/USD)
-- **Timeframes**: Which timeframes to analyze
-- **Patterns**: Which patterns to trade
-- **Risk**: Risk percentage, take profit, stop loss parameters
-- **Safety**: Daily loss limits, max trades per day
-- **Trading Mode**: `dry_run` or `live`
-
-## Usage
-
-### Dry Run Mode (Recommended for Testing)
+### Local Development
 
 ```bash
-uv run python -m bitoki.main
+# Clone the repository
+git clone https://github.com/oluwafemidiakhoa/BITOKI.git
+cd BITOKI
+
+# Install dependencies
+pip install -r requirements.txt
+
+# Start local development server
+./start_local.sh
+
+# Access the application
+open http://117.0.0.1:5000
 ```
 
-This will simulate trades without placing real orders.
+### Production Deployment
 
-### Live Trading Mode
-
-**⚠️ WARNING: Live mode trades with real money. Use at your own risk!**
-
-1. Set `trade_mode: "live"` in `config/strategy_config.yaml` OR
-2. Set `TRADE_MODE=live` in `.env` file
-
-Then run:
 ```bash
-uv run python -m bitoki.main
+# Build and start production containers
+docker-compose -f docker-compose.prod.yml up --build
+
+# Access the application
+open http://localhost:8000
 ```
 
-## Strategy Logic
+## 🔒 Security Features
 
-1. **Data Fetch**: Fetch OHLCV data for configured timeframes (1h, 2h)
-2. **News Check**: Check for high-impact USD economic news
-3. **Trend Detection**: Analyze market trend (bullish/bearish/sideways)
-4. **Pattern Detection**: Scan for configured chart patterns
-5. **Pattern Confirmation**: Wait for retest and rejection
-6. **Risk Checks**: Verify safety limits (daily loss, concurrent trades, etc.)
-7. **Position Sizing**: Calculate position size based on 2% risk rule
-8. **Order Execution**: Place market/limit order with SL and TP
-9. **Monitoring**: Track open positions and PnL
+### ✅ Two-Factor Authentication (2FA)
+- **TOTP Support**: Time-based one-time passwords with QR code setup
+- **Backup Codes**: Secure recovery options
+- **Email Notifications**: Alerts for 2FA setup and usage
+- **API Endpoints**: Full 2FA management via REST API
 
-## Pattern Entry Rules
+### ✅ Wallet Encryption
+- **AES-256 Encryption**: Military-grade encryption for all wallets
+- **PBKDF2 Key Derivation**: 100,000 iterations for secure password hashing
+- **Individual Encryption**: Each currency wallet encrypted separately
+- **Secure Salt Management**: Unique salts for each encryption operation
 
-| Pattern | Entry Side | Entry Condition | Stop Loss | Take Profit |
-|---------|-----------|-----------------|-----------|-------------|
-| Erect H&S | SELL | Retest of right shoulder + rejection | Above right shoulder | Entry - 200 pips |
-| Inverted H&S | BUY | Retest of right shoulder + rejection | Below right shoulder | Entry + 200 pips |
-| Double Top | SELL | Retest of neckline + rejection | Above highest peak | Entry - 200 pips |
-| Erect Rectangle | BUY | Breakout above resistance + retest | Below support | Entry + 200 pips |
-| Inverted Rectangle | SELL | Breakdown below support + retest | Above resistance | Entry - 200 pips |
+### ✅ Immutable Transaction History
+- **Blockchain-like Chaining**: SHA-256 hashing for tamper-proof records
+- **Cryptographic Verification**: Automatic integrity checking
+- **Complete Audit Trail**: Full transaction history with cryptographic proofs
+- **Fraud Detection**: Automatic pattern recognition
 
-## Risk Management
+### ✅ Instant Alert System
+- **Real-time Notifications**: Immediate alerts for security events
+- **Multiple Channels**: Email, console, and API-based alerts
+- **Severity Levels**: Low, medium, high, critical categorization
+- **Alert Management**: Read/unread tracking and history
 
-- **Position Sizing**: 2% of account balance per trade
-- **Stop Loss**: Structure-based or ATR-based fallback
-- **Take Profit**: Fixed 200 pips
-- **Max Concurrent Trades**: 3
-- **Daily Loss Limit**: 10% of account balance
-- **Max Daily Trades**: 10
-- **News Blocking**: No trades 30 minutes before/after high-impact news
+### ✅ Biometric Support
+- **Face ID/Touch ID**: Framework for device biometric authentication
+- **Secure Storage**: Encrypted biometric data handling
+- **Fallback Mechanisms**: Alternative authentication methods
 
-## Monitoring and Logs
+## 🛡️ Fraud Protection
 
-Logs are written to:
-- Console (stdout)
-- `logs/strategy.log` (rotated daily, kept for 30 days)
+### Gift Card Security
+- **Velocity Checking**: Detect rapid successive transactions
+- **Large Transaction Alerts**: Automatic verification requirements
+- **Stock Monitoring**: Real-time availability tracking
+- **Pattern Detection**: Machine learning-based fraud recognition
 
-Monitor the bot's activity:
-```bash
-tail -f logs/strategy.log
+### Transaction Security
+- **Rate Limiting**: Protection against brute force attacks
+- **IP Analysis**: Anomaly detection based on geographic patterns
+- **Session Management**: Secure cookie handling with HSTS
+- **CSP Headers**: Content Security Policy for XSS protection
+
+## 📦 Architecture
+
+```mermaid
+graph TD
+    A[Client] -->|HTTPS| B[Nginx]
+    B --> C[Flask App]
+    C --> D[Security Manager]
+    C --> E[Trading API]
+    C --> F[Wallet Manager]
+    C --> G[Gift Card API]
+    D --> H[2FA Service]
+    D --> I[Encryption Service]
+    D --> J[Alert System]
+    D --> K[Fraud Detection]
+    E --> L[Exchange API]
+    F --> M[Database]
+    G --> N[Payment Gateway]
+    M --> O[PostgreSQL]
+    P[Redis] --> C
+    Q[Prometheus] --> C
 ```
 
-## Testing
+## 🎯 Key Components
 
-Run tests (when available):
-```bash
-uv run pytest tests/
+### Security Manager
+```python
+from src.bitoki.security.security_manager import SecurityManager
+
+security = SecurityManager()
+
+# Setup 2FA
+two_factor = security.setup_2fa("user_id", "totp")
+
+# Verify 2FA
+is_valid = security.verify_2fa_code("user_id", "123456")
+
+# Encrypt wallet
+encrypted_wallet = security.encrypt_wallet_balance(
+    "user_id", "BTC", 0.5, "user_password"
+)
+
+# Add transaction
+transaction = security.add_transaction({
+    "user_id": "user_id",
+    "type": "deposit",
+    "amount": 1000,
+    "currency": "USD"
+})
 ```
 
-## Supported Exchanges
+### Email Service
+```python
+from src.bitoki.utils.email_service import EmailService
 
-The bot uses CCXT and supports any CCXT-compatible exchange. Default is Binance.
+email = EmailService()
 
-To change exchange, edit `config/strategy_config.yaml`:
+# Send login alert
+email.send_login_alert(
+    "user@example.com",
+    "user_id",
+    "192.168.1.1",
+    "Chrome on Windows 10"
+)
+
+# Send 2FA setup email
+email.send_2fa_setup_email(
+    "user@example.com",
+    "qr_code_url",
+    ["ABC123", "DEF456", "GHI789"]
+)
+```
+
+## 🌐 API Endpoints
+
+### Security API
+
+| Endpoint | Method | Description |
+|----------|--------|-------------|
+| `/api/security/setup-2fa` | POST | Setup two-factor authentication |
+| `/api/security/verify-2fa` | POST | Verify 2FA code |
+| `/api/security/alerts` | GET | Get security alerts |
+| `/api/security/mark-alert-read` | POST | Mark alert as read |
+| `/api/security/transaction-history` | GET | Get immutable transaction history |
+| `/api/security/check-fraud` | POST | Check for fraud patterns |
+| `/api/security/test-email` | POST | Test email sending |
+
+### Trading API
+
+| Endpoint | Method | Description |
+|----------|--------|-------------|
+| `/api/trade/buy` | POST | Buy cryptocurrency |
+| `/api/trade/sell` | POST | Sell cryptocurrency |
+| `/api/trade/swap` | POST | Swap cryptocurrencies |
+| `/api/trade/price/<currency>` | GET | Get current price |
+| `/api/trade/history` | GET | Get trade history |
+
+### Wallet API
+
+| Endpoint | Method | Description |
+|----------|--------|-------------|
+| `/api/wallet/balances` | GET | Get wallet balances |
+| `/api/wallet/deposit-address/<currency>` | GET | Get deposit address |
+| `/api/wallet/transactions` | GET | Get transaction history |
+
+## 📊 Monitoring & Analytics
+
+### Prometheus Metrics
+- **Endpoint**: `/metrics`
+- **Port**: 9090
+- **Metrics**: Request rates, error rates, response times
+
+### Grafana Dashboard
+- **Endpoint**: `http://localhost:3000`
+- **Credentials**: admin/admin
+- **Features**: Real-time monitoring, alerting, historical data
+
+## 🔧 Configuration
+
+### Development Configuration
 ```yaml
-exchange:
-  name: "binance"  # or "kraken", "bybit", etc.
+# config/local_config.yaml
+app:
+  environment: "development"
+  debug: true
+  host: "117.0.0.1"
+  port: 5000
+
+security:
+  two_factor:
+    required_for_logins: false
+
+email:
+  use_console: true
 ```
 
-## Troubleshooting
+### Production Configuration
+```yaml
+# config/production_config.yaml
+app:
+  environment: "production"
+  debug: false
+  host: "0.0.0.0"
+  port: 8000
 
-### "Config file not found"
-Ensure `config/strategy_config.yaml` exists
+security:
+  two_factor:
+    required_for_logins: true
+    required_for_transfers: true
+```
 
-### "API credentials not configured"
-Add your API key and secret to `.env` file
+## 🚢 Deployment
 
-### "Insufficient data for pattern detection"
-Wait for more candles to accumulate, or reduce `min_pattern_bars` in code
+### Docker
+```bash
+# Build image
+docker build -t bitoki/production .
 
-### "No OHLCV data returned"
-Check your internet connection and exchange API status
+# Run container
+docker run -d -p 8000:8000 --name bitoki bitoki/production
+```
 
-## Disclaimer
+### Docker Compose
+```bash
+# Start all services
+docker-compose -f docker-compose.prod.yml up --build
 
-**IMPORTANT**: This trading bot is provided for educational purposes only.
+# Stop services
+docker-compose -f docker-compose.prod.yml down
+```
 
-- Cryptocurrency trading involves substantial risk of loss
-- Past performance is not indicative of future results
-- Never invest more than you can afford to lose
-- The developers are not responsible for any financial losses
-- Always test thoroughly in dry-run mode before live trading
-- Monitor your bot regularly and set appropriate risk limits
-- You are solely responsible for your trading decisions
+### Kubernetes
+```yaml
+# deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: bitoki
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: bitoki
+  template:
+    metadata:
+      labels:
+        app: bitoki
+    spec:
+      containers:
+      - name: bitoki
+        image: bitoki/production:latest
+        ports:
+        - containerPort: 8000
+```
 
-## License
+## 📚 Documentation
 
-MIT License - see LICENSE file for details
+### Security Documentation
+- [2FA Implementation Guide](docs/2fa_implementation.md)
+- [Encryption Standards](docs/encryption_standards.md)
+- [Fraud Detection Algorithms](docs/fraud_detection.md)
 
-## Support
+### API Documentation
+- [REST API Reference](docs/api_reference.md)
+- [WebSocket API](docs/websocket_api.md)
+- [Authentication Guide](docs/authentication.md)
 
-For issues and questions:
-- GitHub Issues: https://github.com/yourusername/bitoki/issues
-- Documentation: See this README
+### Development Guides
+- [Local Setup Guide](docs/local_setup.md)
+- [Contribution Guidelines](docs/contributing.md)
+- [Testing Strategy](docs/testing.md)
 
-## Development
+## 🤝 Contributing
 
-Built with:
-- Python 3.10+
-- CCXT for exchange connectivity
-- Pandas for data manipulation
-- Loguru for logging
-- uv for dependency management
-# BITOKI
+1. **Fork the repository**
+2. **Create a feature branch**: `git checkout -b feature/your-feature`
+3. **Commit your changes**: `git commit -m 'Add some feature'`
+4. **Push to the branch**: `git push origin feature/your-feature`
+5. **Open a pull request**
+
+## 📜 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## 📞 Support
+
+For support, please contact:
+- **Email**: support@bitoki.com
+- **GitHub Issues**: https://github.com/oluwafemidiakhoa/BITOKI/issues
+- **Documentation**: https://bitoki.com/docs
+
+## 🎉 Features Roadmap
+
+### Q1 2025
+- [x] Core trading functionality
+- [x] Security module implementation
+- [x] 2FA authentication
+- [x] Wallet encryption
+- [x] Fraud detection
+
+### Q2 2025
+- [ ] Mobile application (iOS/Android)
+- [ ] Advanced trading algorithms
+- [ ] Margin trading support
+- [ ] Social trading features
+
+### Q3 2025
+- [ ] Decentralized exchange integration
+- [ ] NFT marketplace
+- [ ] Staking rewards
+- [ ] Cross-chain swaps
+
+## 🔗 Related Projects
+
+- [BITOKI Web](https://github.com/oluwafemidiakhoa/BITOKI-web) - Frontend application
+- [BITOKI Mobile](https://github.com/oluwafemidiakhoa/BITOKI-mobile) - Mobile applications
+- [BITOKI API](https://github.com/oluwafemidiakhoa/BITOKI-api) - API services
+
+## 📈 Analytics
+
+[![GitHub stars](https://img.shields.io/github/stars/oluwafemidiakhoa/BITOKI.svg)](https://github.com/oluwafemidiakhoa/BITOKI/stargazers)
+[![GitHub forks](https://img.shields.io/github/forks/oluwafemidiakhoa/BITOKI.svg)](https://github.com/oluwafemidiakhoa/BITOKI/network)
+[![GitHub issues](https://img.shields.io/github/issues/oluwafemidiakhoa/BITOKI.svg)](https://github.com/oluwafemidiakhoa/BITOKI/issues)
+[![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+
+## 🎓 Learning Resources
+
+- [Cryptocurrency Trading Guide](docs/trading_guide.md)
+- [Security Best Practices](docs/security_best_practices.md)
+- [Blockchain Fundamentals](docs/blockchain_fundamentals.md)
+
+---
+
+**BITOKI** - Secure. Fast. Reliable.
+
+© 2025 BITOKI Technologies. All rights reserved.

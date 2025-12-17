@@ -1,0 +1,58 @@
+# Local development configuration for BITOKI platform
+# Configured for IP: 117.0.0.1
+
+# Application settings
+app:
+  name: "BITOKI"
+  environment: "development"
+  debug: true
+  host: "117.0.0.1"
+  port: 5000
+  secret_key: "dev-secret-key-change-in-production"
+
+# Security settings (relaxed for development)
+security:
+  two_factor:
+    required_for_logins: false  # Disable 2FA requirement for local dev
+    required_for_transfers: false
+  
+  session:
+    secure_cookies: false  # Allow non-HTTPS cookies for local dev
+    same_site_policy: "Lax"
+
+# Database settings (SQLite for local development)
+database:
+  url: "sqlite:///bitoki_dev.db"
+  echo: true  # Show SQL queries in console
+
+# Email settings (use console for development)
+email:
+  smtp:
+    host: "smtp.zoho.com"
+    port: 587
+    username: "foundryai@getfoundryai.com"
+    password: "Flindell1977@"
+    use_tls: true
+    use_ssl: false
+  
+  # Use console backend for development
+  use_console: true  # Print emails to console instead of sending
+
+# Exchange settings (sandbox mode for development)
+exchange:
+  name: "binance"
+  sandbox: true
+  api_key: "your_dev_api_key"
+  api_secret: "your_dev_api_secret"
+
+# Logging settings
+logging:
+  level: "DEBUG"
+  to_file: false
+  to_console: true
+
+# Feature flags for development
+features:
+  mock_data: true  # Use mock data for testing
+  debug_tools: true  # Enable debug tools
+  auto_login: true  # Auto-login for development
