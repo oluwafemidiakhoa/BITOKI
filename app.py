@@ -157,6 +157,36 @@ def savings():
     return render_template('savings.html')
 
 
+@app.route('/about')
+def about():
+    """About BITOKI page."""
+    return render_template('about.html')
+
+
+@app.route('/contact')
+def contact():
+    """Contact page."""
+    return render_template('contact.html')
+
+
+@app.route('/faq')
+def faq():
+    """FAQ page."""
+    return render_template('faq.html')
+
+
+@app.route('/terms')
+def terms():
+    """Terms of Service page."""
+    return render_template('legal/terms.html')
+
+
+@app.route('/privacy')
+def privacy():
+    """Privacy Policy page."""
+    return render_template('legal/privacy.html')
+
+
 @app.route('/kyc/verify')
 def kyc_verify():
     """KYC verification page."""

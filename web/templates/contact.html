@@ -1,0 +1,98 @@
+{% extends "base.html" %}
+
+{% block title %}Contact Us - BITOKI{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+    <div class="row">
+        <div class="col-lg-8 mx-auto">
+            <h1 class="mb-4">Contact Us</h1>
+            <p class="lead">Get in touch with our team</p>
+
+            <div class="row mt-5">
+                <div class="col-md-6 mb-4">
+                    <div class="card h-100">
+                        <div class="card-body text-center">
+                            <i class="fas fa-envelope fa-3x text-primary mb-3"></i>
+                            <h4>Email Support</h4>
+                            <p class="text-muted">For general inquiries and support</p>
+                            <a href="mailto:support@bitoki.com" class="btn btn-outline-primary">support@bitoki.com</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-6 mb-4">
+                    <div class="card h-100">
+                        <div class="card-body text-center">
+                            <i class="fas fa-phone fa-3x text-success mb-3"></i>
+                            <h4>Phone Support</h4>
+                            <p class="text-muted">Monday - Friday, 9AM - 6PM WAT</p>
+                            <a href="tel:+2348012345678" class="btn btn-outline-success">+234 801 234 5678</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-6 mb-4">
+                    <div class="card h-100">
+                        <div class="card-body text-center">
+                            <i class="fab fa-whatsapp fa-3x text-success mb-3"></i>
+                            <h4>WhatsApp</h4>
+                            <p class="text-muted">Quick responses on WhatsApp</p>
+                            <a href="https://wa.me/2348012345678" class="btn btn-outline-success" target="_blank">Chat with us</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-6 mb-4">
+                    <div class="card h-100">
+                        <div class="card-body text-center">
+                            <i class="fab fa-telegram fa-3x text-info mb-3"></i>
+                            <h4>Telegram</h4>
+                            <p class="text-muted">Join our community</p>
+                            <a href="https://t.me/bitoki" class="btn btn-outline-info" target="_blank">@bitoki</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card mt-5">
+                <div class="card-body">
+                    <h3 class="mb-4">Send us a message</h3>
+                    <form>
+                        <div class="mb-3">
+                            <label for="name" class="form-label">Name</label>
+                            <input type="text" class="form-control" id="name" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="email" class="form-label">Email</label>
+                            <input type="email" class="form-control" id="email" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="subject" class="form-label">Subject</label>
+                            <input type="text" class="form-control" id="subject" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="message" class="form-label">Message</label>
+                            <textarea class="form-control" id="message" rows="5" required></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Send Message</button>
+                    </form>
+                </div>
+            </div>
+
+            <div class="card mt-4">
+                <div class="card-body">
+                    <h4>Office Address</h4>
+                    <p class="mb-0">
+                        <i class="fas fa-map-marker-alt text-danger me-2"></i>
+                        BITOKI Limited<br>
+                        Plot 1234, Herbert Macaulay Way<br>
+                        Central Business District<br>
+                        Abuja, Nigeria
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,373 @@
+{% extends "base.html" %}
+
+{% block title %}FAQ - BITOKI{% endblock %}
+
+{% block extra_css %}
+<style>
+    .search-box {
+        margin-bottom: 30px;
+    }
+    .category-pills {
+        margin-bottom: 25px;
+    }
+    .faq-item {
+        margin-bottom: 15px;
+    }
+    .accordion-button:not(.collapsed) {
+        background-color: #e7f1ff;
+        color: #0d6efd;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2 class="mb-4"><i class="fas fa-question-circle"></i> Frequently Asked Questions</h2>
+
+    <!-- Search Box -->
+    <div class="row search-box">
+        <div class="col-md-8 mx-auto">
+            <div class="input-group">
+                <span class="input-group-text"><i class="fas fa-search"></i></span>
+                <input type="text" class="form-control" id="faq-search" placeholder="Search for answers...">
+            </div>
+        </div>
+    </div>
+
+    <!-- Category Filter -->
+    <div class="category-pills text-center">
+        <button class="btn btn-outline-primary btn-sm active" onclick="filterCategory('all')">All</button>
+        <button class="btn btn-outline-primary btn-sm" onclick="filterCategory('getting-started')">Getting Started</button>
+        <button class="btn btn-outline-primary btn-sm" onclick="filterCategory('trading')">Trading</button>
+        <button class="btn btn-outline-primary btn-sm" onclick="filterCategory('security')">Security</button>
+        <button class="btn btn-outline-primary btn-sm" onclick="filterCategory('withdrawals')">Withdrawals</button>
+        <button class="btn btn-outline-primary btn-sm" onclick="filterCategory('fees')">Fees</button>
+    </div>
+
+    <!-- FAQ Accordion -->
+    <div class="accordion" id="faqAccordion">
+        <!-- Getting Started -->
+        <div class="faq-item" data-category="getting-started">
+            <div class="accordion-item">
+                <h2 class="accordion-header">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq1">
+                        <i class="fas fa-rocket me-2 text-primary"></i> How do I get started with BITOKI?
+                    </button>
+                </h2>
+                <div id="faq1" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                    <div class="accordion-body">
+                        <ol>
+                            <li>Create an account by clicking <a href="/auth/register">Register</a></li>
+                            <li>Verify your email address</li>
+                            <li>Complete KYC verification (optional but recommended for higher limits)</li>
+                            <li>Deposit funds via cryptocurrency or NGN</li>
+                            <li>Start trading!</li>
+                        </ol>
+                        <p>For detailed guidance, check our <a href="/help/getting-started">Getting Started Guide</a>.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="faq-item" data-category="getting-started">
+            <div class="accordion-item">
+                <h2 class="accordion-header">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq2">
+                        <i class="fas fa-id-card me-2 text-primary"></i> What is KYC and why do I need it?
+                    </button>
+                </h2>
+                <div id="faq2" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                    <div class="accordion-body">
+                        <p>KYC (Know Your Customer) is an identity verification process required for cryptocurrency exchanges. BITOKI has 4 verification levels:</p>
+                        <ul>
+                            <li><strong>Level 0 (Unverified):</strong> $500 daily limit, no withdrawals</li>
+                            <li><strong>Level 1 (Email/Phone):</strong> $2,000 daily, $500 withdrawals</li>
+                            <li><strong>Level 2 (ID Document):</strong> $10,000 daily, $3,000 withdrawals</li>
+                            <li><strong>Level 3 (Full Verification):</strong> $50,000 daily, $10,000 withdrawals</li>
+                        </ul>
+                        <p>Higher KYC levels give you access to larger trading limits and lower fees.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Trading -->
+        <div class="faq-item" data-category="trading">
+            <div class="accordion-item">
+                <h2 class="accordion-header">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq3">
+                        <i class="fas fa-exchange-alt me-2 text-success"></i> How do I buy cryptocurrency?
+                    </button>
+                </h2>
+                <div id="faq3" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                    <div class="accordion-body">
+                        <ol>
+                            <li>Go to the <a href="/trade">Trade</a> page</li>
+                            <li>Select the "Buy" tab</li>
+                            <li>Choose the cryptocurrency you want to buy</li>
+                            <li>Enter the amount</li>
+                            <li>Select your payment method (USDT, USD, or NGN)</li>
+                            <li>Review the fee breakdown and total cost</li>
+                            <li>Click "Buy Now" to complete the transaction</li>
+                        </ol>
+                        <p>The cryptocurrency will be instantly credited to your BITOKI wallet.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="faq-item" data-category="trading">
+            <div class="accordion-item">
+                <h2 class="accordion-header">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq4">
+                        <i class="fas fa-chart-line me-2 text-success"></i> What cryptocurrencies can I trade?
+                    </button>
+                </h2>
+                <div id="faq4" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                    <div class="accordion-body">
+                        <p>BITOKI currently supports trading of the following cryptocurrencies:</p>
+                        <ul>
+                            <li><strong>Bitcoin (BTC)</strong> - The original cryptocurrency</li>
+                            <li><strong>Ethereum (ETH)</strong> - Smart contract platform</li>
+                            <li><strong>Solana (SOL)</strong> - High-speed blockchain</li>
+                            <li><strong>Tether (USDT)</strong> - Stablecoin (ERC-20 & TRC-20)</li>
+                            <li><strong>Nigerian Naira (NGN)</strong> - Fiat currency</li>
+                        </ul>
+                        <p>We're constantly adding more cryptocurrencies. Check our <a href="/trade">Trade page</a> for the latest supported assets.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Security -->
+        <div class="faq-item" data-category="security">
+            <div class="accordion-item">
+                <h2 class="accordion-header">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq5">
+                        <i class="fas fa-shield-alt me-2 text-warning"></i> How do I enable Two-Factor Authentication (2FA)?
+                    </button>
+                </h2>
+                <div id="faq5" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                    <div class="accordion-body">
+                        <ol>
+                            <li>Log into your account</li>
+                            <li>Click on your username dropdown</li>
+                            <li>Select "Security (2FA)"</li>
+                            <li>Download an authenticator app (Google Authenticator or Authy)</li>
+                            <li>Scan the QR code with your authenticator app</li>
+                            <li>Enter the 6-digit code to confirm</li>
+                            <li>Save your backup codes in a secure location</li>
+                        </ol>
+                        <p><strong>Important:</strong> Keep your backup codes safe! You'll need them if you lose access to your authenticator device.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="faq-item" data-category="security">
+            <div class="accordion-item">
+                <h2 class="accordion-header">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq6">
+                        <i class="fas fa-lock me-2 text-warning"></i> Is my money safe on BITOKI?
+                    </button>
+                </h2>
+                <div id="faq6" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                    <div class="accordion-body">
+                        <p>Yes! BITOKI implements industry-leading security measures:</p>
+                        <ul>
+                            <li><strong>Encryption:</strong> All data is encrypted using SSL/TLS</li>
+                            <li><strong>2FA:</strong> Optional two-factor authentication</li>
+                            <li><strong>Cold Storage:</strong> Majority of funds stored offline</li>
+                            <li><strong>Activity Monitoring:</strong> Real-time fraud detection</li>
+                            <li><strong>Regular Audits:</strong> Periodic security assessments</li>
+                        </ul>
+                        <p>We also provide transaction alerts via email/SMS for all account activities.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Withdrawals -->
+        <div class="faq-item" data-category="withdrawals">
+            <div class="accordion-item">
+                <h2 class="accordion-header">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq7">
+                        <i class="fas fa-money-bill-wave me-2 text-info"></i> How do I withdraw funds?
+                    </button>
+                </h2>
+                <div id="faq7" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                    <div class="accordion-body">
+                        <ol>
+                            <li>Go to your <a href="/wallet">Wallet</a> page</li>
+                            <li>Select the currency you want to withdraw</li>
+                            <li>Click "Withdraw"</li>
+                            <li>Enter the destination address (for crypto) or bank details (for NGN)</li>
+                            <li>Enter the amount</li>
+                            <li>Confirm the transaction with your 2FA code (if enabled)</li>
+                        </ol>
+                        <p><strong>Processing Time:</strong></p>
+                        <ul>
+                            <li>Cryptocurrency: 10-30 minutes</li>
+                            <li>NGN Bank Transfer: 1-24 hours</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="faq-item" data-category="withdrawals">
+            <div class="accordion-item">
+                <h2 class="accordion-header">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq8">
+                        <i class="fas fa-hourglass-half me-2 text-info"></i> Why is my withdrawal pending?
+                    </button>
+                </h2>
+                <div id="faq8" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                    <div class="accordion-body">
+                        <p>Withdrawals may be pending for several reasons:</p>
+                        <ul>
+                            <li><strong>First-time withdrawal:</strong> Requires manual verification (24 hours)</li>
+                            <li><strong>Large amount:</strong> Amounts over $5,000 require additional checks</li>
+                            <li><strong>Network congestion:</strong> Blockchain confirmation delays</li>
+                            <li><strong>Incomplete KYC:</strong> Higher limits require verification</li>
+                        </ul>
+                        <p>If your withdrawal is pending for more than 48 hours, please contact support.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Fees -->
+        <div class="faq-item" data-category="fees">
+            <div class="accordion-item">
+                <h2 class="accordion-header">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq9">
+                        <i class="fas fa-dollar-sign me-2 text-danger"></i> What are the trading fees?
+                    </button>
+                </h2>
+                <div id="faq9" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                    <div class="accordion-body">
+                        <p>BITOKI has transparent, competitive fees:</p>
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>Transaction Type</th>
+                                    <th>Fee</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Cryptocurrency Trading (Buy/Sell)</td>
+                                    <td>0.5%</td>
+                                </tr>
+                                <tr>
+                                    <td>Cryptocurrency Swap</td>
+                                    <td>0.3%</td>
+                                </tr>
+                                <tr>
+                                    <td>Gift Card Trading</td>
+                                    <td>2%</td>
+                                </tr>
+                                <tr>
+                                    <td>Crypto Deposits</td>
+                                    <td>Free</td>
+                                </tr>
+                                <tr>
+                                    <td>NGN Deposits (Paystack)</td>
+                                    <td>1.5%</td>
+                                </tr>
+                                <tr>
+                                    <td>Crypto Withdrawals</td>
+                                    <td>Network fees only</td>
+                                </tr>
+                                <tr>
+                                    <td>NGN Withdrawals</td>
+                                    <td>₦50 flat</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <p>For complete fee details, visit our <a href="/fees">Fee Schedule</a> page.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="faq-item" data-category="fees">
+            <div class="accordion-item">
+                <h2 class="accordion-header">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq10">
+                        <i class="fas fa-gift me-2 text-danger"></i> How do gift card trades work?
+                    </button>
+                </h2>
+                <div id="faq10" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                    <div class="accordion-body">
+                        <p>BITOKI allows you to trade gift cards for cryptocurrency or NGN:</p>
+                        <ol>
+                            <li>Go to the <a href="/giftcards">Gift Cards</a> page</li>
+                            <li>Select the gift card brand you want to trade</li>
+                            <li>Click "Sell" and enter the card details</li>
+                            <li>Enter the face value and card code/PIN</li>
+                            <li>Review the payout (includes 2% processing fee)</li>
+                            <li>Submit the trade for verification</li>
+                        </ol>
+                        <p><strong>Processing Time:</strong> 30 minutes - 2 hours after verification.</p>
+                        <p><strong>Supported Brands:</strong> Amazon, iTunes, Google Play, Steam, Nike, Visa, and more.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Contact Support -->
+    <div class="card mt-5 mb-4">
+        <div class="card-body text-center">
+            <h5 class="card-title">Still have questions?</h5>
+            <p class="card-text">Our support team is here to help!</p>
+            <a href="/contact" class="btn btn-primary">Contact Support</a>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+// Search functionality
+$(document).ready(function() {
+    $('#faq-search').on('keyup', function() {
+        const searchText = $(this).val().toLowerCase();
+
+        $('.faq-item').each(function() {
+            const itemText = $(this).text().toLowerCase();
+            if (itemText.includes(searchText)) {
+                $(this).show();
+            } else {
+                $(this).hide();
+            }
+        });
+
+        // Show all if search is empty
+        if (searchText === '') {
+            $('.faq-item').show();
+        }
+    });
+});
+
+// Category filter
+function filterCategory(category) {
+    // Update active button
+    $('.category-pills button').removeClass('active');
+    event.target.classList.add('active');
+
+    // Filter FAQ items
+    if (category === 'all') {
+        $('.faq-item').show();
+    } else {
+        $('.faq-item').hide();
+        $(`.faq-item[data-category="${category}"]`).show();
+    }
+
+    // Clear search
+    $('#faq-search').val('');
+}
+</script>
+{% endblock %}
