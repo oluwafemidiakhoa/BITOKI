@@ -9,6 +9,14 @@ from datetime import datetime, timedelta
 
 auth_bp = Blueprint('auth', __name__)
 
+# Import limiter from app (will be set by app.py)
+limiter = None
+
+def get_limiter():
+    """Get the limiter instance from app context."""
+    from flask import current_app
+    return current_app.extensions.get('limiter')
+
 
 @auth_bp.route('/register', methods=['GET', 'POST'])
 def register():
@@ -58,14 +66,20 @@ def register():
         # Log activity
         log_activity(user.id, 'register', request.remote_addr, request.headers.get('User-Agent'))
 
-        # Send welcome email
-        try:
-            from services.email_service import send_welcome_email
-            send_welcome_email(user)
-        except Exception as e:
-            print(f"Failed to send welcome email: {e}")
+        # Generate email verification token
+        verification_token = secrets.token_urlsafe(32)
+        user.email_verification_token = verification_token
+        user.email_verification_sent_at = datetime.utcnow()
+        db.session.commit()
 
-        flash('Registration successful! Please check your email and login.', 'success')
+        # Send verification email
+        try:
+            from services.email_service import send_verification_email
+            send_verification_email(user, verification_token)
+        except Exception as e:
+            print(f"Failed to send verification email: {e}")
+
+        flash('Registration successful! Please check your email to verify your account.', 'success')
         return redirect(url_for('auth.login'))
 
     return render_template('auth/register.html')
@@ -269,6 +283,66 @@ def reset_password():
         return redirect(url_for('auth.login'))
 
     return render_template('auth/reset_password.html', token=token)
+
+
+@auth_bp.route('/verify-email', methods=['GET'])
+def verify_email():
+    """Verify user email address."""
+    token = request.args.get('token')
+
+    if not token:
+        flash('Invalid verification link', 'error')
+        return redirect(url_for('auth.login'))
+
+    user = User.query.filter_by(email_verification_token=token).first()
+
+    if not user:
+        flash('Invalid or expired verification link', 'error')
+        return redirect(url_for('auth.login'))
+
+    # Check if token is expired (24 hours)
+    if user.email_verification_sent_at:
+        expiry_time = user.email_verification_sent_at + timedelta(hours=24)
+        if datetime.utcnow() > expiry_time:
+            flash('Verification link has expired. Please request a new one.', 'error')
+            return redirect(url_for('auth.resend_verification'))
+
+    # Verify email
+    user.email_verified = True
+    user.email_verification_token = None
+    user.email_verification_sent_at = None
+    db.session.commit()
+
+    flash('Email verified successfully! You can now login.', 'success')
+    return redirect(url_for('auth.login'))
+
+
+@auth_bp.route('/resend-verification', methods=['GET', 'POST'])
+def resend_verification():
+    """Resend email verification link."""
+    if request.method == 'POST':
+        email = request.form.get('email')
+        user = User.query.filter_by(email=email).first()
+
+        if user and not user.email_verified:
+            # Generate new token
+            verification_token = secrets.token_urlsafe(32)
+            user.email_verification_token = verification_token
+            user.email_verification_sent_at = datetime.utcnow()
+            db.session.commit()
+
+            # Send verification email
+            try:
+                from services.email_service import send_verification_email
+                send_verification_email(user, verification_token)
+            except Exception as e:
+                print(f"Failed to send verification email: {e}")
+
+        # Always show success to prevent email enumeration
+        flash('If that email exists and is not verified, we sent a new verification link.', 'info')
+        return redirect(url_for('auth.login'))
+
+    return render_template('auth/resend_verification.html')
 
 
 def log_activity(user_id, action, ip_address, user_agent, details=None):

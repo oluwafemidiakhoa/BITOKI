@@ -3,16 +3,21 @@
 import os
 from flask import Flask, render_template, request, jsonify, session
 from flask_cors import CORS
+from flask_login import LoginManager, current_user as _flask_current_user
+from flask_limiter import Limiter
+from flask_limiter.util import get_remote_address
 import ccxt
 from dotenv import load_dotenv
 
+from models import db, bcrypt, User
 from api.wallet import WalletManager
 from api.trading import TradingAPI
 from api.giftcard import GiftCardAPI
+from auth import auth_bp
 from src.bitoki.config import Config
 from src.bitoki.data.market_data import MarketDataFetcher
 from src.bitoki.security.security_manager import SecurityManager
-from src.bitoki.utils.email_service import EmailService
+# Email service is now in services/email_service.py
 
 # Load environment variables
 load_dotenv()
@@ -20,6 +25,55 @@ load_dotenv()
 app = Flask(__name__, template_folder='web/templates', static_folder='web/static')
 app.secret_key = os.getenv('FLASK_SECRET_KEY', 'dev-secret-key-change-in-production')
 CORS(app)
+
+# Configure database and extensions
+app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL', 'sqlite:///bitoki.db')
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+db.init_app(app)
+bcrypt.init_app(app)
+
+# Initialize rate limiter
+limiter = Limiter(
+    app=app,
+    key_func=get_remote_address,
+    default_limits=["200 per day", "50 per hour"],
+    storage_uri="memory://"
+)
+
+login_manager = LoginManager()
+login_manager.login_view = 'auth.login'
+login_manager.init_app(app)
+
+
+@login_manager.user_loader
+def load_user(user_id):
+    """Load user for Flask-Login sessions."""
+    try:
+        return User.query.get(int(user_id))
+    except Exception:
+        return None
+
+
+# Provide a safe anonymous user for templates
+class _AnonymousUser:
+    is_authenticated = False
+    username = "Guest"
+    kyc_level = 0
+    kyc_status = "pending"
+
+
+@app.context_processor
+def inject_current_user():
+    """Ensure templates always have a current_user object."""
+    if _flask_current_user is not None:
+        try:
+            return {"current_user": _flask_current_user}
+        except Exception:
+            pass
+    return {"current_user": _AnonymousUser()}
+
+# Register blueprints
+app.register_blueprint(auth_bp, url_prefix='/auth')
 
 # Initialize components
 try:
@@ -38,13 +92,8 @@ except Exception as e:
 # Initialize security manager
 security_manager = SecurityManager()
 
-# Initialize email service
-try:
-    email_service = EmailService()
-    email_service.create_email_templates()
-except Exception as e:
-    print(f"Warning: Could not initialize email service: {e}")
-    email_service = None
+# Initialize email service - using Flask-Mail in app_prod.py instead
+email_service = None
 
 wallet_manager = WalletManager(exchange)
 trading_api = TradingAPI(exchange) if exchange else None
@@ -56,6 +105,12 @@ giftcard_api = GiftCardAPI()
 def index():
     """Main dashboard."""
     return render_template('index.html')
+
+
+@app.route('/health')
+def health():
+    """Container/platform health check endpoint."""
+    return jsonify({'status': 'ok'})
 
 
 @app.route('/dashboard')
@@ -86,6 +141,24 @@ def giftcards():
 def savings():
     """Savings page."""
     return render_template('savings.html')
+
+
+@app.route('/kyc/verify')
+def kyc_verify():
+    """KYC verification page."""
+    return render_template('kyc/verify.html')
+
+
+@app.route('/api/kyc/submit', methods=['POST'])
+def kyc_submit():
+    """Handle KYC submission (stub)."""
+    return jsonify({'success': True, 'message': 'KYC submitted for review'}), 200
+
+
+@app.route('/api/kyc/documents', methods=['GET'])
+def kyc_documents():
+    """Return uploaded KYC documents (stub)."""
+    return jsonify({'success': True, 'documents': []}), 200
 
 
 # API Endpoints
@@ -211,6 +284,26 @@ def get_price(currency):
             'quote_currency': quote_currency,
             'price': price
         })
+    except Exception as e:
+        return jsonify({'success': False, 'error': str(e)}), 500
+
+
+@app.route('/api/trade/market-overview', methods=['GET'])
+def market_overview():
+    """Get market data for common currencies."""
+    try:
+        currencies = request.args.get('currencies', 'BTC,ETH,SOL,USDT').split(',')
+        quote_currency = request.args.get('quote', 'USDT')
+
+        if not trading_api:
+            return jsonify({'success': False, 'error': 'Trading API not initialized'}), 503
+
+        markets = []
+        for currency in currencies:
+            data = trading_api.get_market_data(currency, quote_currency)
+            markets.append(data)
+
+        return jsonify({'success': True, 'markets': markets})
     except Exception as e:
         return jsonify({'success': False, 'error': str(e)}), 500
 
@@ -519,9 +612,13 @@ if __name__ == '__main__':
     # Create logs directory if it doesn't exist
     os.makedirs('logs', exist_ok=True)
 
+    debug_flag = str(os.getenv('FLASK_DEBUG', '0')).lower() in ('1', 'true', 'yes')
+    host = os.getenv('HOST', '0.0.0.0')
+    port = int(os.getenv('PORT', '5000'))
+
     # Run the app
     app.run(
-        host='0.0.0.0',
-        port=5000,
-        debug=True
+        host=host,
+        port=port,
+        debug=debug_flag
     )

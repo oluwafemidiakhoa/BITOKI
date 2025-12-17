@@ -38,6 +38,71 @@ def send_email(to, subject, body, html=None):
         return False
 
 
+def send_verification_email(user, verification_token):
+    """Send email verification email."""
+    verify_url = f"http://127.0.0.1:5000/auth/verify-email?token={verification_token}"
+
+    subject = "Verify Your BITOKI Email Address"
+
+    body = f"""
+Hello {user.username},
+
+Welcome to BITOKI! Please verify your email address to activate your account.
+
+Click the link below to verify your email:
+{verify_url}
+
+This link will expire in 24 hours.
+
+If you didn't create a BITOKI account, please ignore this email.
+
+Best regards,
+The BITOKI Team
+"""
+
+    html = f"""
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        body {{ font-family: Arial, sans-serif; line-height: 1.6; color: #333; }}
+        .container {{ max-width: 600px; margin: 0 auto; padding: 20px; }}
+        .header {{ background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 30px; text-align: center; border-radius: 10px 10px 0 0; }}
+        .content {{ background: #f8f9fa; padding: 30px; border-radius: 0 0 10px 10px; }}
+        .button {{ display: inline-block; padding: 15px 30px; background: #667eea; color: white; text-decoration: none; border-radius: 5px; margin: 20px 0; }}
+        .warning {{ background: #fff3cd; padding: 15px; border-radius: 5px; margin: 20px 0; }}
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Welcome to BITOKI!</h1>
+            <p>Verify Your Email Address</p>
+        </div>
+        <div class="content">
+            <h2>Hello {user.username},</h2>
+            <p>Thank you for creating a BITOKI account! To get started, please verify your email address.</p>
+
+            <div style="text-align: center;">
+                <a href="{verify_url}" class="button">Verify Email Address</a>
+            </div>
+
+            <div class="warning">
+                <strong>⏱️ This link will expire in 24 hours.</strong>
+            </div>
+
+            <p>If you didn't create a BITOKI account, please ignore this email.</p>
+
+            <p>Best regards,<br>The BITOKI Team</p>
+        </div>
+    </div>
+</body>
+</html>
+"""
+
+    return send_email(user.email, subject, body, html)
+
+
 def send_welcome_email(user):
     """Send welcome email to new user."""
     subject = "Welcome to BITOKI - Your Crypto Trading Journey Starts Here!"
