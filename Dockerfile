@@ -43,6 +43,11 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 # Final stage - smaller image
 FROM python:3.11-slim
 
+# Install runtime tools needed for health checks
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    curl \
+    && rm -rf /var/lib/apt/lists/*
+
 # Copy from builder
 COPY --from=builder /usr/local/lib/python3.11 /usr/local/lib/python3.11
 COPY --from=builder /usr/local/bin /usr/local/bin

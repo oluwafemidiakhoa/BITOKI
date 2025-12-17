@@ -46,6 +46,7 @@ Pillow==11.3.0
 
 # Email and Templates
 Jinja2==3.1.4
+Flask-Mail==0.10.0
 
 # WSGI Server for Production
 gunicorn==21.2.0

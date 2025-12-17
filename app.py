@@ -17,7 +17,7 @@ from auth import auth_bp
 from src.bitoki.config import Config
 from src.bitoki.data.market_data import MarketDataFetcher
 from src.bitoki.security.security_manager import SecurityManager
-# Email service is now in services/email_service.py
+from services.email_service import mail
 
 # Load environment variables
 load_dotenv()
@@ -31,6 +31,16 @@ app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL', 'sqlite:///bit
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db.init_app(app)
 bcrypt.init_app(app)
+
+# Configure Flask-Mail
+app.config['MAIL_SERVER'] = os.getenv('MAIL_SERVER', 'smtp.zoho.com')
+app.config['MAIL_PORT'] = int(os.getenv('MAIL_PORT', 587))
+app.config['MAIL_USE_TLS'] = os.getenv('MAIL_USE_TLS', 'True').lower() == 'true'
+app.config['MAIL_USE_SSL'] = os.getenv('MAIL_USE_SSL', 'False').lower() == 'true'
+app.config['MAIL_USERNAME'] = os.getenv('MAIL_USERNAME')
+app.config['MAIL_PASSWORD'] = os.getenv('MAIL_PASSWORD')
+app.config['MAIL_DEFAULT_SENDER'] = os.getenv('MAIL_DEFAULT_SENDER')
+mail.init_app(app)
 
 # Initialize rate limiter
 limiter = Limiter(

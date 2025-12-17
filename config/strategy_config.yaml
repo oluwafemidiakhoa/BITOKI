@@ -39,4 +39,4 @@ exchange:
   name: "binance"  # or your preferred exchange
   api_key_env: "EXCHANGE_API_KEY"
   api_secret_env: "EXCHANGE_API_SECRET"
-  sandbox: true
+  sandbox: false
