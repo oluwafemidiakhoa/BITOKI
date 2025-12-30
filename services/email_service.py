@@ -42,22 +42,22 @@ def send_verification_email(user, verification_token):
     """Send email verification email."""
     verify_url = f"http://127.0.0.1:5000/auth/verify-email?token={verification_token}"
 
-    subject = "Verify Your BITOKI Email Address"
+    subject = "Verify Your BITfisher Email Address"
 
     body = f"""
 Hello {user.username},
 
-Welcome to BITOKI! Please verify your email address to activate your account.
+Welcome to BITfisher! Please verify your email address to activate your account.
 
 Click the link below to verify your email:
 {verify_url}
 
 This link will expire in 24 hours.
 
-If you didn't create a BITOKI account, please ignore this email.
+If you didn't create a BITfisher account, please ignore this email.
 
 Best regards,
-The BITOKI Team
+The BITfisher Team
 """
 
     html = f"""
@@ -76,12 +76,12 @@ The BITOKI Team
 <body>
     <div class="container">
         <div class="header">
-            <h1>Welcome to BITOKI!</h1>
+            <h1>Welcome to BITfisher!</h1>
             <p>Verify Your Email Address</p>
         </div>
         <div class="content">
             <h2>Hello {user.username},</h2>
-            <p>Thank you for creating a BITOKI account! To get started, please verify your email address.</p>
+            <p>Thank you for creating a BITfisher account! To get started, please verify your email address.</p>
 
             <div style="text-align: center;">
                 <a href="{verify_url}" class="button">Verify Email Address</a>
@@ -91,9 +91,9 @@ The BITOKI Team
                 <strong>⏱️ This link will expire in 24 hours.</strong>
             </div>
 
-            <p>If you didn't create a BITOKI account, please ignore this email.</p>
+            <p>If you didn't create a BITfisher account, please ignore this email.</p>
 
-            <p>Best regards,<br>The BITOKI Team</p>
+            <p>Best regards,<br>The BITfisher Team</p>
         </div>
     </div>
 </body>
@@ -105,12 +105,12 @@ The BITOKI Team
 
 def send_welcome_email(user):
     """Send welcome email to new user."""
-    subject = "Welcome to BITOKI - Your Crypto Trading Journey Starts Here!"
+    subject = "Welcome to BITfisher - Your Crypto Trading Journey Starts Here!"
 
     body = f"""
 Hello {user.username},
 
-Welcome to BITOKI! We're excited to have you join our cryptocurrency trading platform.
+Welcome to BITfisher! We're excited to have you join our cryptocurrency trading platform.
 
 Your account has been successfully created:
 - Email: {user.email}
@@ -127,7 +127,7 @@ Visit our FAQ: https://bitoki.com/help/faq
 Contact Support: support@bitoki.com
 
 Best regards,
-The BITOKI Team
+The BITfisher Team
 
 ---
 This is an automated message. Please do not reply to this email.
@@ -150,7 +150,7 @@ This is an automated message. Please do not reply to this email.
 <body>
     <div class="container">
         <div class="header">
-            <h1>Welcome to BITOKI!</h1>
+            <h1>Welcome to BITfisher!</h1>
             <p>Your Crypto Trading Journey Starts Here</p>
         </div>
         <div class="content">
@@ -183,7 +183,7 @@ This is an automated message. Please do not reply to this email.
             <p>Visit our <a href="https://bitoki.com/help/faq">FAQ</a> or contact <a href="mailto:support@bitoki.com">support@bitoki.com</a></p>
         </div>
         <div class="footer">
-            <p>&copy; 2025 BITOKI. All rights reserved.</p>
+            <p>&copy; 2025 BITfisher. All rights reserved.</p>
             <p>This is an automated message. Please do not reply to this email.</p>
         </div>
     </div>
@@ -196,12 +196,12 @@ This is an automated message. Please do not reply to this email.
 
 def send_login_alert(user, ip_address, user_agent, location="Unknown"):
     """Send login alert email."""
-    subject = "New Login to Your BITOKI Account"
+    subject = "New Login to Your BITfisher Account"
 
     body = f"""
 Hello {user.username},
 
-We detected a new login to your BITOKI account:
+We detected a new login to your BITfisher account:
 
 Login Details:
 - Time: {datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S')} UTC
@@ -217,7 +217,7 @@ If this wasn't you, please:
 3. Contact our support team
 
 Stay safe,
-The BITOKI Team
+The BITfisher Team
 """
 
     html = f"""
@@ -236,7 +236,7 @@ The BITOKI Team
     <div class="container">
         <div class="alert">
             <h2>🔐 New Login Detected</h2>
-            <p>We detected a new login to your BITOKI account.</p>
+            <p>We detected a new login to your BITfisher account.</p>
         </div>
 
         <div class="details">
@@ -260,7 +260,7 @@ The BITOKI Team
             </ol>
         </div>
 
-        <p>Stay safe,<br>The BITOKI Team</p>
+        <p>Stay safe,<br>The BITfisher Team</p>
     </div>
 </body>
 </html>
@@ -273,12 +273,12 @@ def send_password_reset_email(user, reset_token):
     """Send password reset email."""
     reset_url = f"https://bitoki.com/auth/reset-password?token={reset_token}"
 
-    subject = "Reset Your BITOKI Password"
+    subject = "Reset Your BITfisher Password"
 
     body = f"""
 Hello {user.username},
 
-You requested to reset your BITOKI account password.
+You requested to reset your BITfisher account password.
 
 Click the link below to reset your password:
 {reset_url}
@@ -288,7 +288,7 @@ This link will expire in 1 hour.
 If you didn't request this, please ignore this email and your password will remain unchanged.
 
 Best regards,
-The BITOKI Team
+The BITfisher Team
 """
 
     html = f"""
@@ -306,7 +306,7 @@ The BITOKI Team
     <div class="container">
         <h2>Reset Your Password</h2>
         <p>Hello {user.username},</p>
-        <p>You requested to reset your BITOKI account password.</p>
+        <p>You requested to reset your BITfisher account password.</p>
 
         <div style="text-align: center;">
             <a href="{reset_url}" class="button">Reset Password</a>
@@ -318,7 +318,7 @@ The BITOKI Team
 
         <p>If you didn't request this, please ignore this email and your password will remain unchanged.</p>
 
-        <p>Best regards,<br>The BITOKI Team</p>
+        <p>Best regards,<br>The BITfisher Team</p>
     </div>
 </body>
 </html>
@@ -329,12 +329,12 @@ The BITOKI Team
 
 def send_transaction_alert(user, transaction_type, amount, currency):
     """Send transaction alert email."""
-    subject = f"BITOKI Transaction Alert: {transaction_type.upper()} {amount} {currency}"
+    subject = f"BITfisher Transaction Alert: {transaction_type.upper()} {amount} {currency}"
 
     body = f"""
 Hello {user.username},
 
-A transaction was made on your BITOKI account:
+A transaction was made on your BITfisher account:
 
 Transaction Details:
 - Type: {transaction_type.upper()}
@@ -344,7 +344,7 @@ Transaction Details:
 If you didn't authorize this transaction, please contact support immediately.
 
 Best regards,
-The BITOKI Team
+The BITfisher Team
 """
 
     html = f"""
@@ -361,7 +361,7 @@ The BITOKI Team
     <div class="container">
         <h2>💰 Transaction Alert</h2>
         <p>Hello {user.username},</p>
-        <p>A transaction was made on your BITOKI account.</p>
+        <p>A transaction was made on your BITfisher account.</p>
 
         <div class="transaction">
             <h3>Transaction Details:</h3>
@@ -374,7 +374,7 @@ The BITOKI Team
 
         <p>If you didn't authorize this transaction, please contact support immediately at support@bitoki.com</p>
 
-        <p>Best regards,<br>The BITOKI Team</p>
+        <p>Best regards,<br>The BITfisher Team</p>
     </div>
 </body>
 </html>
@@ -386,15 +386,15 @@ The BITOKI Team
 def send_kyc_status_email(user, status, rejection_reason=None):
     """Send KYC verification status email."""
     if status == 'approved':
-        subject = "✅ KYC Verification Approved - BITOKI"
+        subject = "✅ KYC Verification Approved - BITfisher"
         message = "Congratulations! Your KYC verification has been approved."
         color = "#28a745"
     elif status == 'rejected':
-        subject = "❌ KYC Verification Rejected - BITOKI"
+        subject = "❌ KYC Verification Rejected - BITfisher"
         message = f"Your KYC verification was rejected. Reason: {rejection_reason}"
         color = "#dc3545"
     else:
-        subject = "📋 KYC Verification Under Review - BITOKI"
+        subject = "📋 KYC Verification Under Review - BITfisher"
         message = "Your KYC documents are being reviewed. We'll notify you within 24-48 hours."
         color = "#ffc107"
 
@@ -406,7 +406,7 @@ Hello {user.username},
 Current KYC Level: {user.kyc_level}
 
 Best regards,
-The BITOKI Team
+The BITfisher Team
 """
 
     html = f"""
@@ -427,7 +427,7 @@ The BITOKI Team
         <p>Hello {user.username},</p>
         <p>{message}</p>
         <p><strong>Current KYC Level:</strong> {user.kyc_level}</p>
-        <p>Best regards,<br>The BITOKI Team</p>
+        <p>Best regards,<br>The BITfisher Team</p>
     </div>
 </body>
 </html>

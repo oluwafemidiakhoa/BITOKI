@@ -1,8 +1,8 @@
-# 🚀 BITOKI Launch Guide
+# 🚀 BITfisher Launch Guide
 
 ## ✅ Application is NOW RUNNING!
 
-Your BITOKI web application is currently running at:
+Your BITfisher web application is currently running at:
 
 ### 🌐 Access URLs:
 - **Local:** http://127.0.0.1:5000

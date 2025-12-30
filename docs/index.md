@@ -1,6 +1,6 @@
-# BITOKI Documentation
+# BITfisher Documentation
 
-Welcome to the official documentation for BITOKI - Secure Cryptocurrency Trading Platform.
+Welcome to the official documentation for BITfisher - Secure Cryptocurrency Trading Platform.
 
 ## 📚 Table of Contents
 
@@ -44,8 +44,8 @@ Welcome to the official documentation for BITOKI - Secure Cryptocurrency Trading
 
 ## 🚀 Quick Links
 
-- [GitHub Repository](https://github.com/oluwafemidiakhoa/BITOKI)
-- [Issue Tracker](https://github.com/oluwafemidiakhoa/BITOKI/issues)
+- [GitHub Repository](https://github.com/oluwafemidiakhoa/BITfisher)
+- [Issue Tracker](https://github.com/oluwafemidiakhoa/BITfisher/issues)
 - [API Reference](api/rest_api.md)
 - [Security Guide](security/2fa.md)
 
@@ -57,7 +57,7 @@ Welcome to the official documentation for BITOKI - Secure Cryptocurrency Trading
 
 ## 🤝 Community
 
-- [GitHub Discussions](https://github.com/oluwafemidiakhoa/BITOKI/discussions)
+- [GitHub Discussions](https://github.com/oluwafemidiakhoa/BITfisher/discussions)
 - [Contribution Guide](development/contributing.md)
 - [Code of Conduct](community/code_of_conduct.md)
 
@@ -70,6 +70,6 @@ For help and support:
 
 ---
 
-**BITOKI** - Secure. Fast. Reliable.
+**BITfisher** - Secure. Fast. Reliable.
 
-© 2025 BITOKI Technologies. All rights reserved.
+© 2025 BITfisher Technologies. All rights reserved.

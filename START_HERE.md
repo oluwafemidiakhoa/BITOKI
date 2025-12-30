@@ -1,6 +1,6 @@
-# 🚀 START HERE - BITOKI Trading Bot
+# 🚀 START HERE - BITfisher Trading Bot
 
-Welcome! This guide will get you up and running with the BITOKI BTC/USD automated trading bot.
+Welcome! This guide will get you up and running with the BITfisher BTC/USD automated trading bot.
 
 ## What You've Built
 

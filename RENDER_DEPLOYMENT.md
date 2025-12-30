@@ -1,4 +1,4 @@
-# Deploy BITOKI to Render.com
+# Deploy BITfisher to Render.com
 
 ## Quick Start
 
@@ -8,7 +8,7 @@
 
 2. **Create New Web Service**
    - Click "New +" → "Web Service"
-   - Connect your GitHub repository: `oluwafemidiakhoa/BITOKI`
+   - Connect your GitHub repository: `oluwafemidiakhoa/BITfisher`
    - Render will auto-detect the `render.yaml` configuration
 
 3. **Configure Environment Variables**

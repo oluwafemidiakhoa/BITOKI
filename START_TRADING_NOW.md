@@ -1,8 +1,8 @@
-# 🚀 START TRADING NOW - BITOKI
+# 🚀 START TRADING NOW - BITfisher
 
 ## ✅ Your Platform is READY!
 
-**BITOKI** is production-ready with these features:
+**BITfisher** is production-ready with these features:
 - ✅ User registration & login
 - ✅ Multi-currency wallets
 - ✅ Crypto trading (buy/sell/swap)
@@ -291,7 +291,7 @@ http://localhost:5000
 
 ---
 
-**🇳🇬 Let's make BITOKI the #1 crypto exchange in Nigeria!**
+**🇳🇬 Let's make BITfisher the #1 crypto exchange in Nigeria!**
 
 Questions? Check [PRODUCTION_ROADMAP.md](PRODUCTION_ROADMAP.md) for detailed guide.
 

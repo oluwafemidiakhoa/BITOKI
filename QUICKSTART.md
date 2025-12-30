@@ -1,6 +1,6 @@
 # Quick Start Guide
 
-Get BITOKI running in 5 minutes!
+Get BITfisher running in 5 minutes!
 
 ## For Live Trading (Real Money)
 

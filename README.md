@@ -1,8 +1,8 @@
-# BITOKI - Secure Cryptocurrency Trading Platform
+# BITfisher - Secure Cryptocurrency Trading Platform
 
-![BITOKI Logo](https://via.placeholder.com/200x60/1E90FF/FFFFFF?text=BITOKI)
+![BITfisher Logo](https://via.placeholder.com/200x60/1E90FF/FFFFFF?text=BITfisher)
 
-**BITOKI** is a comprehensive, production-ready cryptocurrency trading platform with enterprise-grade security features, fraud protection, and a user-friendly interface.
+**BITfisher** is a comprehensive, production-ready cryptocurrency trading platform with enterprise-grade security features, fraud protection, and a user-friendly interface.
 
 ## 🚀 Quick Start
 
@@ -10,8 +10,8 @@
 
 ```bash
 # Clone the repository
-git clone https://github.com/oluwafemidiakhoa/BITOKI.git
-cd BITOKI
+git clone https://github.com/oluwafemidiakhoa/BITfisher.git
+cd BITfisher
 
 # Install dependencies
 pip install -r requirements.txt
@@ -305,7 +305,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 For support, please contact:
 - **Email**: support@bitoki.com
-- **GitHub Issues**: https://github.com/oluwafemidiakhoa/BITOKI/issues
+- **GitHub Issues**: https://github.com/oluwafemidiakhoa/BITfisher/issues
 - **Documentation**: https://bitoki.com/docs
 
 ## 🎉 Features Roadmap
@@ -331,15 +331,15 @@ For support, please contact:
 
 ## 🔗 Related Projects
 
-- [BITOKI Web](https://github.com/oluwafemidiakhoa/BITOKI-web) - Frontend application
-- [BITOKI Mobile](https://github.com/oluwafemidiakhoa/BITOKI-mobile) - Mobile applications
-- [BITOKI API](https://github.com/oluwafemidiakhoa/BITOKI-api) - API services
+- [BITfisher Web](https://github.com/oluwafemidiakhoa/BITfisher-web) - Frontend application
+- [BITfisher Mobile](https://github.com/oluwafemidiakhoa/BITfisher-mobile) - Mobile applications
+- [BITfisher API](https://github.com/oluwafemidiakhoa/BITfisher-api) - API services
 
 ## 📈 Analytics
 
-[![GitHub stars](https://img.shields.io/github/stars/oluwafemidiakhoa/BITOKI.svg)](https://github.com/oluwafemidiakhoa/BITOKI/stargazers)
-[![GitHub forks](https://img.shields.io/github/forks/oluwafemidiakhoa/BITOKI.svg)](https://github.com/oluwafemidiakhoa/BITOKI/network)
-[![GitHub issues](https://img.shields.io/github/issues/oluwafemidiakhoa/BITOKI.svg)](https://github.com/oluwafemidiakhoa/BITOKI/issues)
+[![GitHub stars](https://img.shields.io/github/stars/oluwafemidiakhoa/BITfisher.svg)](https://github.com/oluwafemidiakhoa/BITfisher/stargazers)
+[![GitHub forks](https://img.shields.io/github/forks/oluwafemidiakhoa/BITfisher.svg)](https://github.com/oluwafemidiakhoa/BITfisher/network)
+[![GitHub issues](https://img.shields.io/github/issues/oluwafemidiakhoa/BITfisher.svg)](https://github.com/oluwafemidiakhoa/BITfisher/issues)
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 
 ## 🎓 Learning Resources
@@ -350,6 +350,6 @@ For support, please contact:
 
 ---
 
-**BITOKI** - Secure. Fast. Reliable.
+**BITfisher** - Secure. Fast. Reliable.
 
-© 2025 BITOKI Technologies. All rights reserved.
+© 2025 BITfisher Technologies. All rights reserved.

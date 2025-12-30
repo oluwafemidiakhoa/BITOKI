@@ -1,6 +1,6 @@
-# BITOKI Web Application
+# BITfisher Web Application
 
-A user-friendly web interface for the BITOKI cryptocurrency trading platform.
+A user-friendly web interface for the BITfisher cryptocurrency trading platform.
 
 ## Features
 
@@ -111,7 +111,7 @@ A user-friendly web interface for the BITOKI cryptocurrency trading platform.
 ## Application Structure
 
 ```
-BITOKI/
+BITfisher/
 ├── app.py                 # Main Flask application
 ├── web/
 │   ├── templates/         # HTML templates

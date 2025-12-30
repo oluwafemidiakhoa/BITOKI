@@ -1,6 +1,6 @@
 # Installation Guide
 
-This guide will help you install and set up the BITOKI trading platform.
+This guide will help you install and set up the BITfisher trading platform.
 
 ## 📋 System Requirements
 
@@ -66,8 +66,8 @@ pip3 --version
 ### 1. Clone the Repository
 
 ```bash
-git clone https://github.com/oluwafemidiakhoa/BITOKI.git
-cd BITOKI
+git clone https://github.com/oluwafemidiakhoa/BITfisher.git
+cd BITfisher
 ```
 
 ### 2. Create Virtual Environment (Recommended)

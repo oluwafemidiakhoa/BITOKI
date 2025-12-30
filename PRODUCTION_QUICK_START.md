@@ -1,8 +1,8 @@
-# 🚀 BITOKI PRODUCTION QUICK START
+# 🚀 BITfisher PRODUCTION QUICK START
 
 ## ⚠️ URGENT: Before You Go Live
 
-Your BITOKI platform is registered and almost ready! Here's what you MUST do immediately:
+Your BITfisher platform is registered and almost ready! Here's what you MUST do immediately:
 
 ---
 
@@ -323,7 +323,7 @@ Ctrl+C
 
 ---
 
-**Your BITOKI exchange is ready to launch!** 🚀
+**Your BITfisher exchange is ready to launch!** 🚀
 
 Focus on:
 1. Get Paystack ✅
@@ -331,4 +331,4 @@ Focus on:
 3. Deploy server ✅
 4. Start marketing 🎯
 
-**Let's make BITOKI the #1 crypto exchange in Nigeria!** 🇳🇬
+**Let's make BITfisher the #1 crypto exchange in Nigeria!** 🇳🇬

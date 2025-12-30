@@ -1,6 +1,6 @@
-# BITOKI Setup Guide
+# BITfisher Setup Guide
 
-This guide will walk you through setting up the BITOKI trading bot for live trading.
+This guide will walk you through setting up the BITfisher trading bot for live trading.
 
 ## Prerequisites
 
@@ -23,7 +23,7 @@ This guide will walk you through setting up the BITOKI trading bot for live trad
 Navigate to the project directory and install dependencies using uv:
 
 ```bash
-cd c:\Users\adminidiakhoa\Demo\BITOKI
+cd c:\Users\adminidiakhoa\Demo\BITfisher
 uv pip install -e .
 ```
 

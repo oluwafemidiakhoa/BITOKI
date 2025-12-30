@@ -1,4 +1,4 @@
-# 🚀 Production Roadmap - BITOKI Exchange for Nigeria
+# 🚀 Production Roadmap - BITfisher Exchange for Nigeria
 
 ## Current Status: ⚠️ **DEVELOPMENT MODE**
 

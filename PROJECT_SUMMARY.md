@@ -1,8 +1,8 @@
-# BITOKI Project Summary
+# BITfisher Project Summary
 
 ## Overview
 
-BITOKI is a fully automated BTC/USD trading bot that detects chart patterns and executes trades with comprehensive risk management. Built for live trading with safety features and proper position sizing.
+BITfisher is a fully automated BTC/USD trading bot that detects chart patterns and executes trades with comprehensive risk management. Built for live trading with safety features and proper position sizing.
 
 ## Architecture Overview
 
@@ -253,7 +253,7 @@ uv run python run.py
 ## File Structure
 
 ```
-BITOKI/
+BITfisher/
 ├── src/bitoki/
 │   ├── __init__.py
 │   ├── main.py              # Entry point
