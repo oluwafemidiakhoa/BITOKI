@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Security Settings - BITfisher</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+    <style>
+        .security-container {
+            max-width: 900px;
+            margin: 40px auto;
+            padding: 20px;
+        }
+
+        .security-section {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            margin-bottom: 24px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 16px;
+            border-bottom: 2px solid #e5e7eb;
+        }
+
+        .section-icon {
+            font-size: 32px;
+            margin-right: 16px;
+        }
+
+        .section-title {
+            font-size: 24px;
+            font-weight: 600;
+            color: #1a1a1a;
+        }
+
+        .section-description {
+            color: #666;
+            margin-bottom: 24px;
+            line-height: 1.6;
+        }
+
+        .passkey-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .passkey-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 16px;
+            background: #f9fafb;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            transition: all 0.2s;
+        }
+
+        .passkey-item:hover {
+            background: #f3f4f6;
+            border-color: #d1d5db;
+        }
+
+        .passkey-info {
+            flex: 1;
+        }
+
+        .passkey-name {
+            font-weight: 600;
+            color: #1a1a1a;
+            margin-bottom: 4px;
+        }
+
+        .passkey-meta {
+            font-size: 13px;
+            color: #6b7280;
+        }
+
+        .passkey-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-weight: 500;
+            cursor: pointer;
+            border: none;
+            transition: all 0.2s;
+            font-size: 14px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #0066cc 0%, #0052a3 100%);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 102, 204, 0.3);
+        }
+
+        .btn-danger {
+            background: #ef4444;
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background: #dc2626;
+        }
+
+        .btn-secondary {
+            background: #6b7280;
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background: #4b5563;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 40px 20px;
+            color: #6b7280;
+        }
+
+        .empty-state-icon {
+            font-size: 64px;
+            margin-bottom: 16px;
+            opacity: 0.5;
+        }
+
+        .alert {
+            padding: 16px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            display: none;
+        }
+
+        .alert.show {
+            display: block;
+        }
+
+        .alert-success {
+            background: #d1fae5;
+            color: #065f46;
+            border: 1px solid #6ee7b7;
+        }
+
+        .alert-error {
+            background: #fee2e2;
+            color: #991b1b;
+            border: 1px solid #fca5a5;
+        }
+
+        .alert-info {
+            background: #dbeafe;
+            color: #1e40af;
+            border: 1px solid #93c5fd;
+        }
+
+        .security-level {
+            display: flex;
+            align-items: center;
+            padding: 20px;
+            background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+            border-radius: 8px;
+            margin-bottom: 24px;
+        }
+
+        .security-level-indicator {
+            font-size: 48px;
+            margin-right: 20px;
+        }
+
+        .security-level-text {
+            flex: 1;
+        }
+
+        .security-level-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #0c4a6e;
+            margin-bottom: 4px;
+        }
+
+        .security-level-description {
+            font-size: 14px;
+            color: #075985;
+        }
+
+        .feature-badge {
+            display: inline-block;
+            padding: 4px 12px;
+            background: #10b981;
+            color: white;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+            margin-left: 8px;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 20px;
+            color: #6b7280;
+        }
+
+        .spinner {
+            border: 3px solid #f3f4f6;
+            border-top: 3px solid #0066cc;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 16px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal.show {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            max-width: 500px;
+            width: 90%;
+        }
+
+        .modal-header {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 16px;
+        }
+
+        .modal-body {
+            margin-bottom: 24px;
+        }
+
+        .modal-footer {
+            display: flex;
+            gap: 12px;
+            justify-content: flex-end;
+        }
+
+        .form-group {
+            margin-bottom: 16px;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: #374151;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+            font-size: 14px;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: #0066cc;
+            box-shadow: 0 0 0 3px rgba(0, 102, 204, 0.1);
+        }
+    </style>
+</head>
+<body>
+    <div class="security-container">
+        <h1 style="margin-bottom: 12px;">🔐 Security Settings</h1>
+        <p style="color: #666; margin-bottom: 32px;">Manage your account security and authentication methods</p>
+
+        <!-- Alerts -->
+        <div id="alert-container"></div>
+
+        <!-- Security Level Indicator -->
+        <div class="security-level">
+            <div class="security-level-indicator">🏆</div>
+            <div class="security-level-text">
+                <div class="security-level-title">
+                    Security Level: <span id="security-level-name">Enhanced</span>
+                    <span class="feature-badge" id="security-level-badge">8/10</span>
+                </div>
+                <div class="security-level-description" id="security-level-desc">
+                    Your account has strong protection. Add a passkey for maximum security (10/10)!
+                </div>
+            </div>
+        </div>
+
+        <!-- Passkeys Section -->
+        <div class="security-section">
+            <div class="section-header">
+                <span class="section-icon">🔑</span>
+                <h2 class="section-title">Passkeys (WebAuthn)</h2>
+            </div>
+
+            <div class="section-description">
+                <strong>Passkeys are the most secure way to sign in.</strong> They use Face ID, Touch ID, or security keys to protect your account. Unlike passwords, passkeys can't be phished, stolen, or forgotten.
+            </div>
+
+            <div id="passkey-loading" class="loading">
+                <div class="spinner"></div>
+                <div>Loading passkeys...</div>
+            </div>
+
+            <div id="passkey-content" style="display: none;">
+                <div id="passkey-list" class="passkey-list">
+                    <!-- Passkeys will be loaded here -->
+                </div>
+
+                <button class="btn btn-primary" onclick="showAddPasskeyModal()">
+                    ➕ Add Passkey
+                </button>
+            </div>
+        </div>
+
+        <!-- Back Button -->
+        <div style="text-align: center; margin-top: 32px;">
+            <a href="/dashboard" class="btn btn-secondary">← Back to Dashboard</a>
+        </div>
+    </div>
+
+    <!-- Add Passkey Modal -->
+    <div id="add-passkey-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">Add New Passkey</div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label class="form-label">Passkey Name (Optional)</label>
+                    <input type="text" id="passkey-name-input" class="form-input"
+                           placeholder="e.g., iPhone 13, YubiKey, Laptop">
+                </div>
+                <p style="color: #6b7280; font-size: 14px;">
+                    You'll be prompted to use Face ID, Touch ID, Windows Hello, or a security key to create your passkey.
+                </p>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeAddPasskeyModal()">Cancel</button>
+                <button class="btn btn-primary" onclick="registerPasskey()">Create Passkey</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="/static/js/passkey.js"></script>
+    <script>
+        // Load passkeys on page load
+        document.addEventListener('DOMContentLoaded', async () => {
+            await loadPasskeys();
+        });
+
+        async function loadPasskeys() {
+            try {
+                const passkeys = await passkeyManager.listPasskeys();
+
+                document.getElementById('passkey-loading').style.display = 'none';
+                document.getElementById('passkey-content').style.display = 'block';
+
+                const listContainer = document.getElementById('passkey-list');
+
+                if (passkeys.length === 0) {
+                    listContainer.innerHTML = `
+                        <div class="empty-state">
+                            <div class="empty-state-icon">🔑</div>
+                            <p>No passkeys added yet</p>
+                            <p style="font-size: 14px;">Add a passkey to enable passwordless login</p>
+                        </div>
+                    `;
+                } else {
+                    listContainer.innerHTML = passkeys.map(pk => `
+                        <div class="passkey-item">
+                            <div class="passkey-info">
+                                <div class="passkey-name">${escapeHtml(pk.name)}</div>
+                                <div class="passkey-meta">
+                                    Added: ${new Date(pk.created_at).toLocaleDateString()} •
+                                    Last used: ${pk.last_used_at ? new Date(pk.last_used_at).toLocaleDateString() : 'Never'}
+                                </div>
+                            </div>
+                            <div class="passkey-actions">
+                                <button class="btn btn-danger" onclick="deletePasskey(${pk.id}, '${escapeHtml(pk.name)}')">
+                                    🗑️ Remove
+                                </button>
+                            </div>
+                        </div>
+                    `).join('');
+
+                    // Update security level
+                    updateSecurityLevel(passkeys.length);
+                }
+
+            } catch (error) {
+                showAlert('error', 'Failed to load passkeys: ' + error.message);
+                document.getElementById('passkey-loading').style.display = 'none';
+                document.getElementById('passkey-content').style.display = 'block';
+            }
+        }
+
+        function showAddPasskeyModal() {
+            if (!passkeyManager.isSupported) {
+                showAlert('error', 'Your browser does not support passkeys. Please use a modern browser like Chrome, Safari, or Edge.');
+                return;
+            }
+            document.getElementById('add-passkey-modal').classList.add('show');
+        }
+
+        function closeAddPasskeyModal() {
+            document.getElementById('add-passkey-modal').classList.remove('show');
+            document.getElementById('passkey-name-input').value = '';
+        }
+
+        async function registerPasskey() {
+            const nameInput = document.getElementById('passkey-name-input');
+            const name = nameInput.value.trim();
+
+            try {
+                showAlert('info', 'Please follow the prompt on your device...');
+
+                const result = await passkeyManager.register(name);
+
+                closeAddPasskeyModal();
+                showAlert('success', 'Passkey added successfully!');
+
+                // Reload passkeys
+                await loadPasskeys();
+
+            } catch (error) {
+                showAlert('error', 'Failed to add passkey: ' + error.message);
+            }
+        }
+
+        async function deletePasskey(id, name) {
+            if (!confirm(`Are you sure you want to remove "${name}"?`)) {
+                return;
+            }
+
+            try {
+                await passkeyManager.deletePasskey(id);
+                showAlert('success', 'Passkey removed successfully');
+                await loadPasskeys();
+            } catch (error) {
+                showAlert('error', 'Failed to remove passkey: ' + error.message);
+            }
+        }
+
+        function updateSecurityLevel(passkeyCount) {
+            const levelName = document.getElementById('security-level-name');
+            const levelBadge = document.getElementById('security-level-badge');
+            const levelDesc = document.getElementById('security-level-desc');
+
+            if (passkeyCount > 0) {
+                levelName.textContent = 'Maximum';
+                levelBadge.textContent = '10/10';
+                levelBadge.style.background = '#10b981';
+                levelDesc.textContent = 'Your account has the highest level of security with passkey authentication!';
+            } else {
+                levelName.textContent = 'Enhanced';
+                levelBadge.textContent = '8/10';
+                levelBadge.style.background = '#f59e0b';
+                levelDesc.textContent = 'Your account has strong protection. Add a passkey for maximum security (10/10)!';
+            }
+        }
+
+        function showAlert(type, message) {
+            const container = document.getElementById('alert-container');
+            const alert = document.createElement('div');
+            alert.className = `alert alert-${type} show`;
+            alert.textContent = message;
+
+            container.innerHTML = '';
+            container.appendChild(alert);
+
+            setTimeout(() => {
+                alert.classList.remove('show');
+                setTimeout(() => alert.remove(), 300);
+            }, 5000);
+        }
+
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+    </script>
+</body>
+</html>

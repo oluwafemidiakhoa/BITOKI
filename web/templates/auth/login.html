@@ -77,6 +77,41 @@
         .alert {
             border-radius: 10px;
         }
+        .btn-passkey {
+            padding: 12px;
+            border-radius: 10px;
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            border: none;
+            color: white;
+            font-weight: 600;
+            width: 100%;
+            margin-top: 15px;
+        }
+        .btn-passkey:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(16, 185, 129, 0.4);
+        }
+        .passkey-divider {
+            text-align: center;
+            margin: 25px 0;
+            position: relative;
+        }
+        .passkey-divider::before {
+            content: "";
+            position: absolute;
+            top: 50%;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: #e0e0e0;
+        }
+        .passkey-divider span {
+            background: white;
+            padding: 0 15px;
+            position: relative;
+            color: #6c757d;
+            font-size: 14px;
+        }
     </style>
 </head>
 <body>
@@ -128,6 +163,14 @@
             </button>
         </form>
 
+        <div class="passkey-divider">
+            <span>or</span>
+        </div>
+
+        <button type="button" class="btn btn-passkey" onclick="loginWithPasskey()">
+            <i class="fas fa-fingerprint"></i> Sign in with Passkey
+        </button>
+
         <div class="divider">
             <small><a href="#" style="color: #667eea; text-decoration: none;">Forgot password?</a></small>
         </div>
@@ -138,5 +181,55 @@
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="/static/js/passkey.js"></script>
+    <script>
+        async function loginWithPasskey() {
+            const btn = event.target;
+            const originalText = btn.innerHTML;
+
+            try {
+                // Check if passkeys are supported
+                if (!passkeyManager.isSupported) {
+                    alert('Your browser does not support passkeys. Please use a modern browser like Chrome, Safari, or Edge.');
+                    return;
+                }
+
+                // Disable button and show loading
+                btn.disabled = true;
+                btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Authenticating...';
+
+                // Get email from form (optional)
+                const email = document.getElementById('email').value.trim() || null;
+
+                // Authenticate with passkey
+                const result = await passkeyManager.authenticate(email);
+
+                if (result.success) {
+                    // Redirect to dashboard
+                    window.location.href = result.redirect || '/dashboard';
+                } else {
+                    throw new Error(result.error || 'Authentication failed');
+                }
+
+            } catch (error) {
+                console.error('Passkey login error:', error);
+
+                // Show error message
+                const alertDiv = document.createElement('div');
+                alertDiv.className = 'alert alert-danger alert-dismissible fade show';
+                alertDiv.innerHTML = `
+                    ${error.message}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                `;
+
+                const logo = document.querySelector('.logo');
+                logo.insertAdjacentElement('afterend', alertDiv);
+
+                // Restore button
+                btn.disabled = false;
+                btn.innerHTML = originalText;
+            }
+        }
+    </script>
 </body>
 </html>
