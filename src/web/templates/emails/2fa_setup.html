@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        body { font-family: Arial, sans-serif; line-height: 1.6; }
+        .container { max-width: 600px; margin: 0 auto; padding: 20px; }
+        .header { background-color: #6c757d; color: white; padding: 10px; text-align: center; }
+        .content { padding: 20px; background-color: #f8f9fa; }
+        .backup-codes { background-color: #e9ecef; padding: 15px; font-family: monospace; }
+        .footer { text-align: center; color: #6c757d; font-size: 12px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h2>🔐 Two-Factor Authentication Setup</h2>
+        </div>
+        <div class="content">
+            <p>Hello,</p>
+            <p>You have successfully enabled two-factor authentication for your BITOKI account.</p>
+            
+            <h3>Scan this QR code with your authenticator app:</h3>
+            <p><img src="{{ qr_code_url }}" alt="QR Code" width="200"></p>
+            
+            <h3>Your Backup Codes:</h3>
+            <div class="backup-codes">
+                {% for code in backup_codes %}
+                <p>{{ code }}</p>
+                {% endfor %}
+            </div>
+            
+            <p><strong>Important:</strong> Please store these backup codes in a safe place. They can be used to access your account if you lose your authenticator device.</p>
+            <p>Each backup code can only be used once.</p>
+        </div>
+        <div class="footer">
+            <p>© {{ "now"|strftime("%Y") }} BITOKI. All rights reserved.</p>
+            <p>This is an automated message. Please do not reply.</p>
+        </div>
+    </div>
+</body>
+</html>

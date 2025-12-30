@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="200" height="200" viewBox="0 0 200 200">
+  <!-- Background circle -->
+  <circle cx="100" cy="100" r="95" fill="url(#blueOrangeGradient)"/>
+
+  <!-- Gradients -->
+  <defs>
+    <linearGradient id="blueOrangeGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0EA5E9;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#F97316;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="goldGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#FBBF24;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#F97316;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+
+  <!-- Simple bird shape (abstract) -->
+  <path d="M 100 60 Q 80 70, 70 90 L 60 85 L 70 95 Q 85 110, 100 115 Q 115 110, 130 95 L 140 85 L 130 90 Q 120 70, 100 60 Z"
+        fill="white" opacity="0.9"/>
+
+  <!-- Bird beak -->
+  <path d="M 100 60 L 105 50 L 100 55 Z" fill="#F97316"/>
+
+  <!-- Bitcoin B -->
+  <text x="100" y="155" font-family="Arial Black, sans-serif" font-size="60" font-weight="bold"
+        fill="url(#goldGradient)" text-anchor="middle">₿</text>
+</svg>

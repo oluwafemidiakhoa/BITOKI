@@ -22,15 +22,18 @@ wheels/
 
 # Virtual environments
 venv/
+.venv/
 env/
 ENV/
 
 # IDE
 .vscode/
 .idea/
+.claude/
 *.swp
 *.swo
 *~
+*.bak
 
 # Logs
 logs/
