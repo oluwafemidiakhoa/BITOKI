@@ -8,23 +8,66 @@
     body {
         background: linear-gradient(135deg, #0F172A 0%, #1E293B 100%);
         min-height: 100vh;
+        overflow-x: hidden;
+    }
+
+    /* Animated background particles */
+    body::before {
+        content: '';
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-image: radial-gradient(circle at 20% 50%, rgba(14, 165, 233, 0.05) 0%, transparent 50%),
+                          radial-gradient(circle at 80% 80%, rgba(249, 115, 22, 0.05) 0%, transparent 50%);
+        pointer-events: none;
+        z-index: 0;
     }
 
     .dashboard-container {
         max-width: 600px;
         margin: 0 auto;
         padding: 20px;
+        position: relative;
+        z-index: 1;
+        animation: fadeInUp 0.6s ease-out;
+    }
+
+    @keyframes fadeInUp {
+        from {
+            opacity: 0;
+            transform: translateY(30px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
     }
 
     /* Wallet Balance Card */
     .wallet-balance-card {
         background: linear-gradient(135deg, #1e3a8a 0%, #312e81 100%);
-        border-radius: 20px;
+        border-radius: 24px;
         padding: 30px;
         margin-bottom: 30px;
         position: relative;
         overflow: hidden;
-        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4),
+                    0 0 0 1px rgba(255, 255, 255, 0.05) inset;
+        backdrop-filter: blur(10px);
+        animation: cardSlideIn 0.7s ease-out 0.2s both;
+    }
+
+    @keyframes cardSlideIn {
+        from {
+            opacity: 0;
+            transform: translateY(20px) scale(0.95);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+        }
     }
 
     .wallet-balance-card::before {
@@ -34,8 +77,14 @@
         right: -50%;
         width: 200%;
         height: 200%;
-        background: radial-gradient(circle, rgba(255,255,255,0.05) 0%, transparent 70%);
+        background: radial-gradient(circle, rgba(255,255,255,0.08) 0%, transparent 70%);
         pointer-events: none;
+        animation: glow 8s ease-in-out infinite;
+    }
+
+    @keyframes glow {
+        0%, 100% { opacity: 0.5; }
+        50% { opacity: 1; }
     }
 
     .balance-header {
@@ -93,58 +142,113 @@
     .action-cards-grid {
         display: grid;
         grid-template-columns: repeat(2, 1fr);
-        gap: 15px;
+        gap: 16px;
         margin-bottom: 30px;
     }
 
     .action-card {
         background: linear-gradient(135deg, rgba(30, 58, 138, 0.5) 0%, rgba(49, 46, 129, 0.3) 100%);
         border: 1px solid rgba(148, 163, 184, 0.1);
-        border-radius: 16px;
-        padding: 25px 20px;
+        border-radius: 18px;
+        padding: 28px 20px;
         text-align: center;
         cursor: pointer;
-        transition: all 0.3s ease;
+        transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         position: relative;
         overflow: hidden;
         text-decoration: none;
         display: block;
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+        opacity: 0;
+        animation: cardFadeIn 0.5s ease-out forwards;
+    }
+
+    @keyframes cardFadeIn {
+        to {
+            opacity: 1;
+        }
+    }
+
+    .action-card:nth-child(1) { animation-delay: 0.3s; }
+    .action-card:nth-child(2) { animation-delay: 0.4s; }
+    .action-card:nth-child(3) { animation-delay: 0.5s; }
+    .action-card:nth-child(4) { animation-delay: 0.6s; }
+    .action-card:nth-child(5) { animation-delay: 0.7s; }
+    .action-card:nth-child(6) { animation-delay: 0.8s; }
+
+    .action-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: radial-gradient(circle at 50% 0%, rgba(255, 255, 255, 0.1), transparent 70%);
+        opacity: 0;
+        transition: opacity 0.3s ease;
     }
 
     .action-card:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
-        border-color: rgba(148, 163, 184, 0.3);
+        transform: translateY(-8px) scale(1.02);
+        box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4),
+                    0 0 0 1px rgba(255, 255, 255, 0.1) inset;
+        border-color: rgba(255, 255, 255, 0.2);
+    }
+
+    .action-card:hover::before {
+        opacity: 1;
+    }
+
+    .action-card:active {
+        transform: translateY(-5px) scale(0.98);
     }
 
     .action-card.store {
         background: linear-gradient(135deg, #1e40af 0%, #3730a3 100%);
+        box-shadow: 0 8px 20px rgba(30, 64, 175, 0.3);
     }
 
     .action-card.trade {
         background: linear-gradient(135deg, #ea580c 0%, #dc2626 100%);
+        box-shadow: 0 8px 20px rgba(234, 88, 12, 0.3);
     }
 
     .action-card.swap {
         background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+        box-shadow: 0 8px 20px rgba(79, 70, 229, 0.3);
     }
 
     .action-card.convert {
         background: linear-gradient(135deg, #7c3aed 0%, #a855f7 100%);
+        box-shadow: 0 8px 20px rgba(124, 58, 237, 0.3);
     }
 
     .action-card.redeem {
         background: linear-gradient(135deg, #1e3a8a 0%, #1e40af 100%);
+        box-shadow: 0 8px 20px rgba(30, 58, 138, 0.3);
     }
 
     .action-card.giftcard {
         background: linear-gradient(135deg, #0e7490 0%, #0891b2 100%);
+        box-shadow: 0 8px 20px rgba(14, 116, 144, 0.3);
     }
 
     .action-card-icon {
-        font-size: 36px;
-        margin-bottom: 12px;
+        font-size: 38px;
+        margin-bottom: 14px;
         color: white;
+        transition: transform 0.3s ease;
+        filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.3));
+    }
+
+    .action-card:hover .action-card-icon {
+        transform: scale(1.15) rotate(5deg);
+        animation: iconPulse 0.6s ease-in-out;
+    }
+
+    @keyframes iconPulse {
+        0%, 100% { transform: scale(1.15) rotate(5deg); }
+        50% { transform: scale(1.25) rotate(-5deg); }
     }
 
     .action-card-title {
@@ -152,6 +256,8 @@
         font-size: 18px;
         font-weight: 600;
         margin: 0;
+        letter-spacing: 0.3px;
+        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
     }
 
     .action-card-badge {
@@ -171,9 +277,23 @@
     .recent-activity {
         background: rgba(30, 41, 59, 0.6);
         border: 1px solid rgba(148, 163, 184, 0.1);
-        border-radius: 20px;
-        padding: 25px;
-        backdrop-filter: blur(10px);
+        border-radius: 24px;
+        padding: 28px;
+        backdrop-filter: blur(20px);
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2),
+                    0 0 0 1px rgba(255, 255, 255, 0.03) inset;
+        animation: slideUp 0.6s ease-out 0.9s both;
+    }
+
+    @keyframes slideUp {
+        from {
+            opacity: 0;
+            transform: translateY(30px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
     }
 
     .activity-header {
@@ -213,14 +333,19 @@
         display: flex;
         align-items: center;
         gap: 15px;
-        padding: 12px;
+        padding: 14px;
         background: rgba(30, 58, 138, 0.2);
-        border-radius: 12px;
-        transition: background 0.2s;
+        border-radius: 14px;
+        transition: all 0.3s ease;
+        border: 1px solid transparent;
+        cursor: pointer;
     }
 
     .activity-item:hover {
-        background: rgba(30, 58, 138, 0.3);
+        background: rgba(30, 58, 138, 0.35);
+        border-color: rgba(148, 163, 184, 0.1);
+        transform: translateX(5px);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
     }
 
     .activity-icon {
@@ -281,30 +406,38 @@
     }
 
     .header-icon-btn {
-        width: 40px;
-        height: 40px;
+        width: 42px;
+        height: 42px;
         border-radius: 50%;
-        background: rgba(30, 41, 59, 0.6);
-        border: 1px solid rgba(148, 163, 184, 0.1);
+        background: rgba(30, 41, 59, 0.7);
+        border: 1px solid rgba(148, 163, 184, 0.15);
         display: flex;
         align-items: center;
         justify-content: center;
         color: #94A3B8;
         cursor: pointer;
-        transition: all 0.3s;
+        transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         position: relative;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        backdrop-filter: blur(10px);
     }
 
     .header-icon-btn:hover {
-        background: rgba(30, 41, 59, 0.8);
+        background: rgba(30, 41, 59, 0.9);
         color: white;
+        transform: scale(1.1) rotate(10deg);
+        box-shadow: 0 6px 16px rgba(0, 0, 0, 0.25);
+    }
+
+    .header-icon-btn:active {
+        transform: scale(0.95);
     }
 
     .header-icon-btn .badge {
         position: absolute;
         top: -5px;
         right: -5px;
-        background: #EF4444;
+        background: linear-gradient(135deg, #EF4444 0%, #DC2626 100%);
         color: white;
         border-radius: 50%;
         width: 18px;
@@ -313,22 +446,55 @@
         display: flex;
         align-items: center;
         justify-content: center;
+        font-weight: 600;
+        box-shadow: 0 2px 8px rgba(239, 68, 68, 0.4);
+        animation: badgePulse 2s ease-in-out infinite;
+    }
+
+    @keyframes badgePulse {
+        0%, 100% { transform: scale(1); }
+        50% { transform: scale(1.1); box-shadow: 0 4px 12px rgba(239, 68, 68, 0.6); }
     }
 
     .deposit-btn {
         background: rgba(30, 41, 59, 0.8);
         color: white;
-        padding: 10px 24px;
-        border-radius: 12px;
+        padding: 11px 26px;
+        border-radius: 14px;
         border: 1px solid rgba(148, 163, 184, 0.2);
-        font-weight: 500;
+        font-weight: 600;
         cursor: pointer;
-        transition: all 0.3s;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        backdrop-filter: blur(10px);
+        position: relative;
+        overflow: hidden;
+    }
+
+    .deposit-btn::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+        transition: left 0.5s ease;
+    }
+
+    .deposit-btn:hover::before {
+        left: 100%;
     }
 
     .deposit-btn:hover {
         background: rgba(30, 41, 59, 1);
-        transform: translateY(-2px);
+        transform: translateY(-3px);
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
+        border-color: rgba(148, 163, 184, 0.3);
+    }
+
+    .deposit-btn:active {
+        transform: translateY(-1px);
     }
 
     /* Responsive */
