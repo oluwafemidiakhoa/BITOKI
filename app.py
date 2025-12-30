@@ -15,6 +15,7 @@ from api.wallet import WalletManager
 from api.trading import TradingAPI
 from api.giftcard import GiftCardAPI
 from auth import auth_bp
+from routes.ngn_wallet import ngn_bp
 from src.bitoki.config import Config
 from src.bitoki.data.market_data import MarketDataFetcher
 from src.bitoki.security.security_manager import SecurityManager
@@ -88,6 +89,7 @@ def inject_current_user():
 
 # Register blueprints
 app.register_blueprint(auth_bp, url_prefix='/auth')
+app.register_blueprint(ngn_bp, url_prefix='/ngn')
 
 # Initialize components
 try:
