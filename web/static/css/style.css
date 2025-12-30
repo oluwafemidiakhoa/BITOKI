@@ -1,12 +1,14 @@
-/* Custom CSS for BITOKI Platform */
+/* Custom CSS for BITfisher Platform */
 
 :root {
-    --primary-color: #0d6efd;
-    --success-color: #198754;
-    --danger-color: #dc3545;
-    --warning-color: #ffc107;
-    --info-color: #0dcaf0;
-    --dark-color: #212529;
+    --primary-color: #0EA5E9;  /* BITfisher Blue */
+    --secondary-color: #F97316; /* BITfisher Orange */
+    --success-color: #10B981;
+    --danger-color: #EF4444;
+    --warning-color: #F59E0B;
+    --info-color: #0EA5E9;
+    --dark-color: #1E293B;
+    --dark-bg: #0F172A; /* Dark navy background */
 }
 
 body {
@@ -42,17 +44,30 @@ body {
     font-weight: 600;
 }
 
-/* Gradient backgrounds */
+/* BITfisher Gradient backgrounds */
 .bg-gradient-primary {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: linear-gradient(135deg, #0EA5E9 0%, #0284C7 100%);
+}
+
+.bg-gradient-secondary {
+    background: linear-gradient(135deg, #F97316 0%, #FBBF24 100%);
 }
 
 .bg-gradient-success {
-    background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+    background: linear-gradient(135deg, #10B981 0%, #34D399 100%);
 }
 
 .bg-gradient-warning {
-    background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+    background: linear-gradient(135deg, #F59E0B 0%, #FBBF24 100%);
+}
+
+/* BITfisher themed gradients */
+.bg-gradient-blue-orange {
+    background: linear-gradient(135deg, #0EA5E9 0%, #F97316 100%);
+}
+
+.bg-gradient-dark {
+    background: linear-gradient(135deg, #0F172A 0%, #1E293B 100%);
 }
 
 /* Buttons */
