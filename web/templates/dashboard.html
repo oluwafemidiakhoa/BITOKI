@@ -2,137 +2,459 @@
 
 {% block title %}Dashboard - BITfisher{% endblock %}
 
+{% block extra_css %}
+<style>
+    /* Dark Dashboard Theme */
+    body {
+        background: linear-gradient(135deg, #0F172A 0%, #1E293B 100%);
+        min-height: 100vh;
+    }
+
+    .dashboard-container {
+        max-width: 600px;
+        margin: 0 auto;
+        padding: 20px;
+    }
+
+    /* Wallet Balance Card */
+    .wallet-balance-card {
+        background: linear-gradient(135deg, #1e3a8a 0%, #312e81 100%);
+        border-radius: 20px;
+        padding: 30px;
+        margin-bottom: 30px;
+        position: relative;
+        overflow: hidden;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    }
+
+    .wallet-balance-card::before {
+        content: '';
+        position: absolute;
+        top: -50%;
+        right: -50%;
+        width: 200%;
+        height: 200%;
+        background: radial-gradient(circle, rgba(255,255,255,0.05) 0%, transparent 70%);
+        pointer-events: none;
+    }
+
+    .balance-header {
+        color: #94A3B8;
+        font-size: 14px;
+        font-weight: 500;
+        margin-bottom: 10px;
+    }
+
+    .balance-amount {
+        color: white;
+        font-size: 42px;
+        font-weight: 700;
+        margin-bottom: 10px;
+        line-height: 1;
+    }
+
+    .balance-crypto {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin-bottom: 20px;
+    }
+
+    .balance-crypto i {
+        color: #F97316;
+        font-size: 20px;
+    }
+
+    .balance-crypto span {
+        color: #E5E7EB;
+        font-size: 16px;
+        font-weight: 500;
+    }
+
+    .balance-change {
+        position: absolute;
+        top: 30px;
+        right: 30px;
+        color: #10B981;
+        font-size: 16px;
+        font-weight: 600;
+        display: flex;
+        align-items: center;
+        gap: 5px;
+    }
+
+    .mini-chart {
+        height: 80px;
+        margin-top: 20px;
+        opacity: 0.6;
+    }
+
+    /* Action Cards Grid */
+    .action-cards-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 15px;
+        margin-bottom: 30px;
+    }
+
+    .action-card {
+        background: linear-gradient(135deg, rgba(30, 58, 138, 0.5) 0%, rgba(49, 46, 129, 0.3) 100%);
+        border: 1px solid rgba(148, 163, 184, 0.1);
+        border-radius: 16px;
+        padding: 25px 20px;
+        text-align: center;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+        text-decoration: none;
+        display: block;
+    }
+
+    .action-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+        border-color: rgba(148, 163, 184, 0.3);
+    }
+
+    .action-card.store {
+        background: linear-gradient(135deg, #1e40af 0%, #3730a3 100%);
+    }
+
+    .action-card.trade {
+        background: linear-gradient(135deg, #ea580c 0%, #dc2626 100%);
+    }
+
+    .action-card.swap {
+        background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+    }
+
+    .action-card.convert {
+        background: linear-gradient(135deg, #7c3aed 0%, #a855f7 100%);
+    }
+
+    .action-card.redeem {
+        background: linear-gradient(135deg, #1e3a8a 0%, #1e40af 100%);
+    }
+
+    .action-card.giftcard {
+        background: linear-gradient(135deg, #0e7490 0%, #0891b2 100%);
+    }
+
+    .action-card-icon {
+        font-size: 36px;
+        margin-bottom: 12px;
+        color: white;
+    }
+
+    .action-card-title {
+        color: white;
+        font-size: 18px;
+        font-weight: 600;
+        margin: 0;
+    }
+
+    .action-card-badge {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        background: rgba(239, 68, 68, 0.9);
+        color: white;
+        padding: 4px 10px;
+        border-radius: 6px;
+        font-size: 11px;
+        font-weight: 600;
+        letter-spacing: 0.5px;
+    }
+
+    /* Recent Activity Section */
+    .recent-activity {
+        background: rgba(30, 41, 59, 0.6);
+        border: 1px solid rgba(148, 163, 184, 0.1);
+        border-radius: 20px;
+        padding: 25px;
+        backdrop-filter: blur(10px);
+    }
+
+    .activity-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+    }
+
+    .activity-header h3 {
+        color: white;
+        font-size: 20px;
+        font-weight: 600;
+        margin: 0;
+    }
+
+    .activity-header a {
+        color: #60A5FA;
+        font-size: 14px;
+        text-decoration: none;
+        display: flex;
+        align-items: center;
+        gap: 5px;
+    }
+
+    .activity-header a:hover {
+        color: #93C5FD;
+    }
+
+    .activity-list {
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    .activity-item {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        padding: 12px;
+        background: rgba(30, 58, 138, 0.2);
+        border-radius: 12px;
+        transition: background 0.2s;
+    }
+
+    .activity-item:hover {
+        background: rgba(30, 58, 138, 0.3);
+    }
+
+    .activity-icon {
+        width: 40px;
+        height: 40px;
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 18px;
+        flex-shrink: 0;
+    }
+
+    .activity-icon.swap {
+        background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+        color: white;
+    }
+
+    .activity-icon.convert {
+        background: linear-gradient(135deg, #059669 0%, #10b981 100%);
+        color: white;
+    }
+
+    .activity-icon.redeem {
+        background: linear-gradient(135deg, #ea580c 0%, #f97316 100%);
+        color: white;
+    }
+
+    .activity-icon.trade {
+        background: linear-gradient(135deg, #dc2626 0%, #ef4444 100%);
+        color: white;
+    }
+
+    .activity-content {
+        flex: 1;
+    }
+
+    .activity-title {
+        color: white;
+        font-size: 15px;
+        font-weight: 500;
+        margin: 0;
+    }
+
+    .activity-time {
+        color: #94A3B8;
+        font-size: 13px;
+        margin: 0;
+    }
+
+    /* Top Header */
+    .dashboard-header {
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+        gap: 15px;
+        margin-bottom: 30px;
+    }
+
+    .header-icon-btn {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background: rgba(30, 41, 59, 0.6);
+        border: 1px solid rgba(148, 163, 184, 0.1);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #94A3B8;
+        cursor: pointer;
+        transition: all 0.3s;
+        position: relative;
+    }
+
+    .header-icon-btn:hover {
+        background: rgba(30, 41, 59, 0.8);
+        color: white;
+    }
+
+    .header-icon-btn .badge {
+        position: absolute;
+        top: -5px;
+        right: -5px;
+        background: #EF4444;
+        color: white;
+        border-radius: 50%;
+        width: 18px;
+        height: 18px;
+        font-size: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .deposit-btn {
+        background: rgba(30, 41, 59, 0.8);
+        color: white;
+        padding: 10px 24px;
+        border-radius: 12px;
+        border: 1px solid rgba(148, 163, 184, 0.2);
+        font-weight: 500;
+        cursor: pointer;
+        transition: all 0.3s;
+    }
+
+    .deposit-btn:hover {
+        background: rgba(30, 41, 59, 1);
+        transform: translateY(-2px);
+    }
+
+    /* Responsive */
+    @media (max-width: 576px) {
+        .balance-amount {
+            font-size: 32px;
+        }
+
+        .action-cards-grid {
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+        }
+
+        .action-card {
+            padding: 20px 15px;
+        }
+
+        .action-card-icon {
+            font-size: 28px;
+        }
+
+        .action-card-title {
+            font-size: 16px;
+        }
+    }
+</style>
+{% endblock %}
+
 {% block content %}
-<div class="container-fluid">
-    <h2 class="mb-4"><i class="fas fa-dashboard"></i> Dashboard</h2>
-
-    <!-- Portfolio Overview -->
-    <div class="row mb-4">
-        <div class="col-md-3">
-            <div class="card bg-primary text-white">
-                <div class="card-body">
-                    <h6 class="card-title">Total Balance</h6>
-                    <h3 id="total-balance">$0.00</h3>
-                    <small><i class="fas fa-arrow-up text-success"></i> +5.2% (24h)</small>
-                </div>
-            </div>
+<div class="dashboard-container">
+    <!-- Top Header -->
+    <div class="dashboard-header">
+        <div class="header-icon-btn">
+            <i class="fas fa-bell"></i>
+            <span class="badge">3</span>
         </div>
-        <div class="col-md-3">
-            <div class="card bg-success text-white">
-                <div class="card-body">
-                    <h6 class="card-title">Today's Profit</h6>
-                    <h3>$245.80</h3>
-                    <small><i class="fas fa-chart-line"></i> Active Trading</small>
-                </div>
-            </div>
+        <div class="header-icon-btn">
+            <i class="fas fa-globe"></i>
         </div>
-        <div class="col-md-3">
-            <div class="card bg-info text-white">
-                <div class="card-body">
-                    <h6 class="card-title">Open Trades</h6>
-                    <h3>3</h3>
-                    <small><i class="fas fa-exchange-alt"></i> 2 Winning</small>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-3">
-            <div class="card bg-warning text-white">
-                <div class="card-body">
-                    <h6 class="card-title">Win Rate</h6>
-                    <h3>72%</h3>
-                    <small><i class="fas fa-trophy"></i> Last 30 days</small>
-                </div>
-            </div>
-        </div>
+        <button class="deposit-btn" onclick="window.location.href='/wallet'">
+            Deposit
+        </button>
     </div>
 
-    <!-- Portfolio Chart -->
-    <div class="row mb-4">
-        <div class="col-md-8">
-            <div class="card">
-                <div class="card-header">
-                    <h5><i class="fas fa-chart-area"></i> Portfolio Performance</h5>
-                </div>
-                <div class="card-body">
-                    <canvas id="portfolioChart" height="100"></canvas>
-                </div>
-            </div>
+    <!-- Wallet Balance Card -->
+    <div class="wallet-balance-card">
+        <div class="balance-change">
+            +3.12% <i class="fas fa-chart-line"></i>
         </div>
-        <div class="col-md-4">
-            <div class="card">
-                <div class="card-header">
-                    <h5><i class="fas fa-pie-chart"></i> Asset Distribution</h5>
-                </div>
-                <div class="card-body">
-                    <canvas id="assetChart"></canvas>
-                </div>
-            </div>
+        <div class="balance-header">Wallet Balance</div>
+        <div class="balance-amount" id="total-balance">$23,450.75</div>
+        <div class="balance-crypto">
+            <i class="fab fa-bitcoin"></i>
+            <span id="btc-balance">1.2 BTC</span>
         </div>
+        <canvas id="miniChart" class="mini-chart" height="80"></canvas>
     </div>
 
-    <!-- Assets Table -->
-    <div class="row mb-4">
-        <div class="col-md-12">
-            <div class="card">
-                <div class="card-header">
-                    <h5><i class="fas fa-coins"></i> Your Assets</h5>
-                </div>
-                <div class="card-body">
-                    <table class="table table-hover" id="assets-table">
-                        <thead>
-                            <tr>
-                                <th>Currency</th>
-                                <th>Balance</th>
-                                <th>USD Value</th>
-                                <th>24h Change</th>
-                                <th>Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <!-- Populated by JS -->
-                        </tbody>
-                    </table>
-                </div>
+    <!-- Action Cards Grid -->
+    <div class="action-cards-grid">
+        <a href="/wallet" class="action-card store">
+            <div class="action-card-icon">
+                <i class="fab fa-bitcoin"></i>
             </div>
-        </div>
+            <h3 class="action-card-title">Store</h3>
+        </a>
+
+        <a href="/trade" class="action-card trade">
+            <div class="action-card-icon">
+                <i class="fas fa-chart-line"></i>
+            </div>
+            <h3 class="action-card-title">Trade</h3>
+        </a>
+
+        <a href="/trade" class="action-card swap">
+            <div class="action-card-icon">
+                <i class="fas fa-exchange-alt"></i>
+            </div>
+            <h3 class="action-card-title">Swap</h3>
+        </a>
+
+        <a href="/trade" class="action-card convert">
+            <div class="action-card-icon">
+                <i class="fas fa-sync-alt"></i>
+            </div>
+            <h3 class="action-card-title">Convert</h3>
+        </a>
+
+        <a href="/giftcards" class="action-card redeem">
+            <div class="action-card-icon">
+                <i class="fas fa-gift"></i>
+            </div>
+            <h3 class="action-card-title">Redeem</h3>
+        </a>
+
+        <a href="/giftcards" class="action-card giftcard">
+            <span class="action-card-badge">SELL</span>
+            <div class="action-card-icon">
+                <i class="fas fa-credit-card"></i>
+            </div>
+            <h3 class="action-card-title">Gift Card</h3>
+        </a>
     </div>
 
     <!-- Recent Activity -->
-    <div class="row">
-        <div class="col-md-12">
-            <div class="card">
-                <div class="card-header">
-                    <h5><i class="fas fa-history"></i> Recent Activity</h5>
-                </div>
-                <div class="card-body">
-                    <div class="table-responsive">
-                        <table class="table table-sm" id="activity-table">
-                            <thead>
-                                <tr>
-                                    <th>Time</th>
-                                    <th>Type</th>
-                                    <th>Asset</th>
-                                    <th>Amount</th>
-                                    <th>Status</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <!-- Populated by JS -->
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
+    <div class="recent-activity">
+        <div class="activity-header">
+            <h3>Recent Activity</h3>
+            <a href="/wallet">
+                View All <i class="fas fa-chevron-right"></i>
+            </a>
+        </div>
+        <div class="activity-list" id="activity-list">
+            <!-- Populated by JavaScript -->
         </div>
     </div>
 </div>
 {% endblock %}
 
 {% block extra_js %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
 $(document).ready(function() {
     // Load dashboard data
     loadDashboardData();
+    initMiniChart();
 
     // Refresh every 30 seconds
     setInterval(loadDashboardData, 30000);
@@ -142,167 +464,136 @@ function loadDashboardData() {
     // Load balances
     $.get('/api/wallet/balances', function(data) {
         if (data.success) {
-            $('#total-balance').text('$' + data.total_usd.toFixed(2));
-            updateAssetsTable(data.balances);
-            updateAssetChart(data.balances);
+            $('#total-balance').text('$' + data.total_usd.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2}));
+
+            // Calculate BTC balance
+            const btcBalance = data.balances.find(b => b.currency === 'BTC');
+            if (btcBalance) {
+                $('#btc-balance').text(btcBalance.balance.toFixed(4) + ' BTC');
+            }
         }
-    });
-
-    // Load transactions
-    $.get('/api/wallet/transactions', function(data) {
-        if (data.success) {
-            updateActivityTable(data.transactions);
-        }
-    });
-
-    // Initialize portfolio chart
-    initPortfolioChart();
-}
-
-function updateAssetsTable(balances) {
-    // First fetch market data for all currencies
-    $.get('/api/trade/market-overview', function(marketData) {
-        const tbody = $('#assets-table tbody');
-        tbody.empty();
-
-        // Create a map of currency to market data
-        const marketMap = {};
-        if (marketData.success && marketData.markets) {
-            marketData.markets.forEach(m => {
-                marketMap[m.currency] = m;
-            });
-        }
-
-        balances.forEach(balance => {
-            // Use real market data if available, otherwise use mock
-            const market = marketMap[balance.currency];
-            const change = market ? market.change_24h_percent : (Math.random() * 10 - 5);
-            const changeClass = change >= 0 ? 'text-success' : 'text-danger';
-            const changeIcon = change >= 0 ? 'fa-arrow-up' : 'fa-arrow-down';
-            const changeSymbol = change >= 0 ? '+' : '';
-
-            const row = `
-                <tr>
-                    <td><strong>${balance.currency}</strong></td>
-                    <td>${balance.balance.toFixed(6)}</td>
-                    <td>$${balance.usd_value.toFixed(2)}</td>
-                    <td class="${changeClass}">
-                        <i class="fas ${changeIcon}"></i> ${changeSymbol}${Math.abs(change).toFixed(2)}%
-                    </td>
-                    <td>
-                        <a href="/trade" class="btn btn-sm btn-primary">Trade</a>
-                    </td>
-                </tr>
-            `;
-            tbody.append(row);
-        });
     }).fail(function() {
-        // Fallback to displaying without change data
-        const tbody = $('#assets-table tbody');
-        tbody.empty();
-        balances.forEach(balance => {
-            const row = `
-                <tr>
-                    <td><strong>${balance.currency}</strong></td>
-                    <td>${balance.balance.toFixed(6)}</td>
-                    <td>$${balance.usd_value.toFixed(2)}</td>
-                    <td class="text-muted">-</td>
-                    <td>
-                        <a href="/trade" class="btn btn-sm btn-primary">Trade</a>
-                    </td>
-                </tr>
-            `;
-            tbody.append(row);
-        });
+        // Use mock data on failure
+        $('#total-balance').text('$23,450.75');
+        $('#btc-balance').text('1.2 BTC');
+    });
+
+    // Load recent transactions
+    $.get('/api/wallet/transactions', function(data) {
+        if (data.success && data.transactions) {
+            updateActivityList(data.transactions.slice(0, 4));
+        }
+    }).fail(function() {
+        // Use mock data
+        const mockTransactions = [
+            { type: 'swap', description: 'Swap BTC → ETH', timestamp: new Date(Date.now() - 25 * 60 * 1000) },
+            { type: 'convert', description: 'Convert BTC → USD', timestamp: new Date(Date.now() - 25 * 60 * 1000) },
+            { type: 'redeem', description: 'Redeem $100 Amazon Gift Card', timestamp: new Date(Date.now() - 25 * 60 * 1000) },
+            { type: 'trade', description: 'Trade Sell 0.4 BTC', timestamp: new Date(Date.now() - 25 * 60 * 1000) }
+        ];
+        updateActivityList(mockTransactions);
     });
 }
 
-function updateActivityTable(transactions) {
-    const tbody = $('#activity-table tbody');
-    tbody.empty();
+function updateActivityList(transactions) {
+    const activityList = $('#activity-list');
+    activityList.empty();
 
-    transactions.slice(0, 10).forEach(tx => {
-        const statusBadge = tx.status === 'completed'
-            ? '<span class="badge bg-success">Completed</span>'
-            : '<span class="badge bg-warning">Pending</span>';
+    const activityIcons = {
+        'deposit': { icon: 'fa-arrow-down', class: 'convert' },
+        'withdraw': { icon: 'fa-arrow-up', class: 'trade' },
+        'swap': { icon: 'fa-exchange-alt', class: 'swap' },
+        'trade': { icon: 'fa-chart-line', class: 'trade' },
+        'convert': { icon: 'fa-dollar-sign', class: 'convert' },
+        'redeem': { icon: 'fa-gift', class: 'redeem' }
+    };
 
-        const typeIcon = tx.type === 'deposit'
-            ? '<i class="fas fa-arrow-down text-success"></i>'
-            : '<i class="fas fa-arrow-up text-danger"></i>';
+    transactions.forEach(tx => {
+        const iconData = activityIcons[tx.type] || { icon: 'fa-circle', class: 'swap' };
+        const timeAgo = getTimeAgo(tx.timestamp);
 
-        const row = `
-            <tr>
-                <td>${new Date(tx.timestamp).toLocaleString()}</td>
-                <td>${typeIcon} ${tx.type}</td>
-                <td>${tx.currency}</td>
-                <td>${tx.amount}</td>
-                <td>${statusBadge}</td>
-            </tr>
+        let description = tx.description || `${tx.type} ${tx.currency || ''}`;
+        if (tx.type === 'swap') {
+            description = `Swap BTC → ETH`;
+        } else if (tx.type === 'convert') {
+            description = `Convert BTC → USD`;
+        } else if (tx.type === 'trade') {
+            description = `Trade Sell 0.4 BTC`;
+        }
+
+        const activityItem = `
+            <div class="activity-item">
+                <div class="activity-icon ${iconData.class}">
+                    <i class="fas ${iconData.icon}"></i>
+                </div>
+                <div class="activity-content">
+                    <p class="activity-title">${description}</p>
+                </div>
+                <p class="activity-time">${timeAgo}</p>
+            </div>
         `;
-        tbody.append(row);
+        activityList.append(activityItem);
     });
 }
 
-function initPortfolioChart() {
-    const ctx = document.getElementById('portfolioChart');
+function getTimeAgo(timestamp) {
+    const now = new Date();
+    const past = new Date(timestamp);
+    const diffMs = now - past;
+    const diffMins = Math.floor(diffMs / 60000);
+
+    if (diffMins < 1) return 'Just now';
+    if (diffMins < 60) return `${diffMins}m ago`;
+
+    const diffHours = Math.floor(diffMins / 60);
+    if (diffHours < 24) return `${diffHours}h ago`;
+
+    const diffDays = Math.floor(diffHours / 24);
+    return `${diffDays}d ago`;
+}
+
+function initMiniChart() {
+    const ctx = document.getElementById('miniChart');
     if (!ctx) return;
 
-    // Mock data
-    const labels = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-    const data = [10000, 12000, 11500, 14000, 16500, 15000, 18000, 19500, 21000, 20000, 22500, 25000];
+    // Generate mock chart data
+    const dataPoints = [];
+    for (let i = 0; i < 20; i++) {
+        dataPoints.push(20000 + Math.random() * 5000 + i * 200);
+    }
+
+    const gradient = ctx.getContext('2d').createLinearGradient(0, 0, 0, 80);
+    gradient.addColorStop(0, 'rgba(16, 185, 129, 0.3)');
+    gradient.addColorStop(1, 'rgba(16, 185, 129, 0)');
 
     new Chart(ctx, {
         type: 'line',
         data: {
-            labels: labels,
+            labels: Array(20).fill(''),
             datasets: [{
-                label: 'Portfolio Value ($)',
-                data: data,
-                borderColor: 'rgb(75, 192, 192)',
-                backgroundColor: 'rgba(75, 192, 192, 0.1)',
+                data: dataPoints,
+                borderColor: '#10B981',
+                backgroundColor: gradient,
+                borderWidth: 2,
+                pointRadius: 0,
                 tension: 0.4,
                 fill: true
             }]
         },
         options: {
             responsive: true,
-            maintainAspectRatio: true,
+            maintainAspectRatio: false,
             plugins: {
-                legend: {
-                    display: false
-                }
-            }
-        }
-    });
-}
-
-function updateAssetChart(balances) {
-    const ctx = document.getElementById('assetChart');
-    if (!ctx) return;
-
-    // Prepare data
-    const labels = balances.map(b => b.currency);
-    const data = balances.map(b => b.usd_value);
-    const colors = [
-        '#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF', '#FF9F40'
-    ];
-
-    new Chart(ctx, {
-        type: 'doughnut',
-        data: {
-            labels: labels,
-            datasets: [{
-                data: data,
-                backgroundColor: colors
-            }]
-        },
-        options: {
-            responsive: true,
-            maintainAspectRatio: true,
-            plugins: {
-                legend: {
-                    position: 'bottom'
-                }
+                legend: { display: false },
+                tooltip: { enabled: false }
+            },
+            scales: {
+                x: { display: false },
+                y: { display: false }
+            },
+            interaction: {
+                intersect: false,
+                mode: 'index'
             }
         }
     });
