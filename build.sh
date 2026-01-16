@@ -20,4 +20,8 @@ else
     python init_db.py
 fi
 
+# Create passkey tables
+echo "Creating passkey tables..."
+python create_passkey_tables.py
+
 echo "Build completed successfully!"
