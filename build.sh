@@ -6,6 +6,10 @@ set -o errexit
 pip install --upgrade pip
 pip install -r requirements.txt
 
+# Fix database schema first
+echo "Fixing database schema..."
+python fix_db_schema.py
+
 # Run database migrations
 export FLASK_APP=app.py
 echo "Running database migrations..."
