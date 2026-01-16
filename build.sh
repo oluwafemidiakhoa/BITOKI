@@ -8,6 +8,12 @@ pip install -r requirements.txt
 
 # Run database migrations
 export FLASK_APP=app.py
-python -m flask db upgrade || python init_db.py
+echo "Running database migrations..."
+if python -m flask db upgrade; then
+    echo "Database migrations completed successfully"
+else
+    echo "Migration failed, trying database initialization..."
+    python init_db.py
+fi
 
 echo "Build completed successfully!"

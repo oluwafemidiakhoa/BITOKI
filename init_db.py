@@ -1,6 +1,6 @@
 """Initialize the database with all tables."""
 
-from app_prod import app, db
+from app import app, db
 from models import User, Wallet, Transaction, KYCDocument, BankAccount, Trade, GiftCardTrade, SavingsPlan, ActivityLog
 
 def init_database():

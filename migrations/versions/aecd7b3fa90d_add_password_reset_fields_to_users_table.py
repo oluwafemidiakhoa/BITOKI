@@ -40,8 +40,9 @@ def upgrade():
     except Exception:
         pass  # Column might already exist
     
-    # Create passkey tables
-    op.create_table('passkey_challenges',
+    # Create passkey tables (only if they don't exist)
+    try:
+        op.create_table('passkey_challenges',
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('user_id', sa.Integer(), nullable=True),
     sa.Column('challenge', sa.String(length=255), nullable=False),
@@ -53,7 +54,11 @@ def upgrade():
     sa.PrimaryKeyConstraint('id'),
     sa.UniqueConstraint('challenge')
     )
-    op.create_table('passkeys',
+    except Exception:
+        pass  # Table might already exist
+    
+    try:
+        op.create_table('passkeys',
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('user_id', sa.Integer(), nullable=False),
     sa.Column('credential_id', sa.LargeBinary(), nullable=False),
@@ -74,6 +79,8 @@ def upgrade():
     sa.PrimaryKeyConstraint('id'),
     sa.UniqueConstraint('credential_id')
     )
+    except Exception:
+        pass  # Table might already exist
     # ### end Alembic commands ###
 
 
