@@ -197,8 +197,15 @@ def setup_2fa():
         db.session.commit()
 
     qr_uri = current_user.get_2fa_uri()
-
-    return render_template('auth/setup_2fa.html', qr_uri=qr_uri)
+    
+    # Generate QR code URL for display
+    import urllib.parse
+    qr_code_url = f"https://chart.googleapis.com/chart?chs=250x250&chld=M|0&cht=qr&chl={urllib.parse.quote(qr_uri)}"
+    
+    return render_template('auth/setup_2fa.html', 
+                         qr_code=qr_code_url, 
+                         secret_key=current_user.two_factor_secret,
+                         qr_uri=qr_uri)
 
 
 @auth_bp.route('/disable-2fa', methods=['POST'])
