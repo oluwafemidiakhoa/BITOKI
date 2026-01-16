@@ -243,8 +243,10 @@ def forgot_password():
             try:
                 from services.email_service import send_password_reset_email
                 send_password_reset_email(user, reset_token)
+                print(f"Password reset email sent successfully to {user.email}")
             except Exception as e:
                 print(f"Failed to send password reset email: {e}")
+                # Continue anyway to prevent enumeration
 
         # Always show success to prevent email enumeration
         flash('If that email exists, we sent a password reset link. Check your email.', 'info')
