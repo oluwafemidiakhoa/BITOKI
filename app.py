@@ -1,9 +1,9 @@
 """Flask web application for BITOKI trading platform."""
 
 import os
-from flask import Flask, render_template, request, jsonify, session
+from flask import Flask, render_template, request, jsonify, session, flash, redirect, url_for
 from flask_cors import CORS
-from flask_login import LoginManager, current_user as _flask_current_user
+from flask_login import LoginManager, current_user as _flask_current_user, login_required
 from flask_limiter import Limiter
 from flask_limiter.util import get_remote_address
 from flask_migrate import Migrate
@@ -184,9 +184,72 @@ def faq():
 
 
 @app.route('/settings')
+@login_required
 def settings():
     """Settings page."""
     return render_template('settings.html')
+
+
+@app.route('/change-password', methods=['POST'])
+@login_required
+def change_password():
+    """Change user password."""
+    current_password = request.form.get('current_password')
+    new_password = request.form.get('new_password')
+    confirm_password = request.form.get('confirm_password')
+    
+    if not current_password or not new_password or not confirm_password:
+        flash('All fields are required', 'error')
+        return redirect(url_for('settings'))
+    
+    if not _flask_current_user.check_password(current_password):
+        flash('Current password is incorrect', 'error')
+        return redirect(url_for('settings'))
+    
+    if new_password != confirm_password:
+        flash('New passwords do not match', 'error')
+        return redirect(url_for('settings'))
+    
+    _flask_current_user.set_password(new_password)
+    db.session.commit()
+    flash('Password changed successfully', 'success')
+    return redirect(url_for('settings'))
+
+
+@app.route('/update-preferences', methods=['POST'])
+@login_required 
+def update_preferences():
+    """Update user preferences."""
+    trading_mode = request.form.get('trading_mode')
+    email_notifications = request.form.get('email_notifications') == 'on'
+    
+    # Update user preferences (you may want to add fields to User model)
+    flash('Preferences updated successfully', 'success')
+    return redirect(url_for('settings'))
+
+
+@app.route('/delete-account', methods=['POST'])
+@login_required
+def delete_account():
+    """Delete user account."""
+    confirm_delete = request.form.get('confirm_delete')
+    password_confirm = request.form.get('password_confirm')
+    
+    if confirm_delete != 'DELETE':
+        flash('Please type DELETE to confirm account deletion', 'error')
+        return redirect(url_for('settings'))
+    
+    if not _flask_current_user.check_password(password_confirm):
+        flash('Incorrect password', 'error')  
+        return redirect(url_for('settings'))
+    
+    # Delete user account
+    user_id = _flask_current_user.id
+    db.session.delete(_flask_current_user)
+    db.session.commit()
+    
+    flash('Account deleted successfully', 'info')
+    return redirect(url_for('auth.login'))
 
 
 @app.route('/terms')

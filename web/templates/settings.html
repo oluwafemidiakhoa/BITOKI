@@ -1,0 +1,215 @@
+{% extends "base.html" %}
+
+{% block title %}Account Settings - BITfisher{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">
+                        <i class="fas fa-cog"></i> Account Settings
+                    </h3>
+                </div>
+                <div class="card-body">
+                    
+                    <!-- Security Section -->
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h5><i class="fas fa-shield-alt"></i> Security Settings</h5>
+                            
+                            <div class="card mb-3">
+                                <div class="card-header">
+                                    <h6>Two-Factor Authentication (2FA)</h6>
+                                </div>
+                                <div class="card-body">
+                                    {% if current_user.two_factor_enabled %}
+                                        <div class="alert alert-success">
+                                            <i class="fas fa-check-circle"></i>
+                                            2FA is <strong>enabled</strong> for your account
+                                        </div>
+                                        <form method="POST" action="{{ url_for('auth.disable_2fa') }}" onsubmit="return confirm('Are you sure you want to disable 2FA?');">
+                                            <div class="mb-3">
+                                                <label for="token" class="form-label">Enter 2FA Code to Disable</label>
+                                                <input type="text" class="form-control" name="token" placeholder="000000" maxlength="6" required>
+                                            </div>
+                                            <button type="submit" class="btn btn-danger">
+                                                <i class="fas fa-times"></i> Disable 2FA
+                                            </button>
+                                        </form>
+                                    {% else %}
+                                        <div class="alert alert-warning">
+                                            <i class="fas fa-exclamation-triangle"></i>
+                                            2FA is <strong>not enabled</strong>. Your account is less secure.
+                                        </div>
+                                        <a href="{{ url_for('auth.setup_2fa') }}" class="btn btn-success">
+                                            <i class="fas fa-shield-alt"></i> Enable 2FA
+                                        </a>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            
+                            <div class="card mb-3">
+                                <div class="card-header">
+                                    <h6>Change Password</h6>
+                                </div>
+                                <div class="card-body">
+                                    <form method="POST" action="{{ url_for('change_password') }}">
+                                        <div class="mb-3">
+                                            <label for="current_password" class="form-label">Current Password</label>
+                                            <input type="password" class="form-control" name="current_password" required>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="new_password" class="form-label">New Password</label>
+                                            <input type="password" class="form-control" name="new_password" required>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="confirm_password" class="form-label">Confirm New Password</label>
+                                            <input type="password" class="form-control" name="confirm_password" required>
+                                        </div>
+                                        <button type="submit" class="btn btn-primary">
+                                            <i class="fas fa-key"></i> Change Password
+                                        </button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Profile Section -->
+                        <div class="col-md-6">
+                            <h5><i class="fas fa-user"></i> Profile Information</h5>
+                            
+                            <div class="card mb-3">
+                                <div class="card-header">
+                                    <h6>Account Details</h6>
+                                </div>
+                                <div class="card-body">
+                                    <div class="mb-3">
+                                        <strong>Username:</strong> {{ current_user.username }}
+                                    </div>
+                                    <div class="mb-3">
+                                        <strong>Email:</strong> {{ current_user.email }}
+                                        {% if current_user.email_verified %}
+                                            <span class="badge bg-success">Verified</span>
+                                        {% else %}
+                                            <span class="badge bg-warning">Not Verified</span>
+                                        {% endif %}
+                                    </div>
+                                    <div class="mb-3">
+                                        <strong>Member Since:</strong> {{ current_user.created_at.strftime('%B %d, %Y') if current_user.created_at else 'Unknown' }}
+                                    </div>
+                                    <div class="mb-3">
+                                        <strong>KYC Level:</strong> 
+                                        <span class="badge bg-{{ 'success' if current_user.kyc_level >= 2 else 'warning' }}">
+                                            Level {{ current_user.kyc_level or 0 }}
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            {% if not current_user.email_verified %}
+                            <div class="card mb-3">
+                                <div class="card-header">
+                                    <h6>Email Verification</h6>
+                                </div>
+                                <div class="card-body">
+                                    <div class="alert alert-warning">
+                                        <i class="fas fa-exclamation-triangle"></i>
+                                        Your email is not verified. Some features may be limited.
+                                    </div>
+                                    <a href="{{ url_for('auth.resend_verification') }}" class="btn btn-info">
+                                        <i class="fas fa-envelope"></i> Resend Verification Email
+                                    </a>
+                                </div>
+                            </div>
+                            {% endif %}
+                            
+                            <div class="card mb-3">
+                                <div class="card-header">
+                                    <h6>Trading Preferences</h6>
+                                </div>
+                                <div class="card-body">
+                                    <form method="POST" action="{{ url_for('update_preferences') }}">
+                                        <div class="mb-3">
+                                            <label for="trading_mode" class="form-label">Trading Mode</label>
+                                            <select class="form-control" name="trading_mode">
+                                                <option value="sandbox">Sandbox (Test)</option>
+                                                <option value="live">Live Trading</option>
+                                            </select>
+                                        </div>
+                                        <div class="mb-3">
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" name="email_notifications" id="email_notifications" checked>
+                                                <label class="form-check-label" for="email_notifications">
+                                                    Email notifications for trades
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <button type="submit" class="btn btn-primary">
+                                            <i class="fas fa-save"></i> Save Preferences
+                                        </button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Danger Zone -->
+                    <div class="row mt-4">
+                        <div class="col-12">
+                            <h5 class="text-danger"><i class="fas fa-exclamation-triangle"></i> Danger Zone</h5>
+                            <div class="card border-danger">
+                                <div class="card-header bg-danger text-white">
+                                    <h6>Account Deletion</h6>
+                                </div>
+                                <div class="card-body">
+                                    <p class="text-muted">
+                                        Once you delete your account, there is no going back. This will permanently delete your account and remove your data from our servers.
+                                    </p>
+                                    <button type="button" class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#deleteAccountModal">
+                                        <i class="fas fa-trash"></i> Delete Account
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Delete Account Modal -->
+<div class="modal fade" id="deleteAccountModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title text-danger">Delete Account</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <p><strong>Are you absolutely sure?</strong></p>
+                <p>This action cannot be undone. This will permanently delete your account and all associated data.</p>
+                <div class="alert alert-danger">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    <strong>Warning:</strong> All your wallets, transaction history, and settings will be lost forever.
+                </div>
+                <form method="POST" action="{{ url_for('delete_account') }}">
+                    <div class="mb-3">
+                        <label for="confirm_delete" class="form-label">Type <code>DELETE</code> to confirm:</label>
+                        <input type="text" class="form-control" name="confirm_delete" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="password_confirm" class="form-label">Enter your password:</label>
+                        <input type="password" class="form-control" name="password_confirm" required>
+                    </div>
+                    <button type="submit" class="btn btn-danger">
+                        <i class="fas fa-trash"></i> I understand, delete my account
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
