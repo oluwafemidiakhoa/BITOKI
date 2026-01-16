@@ -18,6 +18,20 @@ services:
         fromDatabase:
           name: bitoki-db
           property: connectionString
+      - key: MAIL_SERVER
+        value: smtp.zoho.com
+      - key: MAIL_PORT
+        value: 587
+      - key: MAIL_USE_TLS
+        value: true
+      - key: MAIL_USE_SSL
+        value: false
+      - key: MAIL_USERNAME
+        value: foundryai@getfoundryai.com
+      - key: MAIL_PASSWORD
+        value: Flindell1977@
+      - key: MAIL_DEFAULT_SENDER
+        value: foundryai@getfoundryai.com
 
 databases:
   - name: bitoki-db

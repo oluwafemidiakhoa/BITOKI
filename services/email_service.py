@@ -40,7 +40,7 @@ def send_email(to, subject, body, html=None):
 
 def send_verification_email(user, verification_token):
     """Send email verification email."""
-    verify_url = f"http://127.0.0.1:5000/auth/verify-email?token={verification_token}"
+    verify_url = f"https://bitoki.onrender.com/auth/verify-email?token={verification_token}"
 
     subject = "Verify Your BITfisher Email Address"
 
@@ -271,7 +271,7 @@ The BITfisher Team
 
 def send_password_reset_email(user, reset_token):
     """Send password reset email."""
-    reset_url = f"https://bitoki.com/auth/reset-password?token={reset_token}"
+    reset_url = f"https://bitoki.onrender.com/auth/reset-password?token={reset_token}"
 
     subject = "Reset Your BITfisher Password"
 
