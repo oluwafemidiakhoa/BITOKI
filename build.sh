@@ -6,7 +6,8 @@ set -o errexit
 pip install --upgrade pip
 pip install -r requirements.txt
 
-# Initialize database (only if it doesn't exist)
-python init_db.py || true
+# Run database migrations
+export FLASK_APP=app.py
+python -m flask db upgrade || python init_db.py
 
 echo "Build completed successfully!"
