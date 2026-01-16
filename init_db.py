@@ -2,6 +2,7 @@
 
 from app import app, db
 from models import User, Wallet, Transaction, KYCDocument, BankAccount, Trade, GiftCardTrade, SavingsPlan, ActivityLog
+import models_passkey  # Import passkey models to ensure tables are created
 
 def init_database():
     """Create all database tables."""
@@ -20,6 +21,8 @@ def init_database():
         print("- giftcard_trades")
         print("- savings_plans")
         print("- activity_logs")
+        print("- passkeys")
+        print("- passkey_challenges")
 
         # Create admin user (optional)
         admin = User.query.filter_by(username='admin').first()

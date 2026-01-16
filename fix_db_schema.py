@@ -27,7 +27,7 @@ def fix_database_schema():
         
         cursor = conn.cursor()
         
-        # Add missing columns
+        # Add missing columns to users table
         columns_to_add = [
             ("password_reset_token", "VARCHAR(255)"),
             ("password_reset_expires", "TIMESTAMP"),
@@ -43,6 +43,48 @@ def fix_database_schema():
                 print(f"⏭️  Column already exists: {column_name}")
             except Exception as e:
                 print(f"❌ Error adding {column_name}: {e}")
+        
+        # Create passkey tables
+        create_passkey_tables = [
+            """
+            CREATE TABLE IF NOT EXISTS passkeys (
+                id SERIAL PRIMARY KEY,
+                user_id INTEGER NOT NULL REFERENCES users(id),
+                credential_id BYTEA NOT NULL UNIQUE,
+                public_key BYTEA NOT NULL,
+                sign_count INTEGER DEFAULT 0,
+                name VARCHAR(100),
+                aaguid VARCHAR(36),
+                transports VARCHAR(200),
+                device_type VARCHAR(50),
+                user_agent VARCHAR(255),
+                ip_address VARCHAR(45),
+                is_active BOOLEAN DEFAULT TRUE,
+                last_used_at TIMESTAMP,
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                is_backup_eligible BOOLEAN DEFAULT FALSE,
+                is_backup_state BOOLEAN DEFAULT FALSE
+            );
+            """,
+            """
+            CREATE TABLE IF NOT EXISTS passkey_challenges (
+                id SERIAL PRIMARY KEY,
+                user_id INTEGER REFERENCES users(id),
+                challenge VARCHAR(255) NOT NULL UNIQUE,
+                challenge_type VARCHAR(20) NOT NULL,
+                email VARCHAR(120),
+                expires_at TIMESTAMP NOT NULL,
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+            );
+            """
+        ]
+        
+        for table_sql in create_passkey_tables:
+            try:
+                cursor.execute(table_sql)
+                print(f"✅ Created passkey table")
+            except Exception as e:
+                print(f"❌ Error creating passkey table: {e}")
         
         # Commit changes
         conn.commit()
