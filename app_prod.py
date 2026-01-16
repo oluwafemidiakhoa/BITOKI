@@ -2,7 +2,7 @@
 
 import os
 import sys
-from flask import Flask
+from flask import Flask, request
 from werkzeug.middleware.proxy_fix import ProxyFix
 from dotenv import load_dotenv
 
