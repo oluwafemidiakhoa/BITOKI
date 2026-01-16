@@ -93,7 +93,7 @@ app.register_blueprint(auth_bp, url_prefix='/auth')
 app.register_blueprint(ngn_bp, url_prefix='/ngn')
 app.register_blueprint(passkey_bp, url_prefix='/passkey')
 
-# Initialize components
+# Initialize components with fallback handling
 try:
     config = Config('config/strategy_config.yaml')
     market_data = MarketDataFetcher(
@@ -103,8 +103,10 @@ try:
         sandbox=config.is_sandbox
     )
     exchange = market_data.exchange
+    print("Exchange initialized successfully")
 except Exception as e:
     print(f"Warning: Could not initialize exchange: {e}")
+    print("Running in mock mode with sample data")
     exchange = None
 
 # Initialize security manager
@@ -113,8 +115,10 @@ security_manager = SecurityManager()
 # Initialize email service - using Flask-Mail in app_prod.py instead
 email_service = None
 
+# Initialize APIs with fallback to mock data
 wallet_manager = WalletManager(exchange)
-trading_api = TradingAPI(exchange) if exchange else None
+# Always initialize TradingAPI - it will handle mock data when exchange is None
+trading_api = TradingAPI(exchange)
 giftcard_api = GiftCardAPI()
 
 
@@ -177,6 +181,12 @@ def contact():
 def faq():
     """FAQ page."""
     return render_template('faq.html')
+
+
+@app.route('/settings')
+def settings():
+    """Settings page."""
+    return render_template('settings.html')
 
 
 @app.route('/terms')

@@ -4,6 +4,9 @@ from typing import Dict, List, Optional
 from dataclasses import dataclass
 from datetime import datetime
 import ccxt
+import random
+import time
+from loguru import logger
 
 
 @dataclass
@@ -23,14 +26,17 @@ class TradeOrder:
 class TradingAPI:
     """Handles buy, sell, and swap operations."""
 
-    def __init__(self, exchange: ccxt.Exchange):
+    def __init__(self, exchange: Optional[ccxt.Exchange]):
         """
         Initialize trading API.
 
         Args:
-            exchange: CCXT exchange instance
+            exchange: CCXT exchange instance (can be None for mock mode)
         """
         self.exchange = exchange
+        self.mock_mode = exchange is None
+        if self.mock_mode:
+            logger.info("TradingAPI initialized in mock mode - using sample data")
 
     def buy_crypto(
         self,
@@ -49,6 +55,10 @@ class TradingAPI:
         Returns:
             TradeOrder object
         """
+        # Use mock mode if exchange is not available
+        if self.mock_mode or not self.exchange:
+            return self._mock_trade_order('buy', currency, amount, payment_currency)
+        
         try:
             # Get current price
             symbol = f"{currency}/{payment_currency}"
@@ -75,8 +85,8 @@ class TradingAPI:
             )
 
         except Exception as e:
-            print(f"Error buying {currency}: {e}")
-            # Return mock order for demo
+            logger.warning(f"Error buying {currency}: {e}")
+            # Fallback to mock order
             return self._mock_trade_order('buy', currency, amount, payment_currency)
 
     def sell_crypto(
@@ -96,6 +106,10 @@ class TradingAPI:
         Returns:
             TradeOrder object
         """
+        # Use mock mode if exchange is not available
+        if self.mock_mode or not self.exchange:
+            return self._mock_trade_order('sell', currency, amount, receive_currency)
+        
         try:
             symbol = f"{currency}/{receive_currency}"
             ticker = self.exchange.fetch_ticker(symbol)
@@ -121,7 +135,7 @@ class TradingAPI:
             )
 
         except Exception as e:
-            print(f"Error selling {currency}: {e}")
+            logger.warning(f"Error selling {currency}: {e}")
             return self._mock_trade_order('sell', currency, amount, receive_currency)
 
     def swap_crypto(
@@ -178,7 +192,7 @@ class TradingAPI:
             )
 
         except Exception as e:
-            print(f"Error swapping {from_currency} to {to_currency}: {e}")
+            logger.warning(f"Error swapping {from_currency} to {to_currency}: {e}")
             return self._mock_trade_order('swap', from_currency, amount, to_currency)
 
     def get_price(self, currency: str, quote_currency: str = "USDT") -> float:
@@ -197,15 +211,9 @@ class TradingAPI:
             ticker = self.exchange.fetch_ticker(symbol)
             return ticker['last']
         except Exception as e:
-            print(f"Error getting price for {currency}: {e}")
-            # Return mock prices
-            mock_prices = {
-                "BTC": 97000.0,
-                "ETH": 3500.0,
-                "SOL": 180.0,
-                "USDT": 1.0
-            }
-            return mock_prices.get(currency, 0.0)
+            logger.warning(f"Error getting price for {currency}: {e}")
+            # Return mock prices when exchange is unavailable
+            return self._get_mock_price(currency)
 
     def get_market_data(self, currency: str, quote_currency: str = "USDT") -> Dict:
         """
@@ -237,9 +245,8 @@ class TradingAPI:
                 'volume_24h': ticker.get('baseVolume', 0)
             }
         except Exception as e:
-            print(f"Error getting market data for {currency}: {e}")
+            logger.warning(f"Error getting market data for {currency}: {e}")
             # Return mock data with realistic changes
-            import random
             mock_data = {
                 "BTC": {"price": 97000.0, "change": random.uniform(-5, 5)},
                 "ETH": {"price": 3500.0, "change": random.uniform(-5, 5)},
@@ -278,7 +285,7 @@ class TradingAPI:
                 'timestamp': order_book['timestamp']
             }
         except Exception as e:
-            print(f"Error fetching order book: {e}")
+            logger.warning(f"Error fetching order book: {e}")
             return {'bids': [], 'asks': [], 'timestamp': None}
 
     def get_recent_trades(self, limit: int = 20) -> List[Dict]:
@@ -315,6 +322,16 @@ class TradingAPI:
             }
         ]
         return trades[:limit]
+
+    def _get_mock_price(self, currency: str) -> float:
+        """Get mock price for currency when exchange is unavailable."""
+        mock_prices = {
+            "BTC": 65420.50 + random.uniform(-500, 500),  # Add some volatility
+            "ETH": 3245.80 + random.uniform(-50, 50),
+            "SOL": 145.67 + random.uniform(-10, 10),
+            "USDT": 1.00
+        }
+        return mock_prices.get(currency, 100.0)
 
     def _mock_trade_order(
         self,

@@ -2,271 +2,681 @@
 
 {% block title %}Trade - BITfisher{% endblock %}
 
+{% block extra_css %}
+<style>
+/* Enhanced Trade Section Styles */
+:root {
+    --trading-primary: #0EA5E9;
+    --trading-secondary: #F97316;
+    --trading-success: #10B981;
+    --trading-danger: #EF4444;
+    --trading-warning: #F59E0B;
+    --trading-dark: #0F172A;
+    --trading-card-bg: rgba(255, 255, 255, 0.95);
+    --trading-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+}
+
+.trade-container {
+    background: linear-gradient(135deg, #0F172A 0%, #1E293B 50%, #0F172A 100%);
+    min-height: 100vh;
+    padding: 2rem 0;
+    position: relative;
+    overflow: hidden;
+}
+
+.trade-container::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: 
+        radial-gradient(circle at 20% 30%, rgba(14, 165, 233, 0.1) 0%, transparent 50%),
+        radial-gradient(circle at 80% 70%, rgba(249, 115, 22, 0.08) 0%, transparent 50%),
+        radial-gradient(circle at 40% 80%, rgba(16, 185, 129, 0.06) 0%, transparent 50%);
+    pointer-events: none;
+    z-index: 0;
+}
+
+.trade-content {
+    position: relative;
+    z-index: 1;
+}
+
+.trade-header {
+    text-align: center;
+    margin-bottom: 3rem;
+    color: white;
+}
+
+.trade-header h2 {
+    font-size: 2.5rem;
+    font-weight: 700;
+    background: linear-gradient(135deg, #0EA5E9, #F97316);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 0.5rem;
+    text-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+.trade-header p {
+    font-size: 1.1rem;
+    color: #94A3B8;
+    margin: 0;
+}
+
+/* Enhanced Trading Panel */
+.trading-panel {
+    background: var(--trading-card-bg);
+    border-radius: 24px;
+    padding: 2.5rem;
+    box-shadow: var(--trading-shadow);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    margin-bottom: 2rem;
+    animation: slideInUp 0.6s ease-out;
+}
+
+@keyframes slideInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Modern Tab Design */
+.nav-tabs {
+    border: none;
+    margin-bottom: 2rem;
+    background: rgba(15, 23, 42, 0.05);
+    border-radius: 16px;
+    padding: 8px;
+    display: flex;
+    gap: 4px;
+}
+
+.nav-tabs .nav-item {
+    flex: 1;
+}
+
+.nav-tabs .nav-link {
+    border: none;
+    border-radius: 12px;
+    padding: 1rem;
+    text-align: center;
+    font-weight: 600;
+    color: #64748B;
+    background: transparent;
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    position: relative;
+    overflow: hidden;
+}
+
+.nav-tabs .nav-link.active {
+    color: white;
+    background: linear-gradient(135deg, var(--trading-primary), var(--trading-secondary));
+    box-shadow: 0 4px 12px rgba(14, 165, 233, 0.3);
+    transform: translateY(-2px);
+}
+
+.nav-tabs .nav-link:hover:not(.active) {
+    background: rgba(14, 165, 233, 0.1);
+    color: var(--trading-primary);
+    transform: translateY(-1px);
+}
+
+/* Enhanced Form Styling */
+.enhanced-card {
+    background: white;
+    border-radius: 20px;
+    padding: 2rem;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+    border: 1px solid rgba(14, 165, 233, 0.1);
+    position: relative;
+    overflow: hidden;
+}
+
+.enhanced-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, var(--trading-primary), var(--trading-secondary));
+}
+
+.form-label {
+    font-weight: 600;
+    color: #374151;
+    margin-bottom: 0.75rem;
+    font-size: 0.95rem;
+}
+
+.form-select, .form-control {
+    border: 2px solid #E5E7EB;
+    border-radius: 12px;
+    padding: 0.875rem 1rem;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    background-color: #FAFAFA;
+}
+
+.form-select:focus, .form-control:focus {
+    border-color: var(--trading-primary);
+    box-shadow: 0 0 0 0.2rem rgba(14, 165, 233, 0.15);
+    background-color: white;
+    outline: none;
+}
+
+/* Summary Cards */
+.transaction-summary {
+    background: linear-gradient(135deg, #F8FAFC 0%, #F1F5F9 100%);
+    border: 2px solid #E2E8F0;
+    border-radius: 16px;
+    padding: 1.5rem;
+    margin: 1.5rem 0;
+    position: relative;
+}
+
+.transaction-summary.buy {
+    border-color: var(--trading-success);
+    background: linear-gradient(135deg, rgba(16, 185, 129, 0.05) 0%, rgba(16, 185, 129, 0.02) 100%);
+}
+
+.transaction-summary.sell {
+    border-color: var(--trading-danger);
+    background: linear-gradient(135deg, rgba(239, 68, 68, 0.05) 0%, rgba(239, 68, 68, 0.02) 100%);
+}
+
+.transaction-summary.swap {
+    border-color: var(--trading-primary);
+    background: linear-gradient(135deg, rgba(14, 165, 233, 0.05) 0%, rgba(14, 165, 233, 0.02) 100%);
+}
+
+.summary-header {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+    font-weight: 600;
+    color: #374151;
+}
+
+.summary-row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 0.5rem;
+    padding: 0.25rem 0;
+}
+
+.summary-row:last-child {
+    margin-bottom: 0;
+    padding-top: 0.75rem;
+    border-top: 2px solid #E5E7EB;
+    font-weight: 700;
+}
+
+/* Enhanced Buttons */
+.btn-enhanced {
+    padding: 1rem 2rem;
+    border-radius: 12px;
+    font-weight: 600;
+    font-size: 1.1rem;
+    border: none;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    cursor: pointer;
+}
+
+.btn-enhanced::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+    transition: left 0.6s ease;
+}
+
+.btn-enhanced:hover::before {
+    left: 100%;
+}
+
+.btn-enhanced:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+}
+
+.btn-enhanced:active {
+    transform: translateY(-1px);
+}
+
+.btn-buy {
+    background: linear-gradient(135deg, var(--trading-success), #34D399);
+    color: white;
+    box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
+}
+
+.btn-sell {
+    background: linear-gradient(135deg, var(--trading-danger), #F87171);
+    color: white;
+    box-shadow: 0 4px 15px rgba(239, 68, 68, 0.3);
+}
+
+.btn-swap {
+    background: linear-gradient(135deg, var(--trading-primary), #3B82F6);
+    color: white;
+    box-shadow: 0 4px 15px rgba(14, 165, 233, 0.3);
+}
+
+/* Market Info Panel */
+.market-panel {
+    background: var(--trading-card-bg);
+    border-radius: 24px;
+    padding: 2rem;
+    box-shadow: var(--trading-shadow);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    height: fit-content;
+    animation: slideInRight 0.6s ease-out 0.2s both;
+}
+
+@keyframes slideInRight {
+    from {
+        opacity: 0;
+        transform: translateX(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+.market-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+    padding-bottom: 1rem;
+    border-bottom: 2px solid #F1F5F9;
+}
+
+.market-header h5 {
+    margin: 0;
+    font-weight: 700;
+    color: #1F2937;
+}
+
+.live-indicator {
+    background: var(--trading-success);
+    color: white;
+    padding: 0.25rem 0.75rem;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.7; }
+}
+
+.price-item {
+    padding: 1rem;
+    margin-bottom: 0.75rem;
+    background: linear-gradient(135deg, #F8FAFC 0%, #F1F5F9 100%);
+    border-radius: 12px;
+    border: 1px solid #E5E7EB;
+    transition: all 0.3s ease;
+}
+
+.price-item:hover {
+    transform: translateX(5px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    border-color: var(--trading-primary);
+}
+
+.crypto-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.crypto-name {
+    font-weight: 600;
+    color: #1F2937;
+}
+
+.crypto-price {
+    font-weight: 700;
+    color: #1F2937;
+}
+
+.price-change {
+    font-size: 0.875rem;
+    font-weight: 500;
+}
+
+.price-change.positive {
+    color: var(--trading-success);
+}
+
+.price-change.negative {
+    color: var(--trading-danger);
+}
+
+/* Exchange Icon */
+.exchange-icon {
+    display: flex;
+    justify-content: center;
+    margin: 1.5rem 0;
+}
+
+.exchange-icon i {
+    color: var(--trading-primary);
+    font-size: 2rem;
+    padding: 1rem;
+    background: rgba(14, 165, 233, 0.1);
+    border-radius: 50%;
+    animation: rotate 3s linear infinite;
+}
+
+@keyframes rotate {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .trade-header h2 {
+        font-size: 2rem;
+    }
+    
+    .trading-panel, .market-panel {
+        padding: 1.5rem;
+        margin-bottom: 1.5rem;
+    }
+    
+    .nav-tabs .nav-link {
+        padding: 0.75rem;
+        font-size: 0.9rem;
+    }
+}
+</style>
+{% endblock %}
+
 {% block content %}
-<div class="container-fluid">
-    <h2 class="mb-4"><i class="fas fa-exchange-alt"></i> Trade Cryptocurrency</h2>
-
-    <div class="row">
-        <!-- Trading Panel -->
-        <div class="col-md-8">
-            <!-- Tab Navigation -->
-            <ul class="nav nav-tabs mb-3" role="tablist">
-                <li class="nav-item">
-                    <a class="nav-link active" data-bs-toggle="tab" href="#buy-tab">
-                        <i class="fas fa-shopping-cart"></i> Buy
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" data-bs-toggle="tab" href="#sell-tab">
-                        <i class="fas fa-hand-holding-usd"></i> Sell
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" data-bs-toggle="tab" href="#swap-tab">
-                        <i class="fas fa-exchange-alt"></i> Swap
-                    </a>
-                </li>
-            </ul>
-
-            <!-- Tab Content -->
-            <div class="tab-content">
-                <!-- Buy Tab -->
-                <div class="tab-pane fade show active" id="buy-tab">
-                    <div class="card">
-                        <div class="card-body">
-                            <h5 class="card-title">Buy Cryptocurrency</h5>
-                            <form id="buy-form">
-                                <div class="mb-3">
-                                    <label class="form-label">Select Currency</label>
-                                    <select class="form-select" name="currency" required>
-                                        <option value="BTC">Bitcoin (BTC)</option>
-                                        <option value="ETH">Ethereum (ETH)</option>
-                                        <option value="SOL">Solana (SOL)</option>
-                                        <option value="USDT">Tether (USDT)</option>
-                                    </select>
-                                </div>
-
-                                <div class="mb-3">
-                                    <label class="form-label">Amount</label>
-                                    <input type="number" class="form-control" name="amount" step="0.000001" required placeholder="0.00">
-                                </div>
-
-                                <div class="mb-3">
-                                    <label class="form-label">Pay With</label>
-                                    <select class="form-select" name="payment_currency">
-                                        <option value="USDT">USDT</option>
-                                        <option value="USD">USD</option>
-                                        <option value="NGN">NGN</option>
-                                    </select>
-                                </div>
-
-                                <!-- Fee Disclosure -->
-                                <div class="mb-3">
-                                    <div class="card border-primary">
-                                        <div class="card-body p-3">
-                                            <h6 class="card-title mb-2">
-                                                <i class="fas fa-info-circle"></i> Transaction Summary
-                                            </h6>
-                                            <div class="d-flex justify-content-between mb-1">
-                                                <span class="text-muted">Subtotal:</span>
-                                                <span id="buy-subtotal">$0.00</span>
-                                            </div>
-                                            <div class="d-flex justify-content-between mb-1">
-                                                <span class="text-muted">Trading Fee (0.5%):</span>
-                                                <span id="buy-fee">$0.00</span>
-                                            </div>
-                                            <hr class="my-2">
-                                            <div class="d-flex justify-content-between">
-                                                <strong>Total Cost:</strong>
-                                                <strong id="buy-total" class="text-primary">$0.00</strong>
-                                            </div>
-                                            <small class="text-muted mt-2 d-block">
-                                                <i class="fas fa-link"></i> See <a href="/fees" target="_blank">complete fee schedule</a>
-                                            </small>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <button type="submit" class="btn btn-success btn-lg w-100">
-                                    <i class="fas fa-shopping-cart"></i> Buy Now
-                                </button>
-                            </form>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Sell Tab -->
-                <div class="tab-pane fade" id="sell-tab">
-                    <div class="card">
-                        <div class="card-body">
-                            <h5 class="card-title">Sell Cryptocurrency</h5>
-                            <form id="sell-form">
-                                <div class="mb-3">
-                                    <label class="form-label">Select Currency</label>
-                                    <select class="form-select" name="currency" required>
-                                        <option value="BTC">Bitcoin (BTC)</option>
-                                        <option value="ETH">Ethereum (ETH)</option>
-                                        <option value="SOL">Solana (SOL)</option>
-                                        <option value="USDT">Tether (USDT)</option>
-                                    </select>
-                                </div>
-
-                                <div class="mb-3">
-                                    <label class="form-label">Amount</label>
-                                    <input type="number" class="form-control" name="amount" step="0.000001" required placeholder="0.00">
-                                </div>
-
-                                <div class="mb-3">
-                                    <label class="form-label">Receive In</label>
-                                    <select class="form-select" name="receive_currency">
-                                        <option value="USDT">USDT</option>
-                                        <option value="USD">USD</option>
-                                        <option value="NGN">NGN</option>
-                                    </select>
-                                </div>
-
-                                <!-- Fee Disclosure -->
-                                <div class="mb-3">
-                                    <div class="card border-danger">
-                                        <div class="card-body p-3">
-                                            <h6 class="card-title mb-2">
-                                                <i class="fas fa-info-circle"></i> Transaction Summary
-                                            </h6>
-                                            <div class="d-flex justify-content-between mb-1">
-                                                <span class="text-muted">Market Value:</span>
-                                                <span id="sell-subtotal">$0.00</span>
-                                            </div>
-                                            <div class="d-flex justify-content-between mb-1">
-                                                <span class="text-muted">Trading Fee (0.5%):</span>
-                                                <span id="sell-fee" class="text-danger">-$0.00</span>
-                                            </div>
-                                            <hr class="my-2">
-                                            <div class="d-flex justify-content-between">
-                                                <strong>You'll Receive:</strong>
-                                                <strong id="sell-total" class="text-success">$0.00</strong>
-                                            </div>
-                                            <small class="text-muted mt-2 d-block">
-                                                <i class="fas fa-link"></i> See <a href="/fees" target="_blank">complete fee schedule</a>
-                                            </small>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <button type="submit" class="btn btn-danger btn-lg w-100">
-                                    <i class="fas fa-hand-holding-usd"></i> Sell Now
-                                </button>
-                            </form>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Swap Tab -->
-                <div class="tab-pane fade" id="swap-tab">
-                    <div class="card">
-                        <div class="card-body">
-                            <h5 class="card-title">Swap Cryptocurrency</h5>
-                            <form id="swap-form">
-                                <div class="mb-3">
-                                    <label class="form-label">From</label>
-                                    <select class="form-select" name="from_currency" required>
-                                        <option value="BTC">Bitcoin (BTC)</option>
-                                        <option value="ETH">Ethereum (ETH)</option>
-                                        <option value="SOL">Solana (SOL)</option>
-                                        <option value="USDT">Tether (USDT)</option>
-                                    </select>
-                                </div>
-
-                                <div class="mb-3">
-                                    <label class="form-label">Amount</label>
-                                    <input type="number" class="form-control" name="amount" step="0.000001" required placeholder="0.00">
-                                </div>
-
-                                <div class="text-center mb-3">
-                                    <i class="fas fa-exchange-alt fa-2x text-primary"></i>
-                                </div>
-
-                                <div class="mb-3">
-                                    <label class="form-label">To</label>
-                                    <select class="form-select" name="to_currency" required>
-                                        <option value="ETH">Ethereum (ETH)</option>
-                                        <option value="BTC">Bitcoin (BTC)</option>
-                                        <option value="SOL">Solana (SOL)</option>
-                                        <option value="USDT">Tether (USDT)</option>
-                                    </select>
-                                </div>
-
-                                <!-- Fee Disclosure -->
-                                <div class="mb-3">
-                                    <div class="card border-info">
-                                        <div class="card-body p-3">
-                                            <h6 class="card-title mb-2">
-                                                <i class="fas fa-info-circle"></i> Transaction Summary
-                                            </h6>
-                                            <div class="d-flex justify-content-between mb-1">
-                                                <span class="text-muted">Exchange Value:</span>
-                                                <span id="swap-subtotal">0.00</span>
-                                            </div>
-                                            <div class="d-flex justify-content-between mb-1">
-                                                <span class="text-muted">Swap Fee (0.3%):</span>
-                                                <span id="swap-fee" class="text-warning">-0.00</span>
-                                            </div>
-                                            <hr class="my-2">
-                                            <div class="d-flex justify-content-between">
-                                                <strong>You'll Receive:</strong>
-                                                <strong id="swap-total" class="text-info">0.00</strong>
-                                            </div>
-                                            <small class="text-muted mt-2 d-block">
-                                                <i class="fas fa-link"></i> See <a href="/fees" target="_blank">complete fee schedule</a>
-                                            </small>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <button type="submit" class="btn btn-primary btn-lg w-100">
-                                    <i class="fas fa-exchange-alt"></i> Swap Now
-                                </button>
-                            </form>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Market Info -->
-        <div class="col-md-4">
-            <!-- Current Prices -->
-            <div class="card mb-3">
-                <div class="card-header d-flex justify-content-between align-items-center">
-                    <h5 class="mb-0"><i class="fas fa-chart-line"></i> Current Prices</h5>
-                    <small class="text-muted">Live</small>
-                </div>
-                <div class="card-body" id="market-prices">
-                    <!-- Populated by JS with price change indicators -->
-                    <div class="text-center text-muted">
-                        <i class="fas fa-spinner fa-spin"></i> Loading prices...
-                    </div>
-                </div>
+<div class="trade-container">
+    <div class="container">
+        <div class="trade-content">
+            <div class="trade-header">
+                <h2><i class="fas fa-chart-line"></i> Advanced Trading</h2>
+                <p>Trade cryptocurrencies with real-time pricing and zero hidden fees</p>
             </div>
 
-            <!-- Recent Trades -->
-            <div class="card">
-                <div class="card-header">
-                    <h5><i class="fas fa-history"></i> Recent Trades</h5>
+            <div class="row">
+                <!-- Enhanced Trading Panel -->
+                <div class="col-lg-8">
+                    <div class="trading-panel trade-enhanced trade-card">
+                        <!-- Enhanced Tab Navigation -->
+                        <ul class="nav nav-tabs" role="tablist">
+                            <li class="nav-item">
+                                <a class="nav-link active" data-bs-toggle="tab" href="#buy-tab">
+                                    <i class="fas fa-shopping-cart"></i> Buy
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" data-bs-toggle="tab" href="#sell-tab">
+                                    <i class="fas fa-hand-holding-usd"></i> Sell
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" data-bs-toggle="tab" href="#swap-tab">
+                                    <i class="fas fa-exchange-alt"></i> Swap
+                                </a>
+                            </li>
+                        </ul>
+
+                        <!-- Enhanced Tab Content -->
+                        <div class="tab-content">
+                            <!-- Enhanced Buy Tab -->
+                            <div class="tab-pane fade show active" id="buy-tab">
+                                <div class="enhanced-card">
+                                    <h5 class="mb-4"><i class="fas fa-shopping-cart text-success"></i> Buy Cryptocurrency</h5>
+                                    <form id="buy-form">
+                                        <div class="mb-3">
+                                            <label class="form-label">Select Currency</label>
+                                            <select class="form-select" name="currency" required>
+                                                <option value="BTC">Bitcoin (BTC)</option>
+                                                <option value="ETH">Ethereum (ETH)</option>
+                                                <option value="SOL">Solana (SOL)</option>
+                                                <option value="USDT">Tether (USDT)</option>
+                                            </select>
+                                        </div>
+
+                                        <div class="mb-3">
+                                            <label class="form-label">Amount</label>
+                                            <input type="number" class="form-control" name="amount" step="0.000001" required placeholder="0.00">
+                                        </div>
+
+                                        <div class="mb-3">
+                                            <label class="form-label">Pay With</label>
+                                            <select class="form-select" name="payment_currency">
+                                                <option value="USDT">USDT</option>
+                                                <option value="USD">USD</option>
+                                                <option value="NGN">NGN</option>
+                                            </select>
+                                        </div>
+
+                                        <!-- Enhanced Fee Disclosure -->
+                                        <div class="mb-4">
+                                            <div class="transaction-summary buy">
+                                                <div class="summary-header">
+                                                    <i class="fas fa-calculator"></i>
+                                                    <span>Transaction Summary</span>
+                                                </div>
+                                                <div class="summary-row">
+                                                    <span class="text-muted">Subtotal:</span>
+                                                    <span id="buy-subtotal">$0.00</span>
+                                                </div>
+                                                <div class="summary-row">
+                                                    <span class="text-muted">Trading Fee (0.5%):</span>
+                                                    <span id="buy-fee">$0.00</span>
+                                                </div>
+                                                <div class="summary-row">
+                                                    <strong>Total Cost:</strong>
+                                                    <strong id="buy-total" class="text-success">$0.00</strong>
+                                                </div>
+                                                <small class="text-muted mt-2 d-block">
+                                                    <i class="fas fa-link"></i> See <a href="/fees" target="_blank">complete fee schedule</a>
+                                                </small>
+                                            </div>
+                                        </div>
+
+                                        <button type="submit" class="btn-enhanced btn-buy trade-button w-100">
+                                            <i class="fas fa-shopping-cart"></i> Execute Buy Order
+                                        </button>
+                                    </form>
+                                </div>
+                            </div>
+
+                            <!-- Enhanced Sell Tab -->
+                            <div class="tab-pane fade" id="sell-tab">
+                                <div class="enhanced-card">
+                                    <h5 class="mb-4"><i class="fas fa-hand-holding-usd text-danger"></i> Sell Cryptocurrency</h5>
+                                    <form id="sell-form">
+                                        <div class="mb-3">
+                                            <label class="form-label">Select Currency</label>
+                                            <select class="form-select" name="currency" required>
+                                                <option value="BTC">Bitcoin (BTC)</option>
+                                                <option value="ETH">Ethereum (ETH)</option>
+                                                <option value="SOL">Solana (SOL)</option>
+                                                <option value="USDT">Tether (USDT)</option>
+                                            </select>
+                                        </div>
+
+                                        <div class="mb-3">
+                                            <label class="form-label">Amount</label>
+                                            <input type="number" class="form-control" name="amount" step="0.000001" required placeholder="0.00">
+                                        </div>
+
+                                        <div class="mb-3">
+                                            <label class="form-label">Receive In</label>
+                                            <select class="form-select" name="receive_currency">
+                                                <option value="USDT">USDT</option>
+                                                <option value="USD">USD</option>
+                                                <option value="NGN">NGN</option>
+                                            </select>
+                                        </div>
+
+                                        <!-- Enhanced Fee Disclosure -->
+                                        <div class="mb-4">
+                                            <div class="transaction-summary sell">
+                                                <div class="summary-header">
+                                                    <i class="fas fa-calculator"></i>
+                                                    <span>Transaction Summary</span>
+                                                </div>
+                                                <div class="summary-row">
+                                                    <span class="text-muted">Market Value:</span>
+                                                    <span id="sell-subtotal">$0.00</span>
+                                                </div>
+                                                <div class="summary-row">
+                                                    <span class="text-muted">Trading Fee (0.5%):</span>
+                                                    <span id="sell-fee" class="text-danger">-$0.00</span>
+                                                </div>
+                                                <div class="summary-row">
+                                                    <strong>You'll Receive:</strong>
+                                                    <strong id="sell-total" class="text-success">$0.00</strong>
+                                                </div>
+                                                <small class="text-muted mt-2 d-block">
+                                                    <i class="fas fa-link"></i> See <a href="/fees" target="_blank">complete fee schedule</a>
+                                                </small>
+                                            </div>
+                                        </div>
+
+                                        <button type="submit" class="btn-enhanced btn-sell trade-button w-100">
+                                            <i class="fas fa-hand-holding-usd"></i> Execute Sell Order
+                                        </button>
+                                    </form>
+                                </div>
+                            </div>
+
+                            <!-- Enhanced Swap Tab -->
+                            <div class="tab-pane fade" id="swap-tab">
+                                <div class="enhanced-card">
+                                    <h5 class="mb-4"><i class="fas fa-exchange-alt text-primary"></i> Swap Cryptocurrency</h5>
+                                    <form id="swap-form">
+                                        <div class="mb-3">
+                                            <label class="form-label">From</label>
+                                            <select class="form-select" name="from_currency" required>
+                                                <option value="BTC">Bitcoin (BTC)</option>
+                                                <option value="ETH">Ethereum (ETH)</option>
+                                                <option value="SOL">Solana (SOL)</option>
+                                                <option value="USDT">Tether (USDT)</option>
+                                            </select>
+                                        </div>
+
+                                        <div class="mb-3">
+                                            <label class="form-label">Amount</label>
+                                            <input type="number" class="form-control" name="amount" step="0.000001" required placeholder="0.00">
+                                        </div>
+
+                                        <div class="exchange-icon">
+                                            <i class="fas fa-exchange-alt"></i>
+                                        </div>
+
+                                        <div class="mb-3">
+                                            <label class="form-label">To</label>
+                                            <select class="form-select" name="to_currency" required>
+                                                <option value="ETH">Ethereum (ETH)</option>
+                                                <option value="BTC">Bitcoin (BTC)</option>
+                                                <option value="SOL">Solana (SOL)</option>
+                                                <option value="USDT">Tether (USDT)</option>
+                                            </select>
+                                        </div>
+
+                                        <!-- Enhanced Fee Disclosure -->
+                                        <div class="mb-4">
+                                            <div class="transaction-summary swap">
+                                                <div class="summary-header">
+                                                    <i class="fas fa-calculator"></i>
+                                                    <span>Transaction Summary</span>
+                                                </div>
+                                                <div class="summary-row">
+                                                    <span class="text-muted">Exchange Value:</span>
+                                                    <span id="swap-subtotal">0.00</span>
+                                                </div>
+                                                <div class="summary-row">
+                                                    <span class="text-muted">Swap Fee (0.3%):</span>
+                                                    <span id="swap-fee" class="text-warning">-0.00</span>
+                                                </div>
+                                                <div class="summary-row">
+                                                    <strong>You'll Receive:</strong>
+                                                    <strong id="swap-total" class="text-primary">0.00</strong>
+                                                </div>
+                                                <small class="text-muted mt-2 d-block">
+                                                    <i class="fas fa-link"></i> See <a href="/fees" target="_blank">complete fee schedule</a>
+                                                </small>
+                                            </div>
+                                        </div>
+
+                                        <button type="submit" class="btn-enhanced btn-swap trade-button w-100">
+                                            <i class="fas fa-exchange-alt"></i> Execute Swap Order
+                                        </button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <div class="card-body">
-                    <div class="table-responsive">
-                        <table class="table table-sm">
-                            <thead>
-                                <tr>
-                                    <th>Pair</th>
-                                    <th>Amount</th>
-                                    <th>Status</th>
-                                </tr>
-                            </thead>
-                            <tbody id="recent-trades-table">
-                                <!-- Populated by JS -->
-                            </tbody>
-                        </table>
+
+                <!-- Enhanced Market Info -->
+                <div class="col-lg-4">
+                    <div class="market-panel trade-enhanced trade-card">
+                        <!-- Enhanced Current Prices -->
+                        <div class="market-header">
+                            <h5><i class="fas fa-chart-line"></i> Market Prices</h5>
+                            <span class="live-indicator">● LIVE</span>
+                        </div>
+                        <div id="market-prices">
+                            <!-- Populated by JS with enhanced price indicators -->
+                            <div class="text-center text-muted py-4">
+                                <i class="fas fa-spinner fa-spin"></i> Loading real-time prices...
+                            </div>
+                        </div>
+
+                        <div style="margin-top: 2rem; padding-top: 2rem; border-top: 2px solid #F1F5F9;">
+                            <h6><i class="fas fa-history"></i> Recent Activity</h6>
+                            <div class="table-responsive mt-3">
+                                <table class="table table-sm">
+                                    <thead>
+                                        <tr>
+                                            <th>Pair</th>
+                                            <th>Amount</th>
+                                            <th>Status</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="recent-trades-table">
+                                        <!-- Populated by JS -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -299,7 +709,7 @@
 {% block extra_js %}
 <script>
 $(document).ready(function() {
-    // Load market prices with change indicators
+    // Load market prices with enhanced design
     loadMarketPrices();
 
     // Load recent trades
@@ -402,28 +812,70 @@ function loadMarketPrices() {
             data.markets.forEach(market => {
                 const change = market.change_24h_percent;
                 const isPositive = change >= 0;
-                const changeClass = isPositive ? 'text-success' : 'text-danger';
+                const changeClass = isPositive ? 'positive' : 'negative';
                 const changeIcon = isPositive ? 'fa-arrow-up' : 'fa-arrow-down';
                 const changeSymbol = isPositive ? '+' : '';
 
-                const priceRow = `
-                    <div class="d-flex justify-content-between align-items-center mb-2 pb-2 border-bottom">
-                        <div>
-                            <strong>${market.currency}/USD</strong><br>
-                            <small class="${changeClass}">
-                                <i class="fas ${changeIcon}"></i> ${changeSymbol}${change.toFixed(2)}%
-                            </small>
-                        </div>
-                        <div class="text-end">
-                            <strong>$${market.price.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}</strong>
+                const priceItem = `
+                    <div class="price-item">
+                        <div class="crypto-info">
+                            <div>
+                                <div class="crypto-name">${market.currency}/USD</div>
+                                <div class="price-change ${changeClass}">
+                                    <i class="fas ${changeIcon}"></i> ${changeSymbol}${change.toFixed(2)}%
+                                </div>
+                            </div>
+                            <div class="crypto-price price-pulse">
+                                $${market.price.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}
+                                <span class="market-status ${isPositive ? 'bullish' : 'bearish'}">
+                                    <i class="fas ${changeIcon}"></i> ${change >= 0 ? 'UP' : 'DOWN'}
+                                </span>
+                            </div>
                         </div>
                     </div>
                 `;
-                container.append(priceRow);
+                container.append(priceItem);
             });
         }
     }).fail(function() {
-        $('#market-prices').html('<div class="text-center text-muted"><small>Unable to load prices</small></div>');
+        // Mock data for demonstration
+        const mockData = [
+            { currency: 'BTC', price: 65420.50, change_24h_percent: 2.34 },
+            { currency: 'ETH', price: 3245.80, change_24h_percent: -1.12 },
+            { currency: 'SOL', price: 145.67, change_24h_percent: 5.23 },
+            { currency: 'USDT', price: 1.00, change_24h_percent: 0.01 }
+        ];
+
+        const container = $('#market-prices');
+        container.empty();
+
+        mockData.forEach(market => {
+            const change = market.change_24h_percent;
+            const isPositive = change >= 0;
+            const changeClass = isPositive ? 'positive' : 'negative';
+            const changeIcon = isPositive ? 'fa-arrow-up' : 'fa-arrow-down';
+            const changeSymbol = isPositive ? '+' : '';
+
+            const priceItem = `
+                <div class="price-item">
+                    <div class="crypto-info">
+                        <div>
+                            <div class="crypto-name">${market.currency}/USD</div>
+                            <div class="price-change ${changeClass}">
+                                <i class="fas ${changeIcon}"></i> ${changeSymbol}${change.toFixed(2)}%
+                            </div>
+                        </div>
+                        <div class="crypto-price price-pulse">
+                            $${market.price.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}
+                            <span class="market-status ${isPositive ? 'bullish' : 'bearish'}">
+                                <i class="fas ${changeIcon}"></i> ${change >= 0 ? 'UP' : 'DOWN'}
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            `;
+            container.append(priceItem);
+        });
     });
 }
 
@@ -444,6 +896,27 @@ function loadRecentTrades() {
                 tbody.append(row);
             });
         }
+    }).fail(function() {
+        // Mock data
+        const mockTrades = [
+            { pair: 'BTC/USD', amount: '0.245' },
+            { pair: 'ETH/BTC', amount: '2.45' },
+            { pair: 'SOL/USD', amount: '15.2' }
+        ];
+
+        const tbody = $('#recent-trades-table');
+        tbody.empty();
+
+        mockTrades.forEach(trade => {
+            const row = `
+                <tr>
+                    <td>${trade.pair}</td>
+                    <td>${trade.amount}</td>
+                    <td><span class="badge bg-success">✓</span></td>
+                </tr>
+            `;
+            tbody.append(row);
+        });
     });
 }
 

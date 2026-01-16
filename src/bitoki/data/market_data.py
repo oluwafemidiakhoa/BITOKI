@@ -38,7 +38,7 @@ class MarketDataFetcher:
                 'secret': api_secret,
                 'enableRateLimit': True,
                 'options': {
-                    'defaultType': 'future',  # Use futures for BTC/USD
+                    'defaultType': 'spot',  # Use spot trading for better African market support
                 }
             })
 

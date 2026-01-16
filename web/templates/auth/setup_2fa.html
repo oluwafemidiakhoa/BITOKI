@@ -152,7 +152,7 @@
             <div class="step">
                 <span class="step-number">4</span>
                 <strong>Enter the 6-digit code</strong>
-                <form method="POST" action="{{ url_for('auth.verify_2fa_setup') }}">
+                <form method="POST" action="{{ url_for('auth.setup_2fa') }}">
                     <input type="hidden" name="secret" value="{{ secret_key }}">
                     <div class="mt-3">
                         <input type="text" class="form-control" id="token" name="token"

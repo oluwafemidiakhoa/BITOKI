@@ -36,7 +36,7 @@ safety:
 
 # Exchange credentials (set via environment variables for security)
 exchange:
-  name: "binance"  # or your preferred exchange
+  name: "binance"  # Works great in Africa!
   api_key_env: "EXCHANGE_API_KEY"
   api_secret_env: "EXCHANGE_API_SECRET"
-  sandbox: false
+  sandbox: false  # Set to false for real trading in African markets

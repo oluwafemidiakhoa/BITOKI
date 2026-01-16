@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 60" width="200" height="60">
+  <defs>
+    <linearGradient id="logoGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#0EA5E9"/>
+      <stop offset="100%" style="stop-color:#F97316"/>
+    </linearGradient>
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+      <feMerge> 
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+  
+  <!-- Bitcoin symbol background -->
+  <circle cx="25" cy="30" r="18" fill="url(#logoGradient)" filter="url(#glow)" opacity="0.9"/>
+  <path d="M18 20 h8 c3 0 5 2 5 5 s-2 5-5 5 h-3 c3 0 5 2 5 5 s-2 5-5 5 h-8 M22 15 v5 M22 40 v5 M26 15 v5 M26 40 v5" 
+        stroke="white" stroke-width="2" fill="none" stroke-linecap="round"/>
+  
+  <!-- BITfisher text -->
+  <text x="50" y="25" font-family="Arial, sans-serif" font-size="18" font-weight="bold" fill="url(#logoGradient)">
+    BIT
+  </text>
+  <text x="50" y="45" font-family="Arial, sans-serif" font-size="18" font-weight="bold" fill="url(#logoGradient)">
+    fisher
+  </text>
+  
+  <!-- Accent elements -->
+  <circle cx="180" cy="15" r="3" fill="#F97316" opacity="0.7"/>
+  <circle cx="190" cy="25" r="2" fill="#0EA5E9" opacity="0.7"/>
+  <circle cx="185" cy="35" r="1.5" fill="#F97316" opacity="0.5"/>
+</svg>
