@@ -23,6 +23,19 @@ def send_email(to, subject, body, html=None):
         body: Plain text body
         html: HTML body (optional)
     """
+    # Check if we're in development mode and should use console output
+    if current_app.config.get('FLASK_ENV') == 'development' or current_app.config.get('TESTING'):
+        print(f"\n{'='*60}")
+        print(f"📧 EMAIL SIMULATION (Development Mode)")
+        print(f"{'='*60}")
+        print(f"To: {to}")
+        print(f"Subject: {subject}")
+        print(f"Body:\n{body}")
+        if html:
+            print(f"\nHTML:\n{html[:200]}..." if len(html) > 200 else f"\nHTML:\n{html}")
+        print(f"{'='*60}\n")
+        return True
+    
     try:
         msg = Message(
             subject=subject,
