@@ -730,6 +730,43 @@ def test_email():
         return jsonify({'success': False, 'error': str(e)}), 500
 
 
+@app.route('/api/admin/db-status', methods=['GET'])
+def db_status():
+    """Check database status and table existence."""
+    try:
+        db_url = app.config['SQLALCHEMY_DATABASE_URI']
+        db_type = 'PostgreSQL' if 'postgresql' in db_url else 'SQLite' if 'sqlite' in db_url else 'Other'
+        
+        # Check passkey tables
+        passkey_tables_status = {}
+        
+        try:
+            import models_passkey
+            from models_passkey import PasskeyChallenge, Passkey
+            
+            # Test passkey_challenges table
+            PasskeyChallenge.query.limit(1).all()
+            passkey_tables_status['passkey_challenges'] = 'exists'
+        except Exception as e:
+            passkey_tables_status['passkey_challenges'] = f'error: {str(e)}'
+        
+        try:
+            # Test passkeys table  
+            Passkey.query.limit(1).all()
+            passkey_tables_status['passkeys'] = 'exists'
+        except Exception as e:
+            passkey_tables_status['passkeys'] = f'error: {str(e)}'
+        
+        return jsonify({
+            'success': True,
+            'database_type': db_type,
+            'database_url_prefix': db_url[:50],
+            'passkey_tables': passkey_tables_status
+        })
+    except Exception as e:
+        return jsonify({'success': False, 'error': str(e)}), 500
+
+
 if __name__ == '__main__':
     # Create logs directory if it doesn't exist
     os.makedirs('logs', exist_ok=True)
