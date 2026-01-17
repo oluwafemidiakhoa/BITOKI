@@ -27,9 +27,18 @@ class PasskeyService:
     """Handle WebAuthn passkey operations."""
 
     def __init__(self):
-        self.rp_id = os.getenv('WEBAUTHN_RP_ID', 'localhost')  # Relying Party ID (your domain)
+        # Auto-detect domain based on environment
+        flask_env = os.getenv('FLASK_ENV', 'development')
+        if flask_env == 'production':
+            default_rp_id = 'bitoki.onrender.com'
+            default_origin = 'https://bitoki.onrender.com'
+        else:
+            default_rp_id = 'localhost'
+            default_origin = 'http://localhost:5000'
+            
+        self.rp_id = os.getenv('WEBAUTHN_RP_ID', default_rp_id)
         self.rp_name = os.getenv('WEBAUTHN_RP_NAME', 'BITfisher')
-        self.origin = os.getenv('APP_URL', 'http://localhost:5000')
+        self.origin = os.getenv('APP_URL', default_origin)
 
     def generate_registration_options(self, user):
         """

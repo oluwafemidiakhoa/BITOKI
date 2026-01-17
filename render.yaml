@@ -32,6 +32,10 @@ services:
         value: Flindell1977@
       - key: MAIL_DEFAULT_SENDER
         value: foundryai@getfoundryai.com
+      - key: WEBAUTHN_RP_ID
+        value: bitoki.onrender.com
+      - key: APP_URL
+        value: https://bitoki.onrender.com
 
 databases:
   - name: bitoki-db
