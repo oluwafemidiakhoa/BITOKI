@@ -767,6 +767,40 @@ def db_status():
         return jsonify({'success': False, 'error': str(e)}), 500
 
 
+@app.route('/api/admin/test-email', methods=['POST'])
+def admin_test_email():
+    """Test email sending functionality."""
+    try:
+        data = request.get_json() if request.is_json else request.form
+        email = data.get('email', 'test@example.com')
+        
+        # Test email configuration
+        mail_config = {
+            'server': app.config.get('MAIL_SERVER'),
+            'port': app.config.get('MAIL_PORT'),
+            'username': app.config.get('MAIL_USERNAME'),
+            'default_sender': app.config.get('MAIL_DEFAULT_SENDER'),
+            'use_tls': app.config.get('MAIL_USE_TLS'),
+        }
+        
+        # Try to send test email
+        from services.email_service import send_email
+        success = send_email(
+            to=email,
+            subject="Test Email from BITOKI",
+            body="This is a test email to verify email functionality is working."
+        )
+        
+        return jsonify({
+            'success': success,
+            'message': 'Test email sent successfully' if success else 'Failed to send test email',
+            'mail_config': mail_config,
+            'environment': app.config.get('FLASK_ENV', 'unknown')
+        })
+    except Exception as e:
+        return jsonify({'success': False, 'error': str(e)}), 500
+
+
 if __name__ == '__main__':
     # Create logs directory if it doesn't exist
     os.makedirs('logs', exist_ok=True)
