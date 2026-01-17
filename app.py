@@ -11,7 +11,7 @@ import ccxt
 from dotenv import load_dotenv
 
 from models import db, bcrypt, User
-# import models_passkey  # Import passkey models to register tables - temporarily disabled
+import models_passkey  # Import passkey models to register tables
 from api.wallet import WalletManager
 from api.trading import TradingAPI
 from api.giftcard import GiftCardAPI
