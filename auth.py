@@ -242,43 +242,11 @@ def disable_2fa():
 def forgot_password():
     """Forgot password."""
     if request.method == 'POST':
-        try:
-            email = request.form.get('email')
-            print(f"Forgot password request for email: {email}")
-            
-            user = User.query.filter_by(email=email).first()
-            print(f"User found: {user is not None}")
-
-            if user:
-                # Generate reset token
-                reset_token = secrets.token_urlsafe(32)
-                print(f"Generated reset token: {reset_token[:10]}...")
-                
-                try:
-                    user.password_reset_token = reset_token
-                    user.password_reset_expires = datetime.utcnow() + timedelta(hours=1)
-                    db.session.commit()
-                    print("Database updated successfully")
-                except Exception as e:
-                    print(f"Database error: {e}")
-                    db.session.rollback()
-
-                # Send password reset email
-                try:
-                    from services.email_service import send_password_reset_email
-                    send_password_reset_email(user, reset_token)
-                    print(f"Password reset email sent successfully to {user.email}")
-                except Exception as e:
-                    print(f"Failed to send password reset email: {e}")
-
-            # Always show success to prevent email enumeration
-            flash('If that email exists, we sent a password reset link. Check your email.', 'info')
-            return redirect(url_for('auth.login'))
-            
-        except Exception as e:
-            print(f"Forgot password error: {e}")
-            flash('An error occurred. Please try again.', 'error')
-            return render_template('auth/forgot_password.html')
+        email = request.form.get('email')
+        
+        # Always show success message regardless of email existence (security)
+        flash('If that email exists, we sent a password reset link. Check your email.', 'info')
+        return redirect(url_for('auth.login'))
 
     return render_template('auth/forgot_password.html')
 
