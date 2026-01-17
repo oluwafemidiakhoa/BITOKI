@@ -44,27 +44,40 @@ def register():
             flash('Username already taken', 'error')
             return render_template('auth/register.html')
 
-        # Create user
-        user = User(
-            email=email,
-            username=username,
-            phone=phone
-        )
-        user.set_password(password)
+        try:
+            # Create user
+            user = User(
+                email=email,
+                username=username,
+                phone=phone
+            )
+            user.set_password(password)
 
-        db.session.add(user)
-        db.session.commit()
+            db.session.add(user)
+            db.session.commit()
+            print(f"User created successfully: {user.id}")
 
-        # Create default wallets
-        currencies = ['BTC', 'ETH', 'SOL', 'USDT', 'NGN']
-        for currency in currencies:
-            wallet = Wallet(user_id=user.id, currency=currency, balance=0.0)
-            db.session.add(wallet)
+            # Create default wallets
+            currencies = ['BTC', 'ETH', 'SOL', 'USDT', 'NGN']
+            for currency in currencies:
+                wallet = Wallet(user_id=user.id, currency=currency, balance=0.0)
+                db.session.add(wallet)
 
-        db.session.commit()
+            db.session.commit()
+            print(f"Wallets created successfully for user {user.id}")
 
-        # Log activity
-        log_activity(user.id, 'register', request.remote_addr, request.headers.get('User-Agent'))
+            # Log activity
+            try:
+                log_activity(user.id, 'register', request.remote_addr, request.headers.get('User-Agent'))
+                print("Activity logged successfully")
+            except Exception as e:
+                print(f"Failed to log activity: {e}")
+                
+        except Exception as e:
+            print(f"Registration error: {e}")
+            db.session.rollback()
+            flash('Registration failed. Please try again.', 'error')
+            return render_template('auth/register.html')
 
         # Generate email verification token
         verification_token = secrets.token_urlsafe(32)
